@@ -25,7 +25,7 @@ A Node-RED node to lookup Yr.no weather data (in XML format).
 A Node-RED node to lookup Yr.no weather info links.
 
 <h3>Samples</h3>
-Node-RED sample flows.
+Node-RED sample flows. The two flows are examples of using the Geonames and / or Yr nodes in Node-RED.
 
 Sample test URL's:
 
