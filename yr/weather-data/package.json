@@ -1,0 +1,19 @@
+{
+    "name"          : "node-red-contrib-weather-data",
+    "version"       : "0.1.1",
+    "description"   : "A Node-RED node to lookup Yr.no weather data (in XML format).",
+    "dependencies"  : {
+    },
+    "license": "Apache",
+    "keywords": [ "node-red", "weather-data" ],
+    "node-red"      : {
+        "nodes"     : {
+            "weather-data": "weather-data.js"
+        }
+    },
+    "author": {
+        "name": "Jo Torsmyr",
+        "email": "jo@torsmyr.com",
+        "url": "http://plus.google.com/+JoTorsmyr"
+    }
+}

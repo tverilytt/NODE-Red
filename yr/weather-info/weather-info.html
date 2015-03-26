@@ -1,0 +1,43 @@
+
+<script type="text/x-red" data-template-name="weather info">
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="weather info">
+    <h4>Yr weather info</h4>
+    <p>Lookup Yr weather weather info links for a specific place</>
+    <p>Input: msg.payload - Object structure as returned from Node geonames lookup-place</p>
+    <p>Output: msg.payload - Object structure containing links to <a target="_blank" href="http://www.yr.no">Yr.no</a> weather page, meteogram and XML weather data for a certain place.</p>
+    <p>Sample response payload:<br>
+    {
+      "yr": "http://www.yr.no/place/United_Kingdom/England/The_Grand_at_Trafalgar_Square/",
+      "meteogram": "http://www.yr.no/place/United_Kingdom/England/The_Grand_at_Trafalgar_Square/meteogram.png",
+      "weather-data": "http://www.yr.no/place/United_Kingdom/England/The_Grand_at_Trafalgar_Square/forecast.xml",
+      "place": "The Grand at Trafalgar Square,England,United Kingdom"
+    }
+    </>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('weather info', {
+        category : 'yr',
+        color : 'LightBlue',
+        defaults: {
+            debug : {value : false },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'yr.png',
+        label : function() {
+            return this.name|| 'weather info';
+        },
+    });
+</script>

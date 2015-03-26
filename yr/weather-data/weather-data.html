@@ -1,0 +1,36 @@
+
+<script type="text/x-red" data-template-name="weather data">
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="weather data">
+    <h4>Yr weather data</h4>
+    <p>Lookup Yr weather weather data (in XML format) for a specific place</>
+    <p>Input: msg.payload - Object structure as returned from Node geonames lookup-place</p>
+    <p>Output: msg.payload - XML containing Yr weather data, for a certain place.</p>
+    </>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('weather data', {
+        category : 'yr',
+        color : 'LightBlue',
+        defaults: {
+            debug : {value : false },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'yr.png',
+        label : function() {
+            return this.name|| 'weather data';
+        },
+    });
+</script>

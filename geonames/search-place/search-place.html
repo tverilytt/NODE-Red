@@ -1,0 +1,60 @@
+
+<script type="text/x-red" data-template-name="search place">
+    <div class="form-row">
+        <label for="node-input-query"><i class="icon-tag"></i> Query</label>
+        <input type="text" id="node-input-query" placeholder="Query">
+    </div>
+    <div class="form-row">
+        <label for="node-input-maxrows"><i class="icon-tag"></i> Max rows</label>
+        <input type="text" id="node-input-maxrows" placeholder="MaxRows">
+    </div>
+    <div class="form-row">
+        <label for="node-input-username"><i class="icon-tag"></i> Username</label>
+        <input type="text" id="node-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="search place">
+    <h4>Search-place</h4>
+    <p>This node performs search for geographical places, using <a target="_blank" href="http://www.geonames.org">geonames.org</a></p>
+    <p>Please note that geonames.org requires a <strong>valid username</strong> as parameter.</p>
+    <p>The node uses the service <strong>api.geonames.org/searchJSON</strong></p>
+    <h4>Input parameters</h4> 
+    Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
+    <ul>
+      <li>Query parameters</li>
+        <p>URI: ?query=london&maxrows=10&username=demo</p>
+        <p>Resulting in: msg.query=london, msg.maxrows=10, username=demo</p>
+      <li>JSON payload</li>
+        <p>Payload: { 'query' : 'london', 'maxrows' : 10, 'username' : 'demo' }</p>
+        <p>Resulting in: msg.payload.query=london, msg.payload.maxrows=10, msg.payload.username=demo</p>
+    </ul>  
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('search place', {
+        category : 'geonames',
+        color : 'LightCyan',
+        defaults: {
+            query : {value : ''},
+            maxrows : {value : ''},
+            username : {value : 'demo'},
+            debug : {value : false },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'geonames.png',
+        label : function() {
+            return this.name|| 'search place';
+        },
+    });
+</script>

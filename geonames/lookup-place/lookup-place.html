@@ -1,0 +1,61 @@
+
+<script type="text/x-red" data-template-name="lookup place">
+    <div class="form-row">
+        <label for="node-input-latitude"><i class="icon-tag"></i> Latitude</label>
+        <input type="text" id="node-input-latitude" placeholder="Latitude">
+    </div>
+    <div class="form-row">
+        <label for="node-input-longitude"><i class="icon-tag"></i> Longitude</label>
+        <input type="text" id="node-input-longitude" placeholder="Longitude">
+    </div>
+    <div class="form-row">
+        <label for="node-input-username"><i class="icon-tag"></i> Username</label>
+        <input type="text" id="node-input-username" placeholder="Username">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="lookup place">
+    <h4>lookup-place</h4>
+    <p>This node performs reverse geolocation place lookup, using <a target="_blank" href="http://www.geonames.org">geonames.org</a>, from provided latitude and longitude input parameters.</p>
+    <p>Geolocation decimal degree format - Latitude must be between -90 - 90, and longitude between -180 - 180.</p>
+    <p>The node uses the service <strong>api.geonames.org/findNearbyJSON</strong></p>
+    <p>Please note that geonames.org requires a <strong>valid username</strong> as parameter.</p>
+    <h4>Input parameters</h4>
+    Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
+    <ul>
+      <li>Query parameters</li>
+    <p>URI: ?latitude=60&longitude=10&username=demo</p>
+    <p>Resulting in: msg.latitude=60, msg.longitude=10, username=demo</p>
+      <li>JSON payload</li>
+    <p>Payload: { 'latitude' : 60, 'longitude' : 10, 'username' : 'demo' }</p>
+    <p>Resulting in: msg.payload.latitude=60, msg.payload.longitude=10, msg.payload.username=demo</p>
+    </ul>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('lookup place', {
+        category : 'geonames',
+        color : 'LightCyan',
+        defaults: {
+            latitude : {value : 60, validate:function(lat) { var n = parseFloat(lat); return n <= 90 && n >= -90;} },
+            longitude : {value : 10, validate:function(lng) { var n = parseFloat(lng); return n <= 180 && n >= -180;} },
+            username : {value : 'demo'},
+            debug : {value : false },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'geonames.png',
+        label : function() {
+            return this.name|| 'lookup place';
+        },
+    });
+</script>
