@@ -24,4 +24,7 @@ A Node-RED node to lookup Yr.no weather data (in XML format).
 <h4>weather-info</h4>
 A Node-RED node to lookup Yr.no weather info links.
 
+<h3>Yr</h3>
+NODE-Red sample flows.
+
 </body></html>
