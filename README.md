@@ -1,7 +1,7 @@
 <html><body>
-<h3>NODE-RED nodes</h3>
+<h3>Node-RED nodes</h3>
 
-This repository contains <a target="_blank" href="http://nodered.org/" >NODE-Red</a> nodes.
+This repository contains <a target="_blank" href="http://nodered.org/" >Node-RED</a> nodes.
 
 <h3>Geonames</h3>
 These nodes use the <a target="_blank" href="http://geonames.org/" >geonames.org</a> API.
@@ -25,6 +25,16 @@ A Node-RED node to lookup Yr.no weather data (in XML format).
 A Node-RED node to lookup Yr.no weather info links.
 
 <h3>Samples</h3>
-NODE-Red sample flows.
+Node-RED sample flows.
+
+Sample test URL's:
+
+<p>Yr weather links:
+<a target="_blank" href="http://timeregredapp.mybluemix.net/yrinfo?latitude=59.93797728565216&longitude=10.720676915344256&username=demo">http://timeregredapp.mybluemix.net/yrinfo?latitude=59.93797728565216&longitude=10.720676915344256&username=demo</a>
+</p>
+
+<p> Geonames reverse geolocation lookup:
+<a target="_blank" href="http://timeregredapp.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo">http://timeregredapp.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo</a>
+</p>
 
 </body></html>
