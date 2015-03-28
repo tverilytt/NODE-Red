@@ -4,6 +4,10 @@
     "description"   : "A Node-RED node to perform reverse geolocation place lookup using Geonames.org.",
     "dependencies"  : {
     },
+    "repository" : {
+        "type":"git",
+        "url":"https://github.com/tverilytt/NODE-Red/tree/master/geonames/lookup-place"
+    },    
     "license": "Apache",
     "keywords": [ "node-red", "lookup-place" ],
     "node-red"      : {
