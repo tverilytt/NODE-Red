@@ -57,9 +57,7 @@ module.exports = function(RED) {
            });
          }).on('error', function(error) {
            debugLog('http request, on error: ' + error.message);
-           msg.headers = {'Content-Type' : 'application/json'};
-           msg.payload = JSON.stringify(error);
-           node.send(msg);
+           node.error(JSON.stringify(error));
          });
          request.end();
       } else {

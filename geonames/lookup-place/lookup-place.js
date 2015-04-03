@@ -49,8 +49,7 @@ module.exports = function(RED) {
            });
          }).on('error', function(error) {
            debugLog('Got error: ' + error.message);
-           msg.payload = JSON.stringify(error);
-           node.send(msg);
+           node.error(JSON.stringify(error));
          });
       } else {
         msg.payload = {'error' : 'Latitude / Longitude validation error. Latitude must be between -90 - 90 and longitude between -180 - 180',

@@ -40,8 +40,9 @@ module.exports = function(RED) {
            res.setEncoding('utf8');
            debugLog('Got response: ' + res.statusCode);
 
-          msg.statusCode = res.statusCode;
-          if (res.statusCode === 200) {
+           msg.statusCode = res.statusCode;
+
+           if (res.statusCode === 200) {
               var yrInfo = getYrInfo(yrURI, geonames[0]);
               debugLog('HTTP 200 OK: yr info: ' + JSON.stringify(yrInfo));
               msg.payload = yrInfo;
@@ -53,12 +54,19 @@ module.exports = function(RED) {
               msg.payload = unknownResult;
               node.send(msg);
            }
-         }).on('error', function(error) {
-           debugLog('http request, on error: ' + error.message);
-           msg.payload = JSON.stringify(error);
-           node.send(msg);
+
+           res.on('end', function() {
+             debugLog('END HEAD');
+             node.send(msg);
+           });
          });
+
          request.end();
+
+         request.on('error', function(error) {
+           debugLog('http request, on error: ' + error.message);
+           node.error(JSON.stringify(error));
+         });
       } else {
          debugLog('Yr URI unknown');
          msg.payload = unknownResult;
