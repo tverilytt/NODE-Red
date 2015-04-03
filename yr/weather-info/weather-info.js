@@ -3,9 +3,10 @@
 
 'use strict';
 
+var yrCommon = require('../yr-common.js');
+
 var DEBUG_PREFIX = '[yr: weather-info]';
 var unknownResult = { 'yr' : 'Unknown', 'meteogram' : 'Unknown', 'weather-data' : 'Unknown' , 'place' : 'No geoname for this location'};
-var yrHost = 'www.yr.no';
 var meteogram = 'meteogram.png';
 
 module.exports = function(RED) {
@@ -23,13 +24,13 @@ module.exports = function(RED) {
 
       debugLog(JSON.stringify(geonames));
 
-      var yrURI = getYrURI(geonames);
+      var yrURI = yrCommon.getYrURI(geonames);
 
       debugLog('yr URI: ', yrURI);
 
       if (yrURI) {
          var options = {
-           hostname: yrHost,
+           hostname: yrCommon.yrHost,
            port: 80,
            path: yrURI + meteogram,
            method: 'HEAD'
@@ -76,7 +77,7 @@ module.exports = function(RED) {
 };
 
 function getYrInfo(uri, geoinfo) {
-  var baseURL = 'http://' + yrHost + uri;
+  var baseURL = 'http://' + yrCommon.yrHost + uri;
   var place = '';
   place += geoinfo.toponymName ? geoinfo.toponymName : '';
   place += geoinfo.adminName1 ? ',' + geoinfo.adminName1 : '';
@@ -84,37 +85,4 @@ function getYrInfo(uri, geoinfo) {
   if (place === '') place = 'No geoname for this location';
 
   return { 'yr' : baseURL, 'meteogram' : baseURL + 'meteogram.png', 'weather-data' : baseURL + 'forecast.xml' , 'place' : place};
-}
-
-function getYrURI(geonames) {
-  var uri = '';
-
-  if (geonames && geonames[0]) {
-     var geoname = geonames[0];
-     var svalbard = false;
-
-    // Map Svalbard and Jan Mayen to Norway
-     if (geoname.countryName == 'Svalbard and Jan Mayen') {
-        geoname.countryName = 'Norway';
-        svalbard = true;
-     }
-   
-     uri += '/place/';
-     uri += geoname.countryName + '/';
-   
-     if (geoname.adminName1 === '') uri += 'Other' + '/';
-     else uri += geoname.adminName1 + '/';
-
-     if (geoname.countryName == 'Norway' && !svalbard)
-        if (geoname.adminName2)
-           uri += geoname.adminName2 + '/';
-        else
-           uri += geoname.adminName1 + '/';      
-     uri += geoname.toponymName + '/';
-
-     uri = uri.replace(/\s+/g, '_');
-   
-     return uri;
-  } else
-     return null;
 }

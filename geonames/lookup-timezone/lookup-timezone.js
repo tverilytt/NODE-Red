@@ -3,6 +3,8 @@
 
 'use strict';
 
+var geoCommon = require('../geonames-common.js');
+
 var DEBUG_PREFIX = '[geonames: lookup-timezone]';
 
 module.exports = function(RED) {
@@ -23,8 +25,8 @@ module.exports = function(RED) {
       var longitude = msg.longitude || msg.payload.longitude;
       var username = msg.username || msg.payload.username;
 
-      if (setParameters(node, latitude, longitude, username)) {
-         var geonamesURL = getGeonamesURL(node.latitude, node.longitude, node.username);
+      if (geoCommon.setParameters(node, latitude, longitude, username)) {
+         var geonamesURL = geoCommon.getGeonamesURL(node.latitude, node.longitude, node.username);
 
          debugLog('geonames URL:', geonamesURL);
 
@@ -65,34 +67,3 @@ module.exports = function(RED) {
   }
   RED.nodes.registerType('lookup timezone', LookupTimezone);
 };
-
-  function validLatitude(latitude) {
-    var n = parseFloat(latitude);
-    return n <= 90 && n >= -90;
-  }
-  function validLongitude(longitude) {
-    var n = parseFloat(longitude);
-    return n <= 180 && n >= -180;
-  }
-
-  function setParameters(node, latitude, longitude, username) {
-    if (validLatitude(latitude)) node.latitude = latitude;
-    else return false;
-    if (validLongitude(longitude)) node.longitude = longitude;
-    else return false;
-    if (username) node.username = username;
-    return true;
-  }
-
-  function getGeonamesURL(latitude, longitude, username) {
-    var geonamesurl = 'http://api.geonames.org/timezoneJSON';
-
-    if (username === undefined) username = 'demo';
-
-    geonamesurl += '?username=' + username;
-    geonamesurl += '&lat=' + latitude;
-    geonamesurl += '&lng=' + longitude;
-    geonamesurl += '&style=FULL';
-    
-    return geonamesurl;
-  }

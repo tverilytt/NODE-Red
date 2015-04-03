@@ -1,0 +1,75 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\utilities\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\utilities\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '.' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.38
+4 verbose node symlink C:\utilities\nodejs\\node.exe
+5 warn package.json node-red-contrib-geonames@0.1.1 No repository field.
+6 verbose readDependencies using package.json deps
+7 verbose install where, deps [ 'C:\\home\\jo\\IBM\\dev\\github\\NODE-Red',
+7 verbose install   [ 'node-red-contrib-lookup-place' ] ]
+8 info preinstall node-red-contrib-geonames@0.1.1
+9 verbose readDependencies using package.json deps
+10 verbose cache add [ 'node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git#master',
+10 verbose cache add   null ]
+11 verbose cache add name=undefined spec="node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git#master" args=["node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git#master",null]
+12 verbose parsed url { protocol: null,
+12 verbose parsed url   slashes: null,
+12 verbose parsed url   auth: null,
+12 verbose parsed url   host: null,
+12 verbose parsed url   port: null,
+12 verbose parsed url   hostname: null,
+12 verbose parsed url   hash: '#master',
+12 verbose parsed url   search: null,
+12 verbose parsed url   query: null,
+12 verbose parsed url   pathname: 'node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git',
+12 verbose parsed url   path: 'node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git',
+12 verbose parsed url   href: 'node-red-contrib-lookup-place@https://github.com/tverilytt/NODE-Red.git#master' }
+13 verbose cache add name="node-red-contrib-lookup-place" spec="https://github.com/tverilytt/NODE-Red.git#master" args=["node-red-contrib-lookup-place","https://github.com/tverilytt/NODE-Red.git#master"]
+14 verbose parsed url { protocol: 'https:',
+14 verbose parsed url   slashes: true,
+14 verbose parsed url   auth: null,
+14 verbose parsed url   host: 'github.com',
+14 verbose parsed url   port: null,
+14 verbose parsed url   hostname: 'github.com',
+14 verbose parsed url   hash: '#master',
+14 verbose parsed url   search: null,
+14 verbose parsed url   query: null,
+14 verbose parsed url   pathname: '/tverilytt/NODE-Red.git',
+14 verbose parsed url   path: '/tverilytt/NODE-Red.git',
+14 verbose parsed url   href: 'https://github.com/tverilytt/NODE-Red.git#master' }
+15 silly lockFile d1f300ab-om-tverilytt-NODE-Red-git-master https://github.com/tverilytt/NODE-Red.git#master
+16 verbose lock https://github.com/tverilytt/NODE-Red.git#master C:\Users\IBM_ADMIN\AppData\Roaming\npm-cache\d1f300ab-om-tverilytt-NODE-Red-git-master.lock
+17 verbose addRemoteTarball [ 'https://github.com/tverilytt/NODE-Red.git#master', null ]
+18 info retry fetch attempt 1 at 20:10:39
+19 verbose fetch to= C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+20 http GET https://github.com/tverilytt/NODE-Red.git#master
+21 http 200 https://github.com/tverilytt/NODE-Red.git#master
+22 verbose tar unpack C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+23 silly lockFile 94d737c7-om-tverilytt-NODE-Red-git-unpack tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack
+24 verbose lock tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack C:\Users\IBM_ADMIN\AppData\Roaming\npm-cache\94d737c7-om-tverilytt-NODE-Red-git-unpack.lock
+25 silly lockFile b1eb1a16-ithub-com-tverilytt-NODE-Red-git tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+26 verbose lock tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git C:\Users\IBM_ADMIN\AppData\Roaming\npm-cache\b1eb1a16-ithub-com-tverilytt-NODE-Red-git.lock
+27 silly gunzTarPerm modes [ '777', '666' ]
+28 error not a package C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+29 silly lockFile 94d737c7-om-tverilytt-NODE-Red-git-unpack tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack
+30 silly lockFile 94d737c7-om-tverilytt-NODE-Red-git-unpack tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack
+31 silly lockFile b1eb1a16-ithub-com-tverilytt-NODE-Red-git tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+32 silly lockFile b1eb1a16-ithub-com-tverilytt-NODE-Red-git tar://C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git
+33 silly lockFile d1f300ab-om-tverilytt-NODE-Red-git-master https://github.com/tverilytt/NODE-Red.git#master
+34 silly lockFile d1f300ab-om-tverilytt-NODE-Red-git-master https://github.com/tverilytt/NODE-Red.git#master
+35 error Error: ENOENT, open 'C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack\package.json'
+36 error If you need help, you may report this *entire* log,
+36 error including the npm and node versions, at:
+36 error     <http://github.com/npm/npm/issues>
+37 error System Windows_NT 6.1.7601
+38 error command "C:\\utilities\\nodejs\\\\node.exe" "C:\\utilities\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "."
+39 error cwd C:\home\jo\IBM\dev\github\NODE-Red
+40 error node -v v0.10.38
+41 error npm -v 1.4.28
+42 error path C:\Users\IBM_AD~1\AppData\Local\Temp\npm-9536-WzojtO0r\github.com\tverilytt\NODE-Red.git-unpack\package.json
+43 error code ENOENT
+44 error errno 34
+45 verbose exit [ 34, true ]

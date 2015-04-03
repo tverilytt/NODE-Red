@@ -1,0 +1,20 @@
+{
+    "name"          : "node-red-contrib-yr",
+    "version"       : "0.1.2",
+    "description"   : "A collection of Node-RED nodes for accessing yr.no weather info and data.",
+    "dependencies"  : {
+    },
+    "license" : "Apache",
+    "keywords" : [ "node-red", "weather-info", "weather-data" ],
+    "node-red"      : {
+        "nodes"     : {
+            "weather-info" : "weather-info/weather-info.js",
+            "weather-data" : "weather-data/weather-data.js"
+        }
+    },
+    "author": {
+        "name": "Jo Torsmyr",
+        "email": "jo@torsmyr.com",
+        "url": "http://plus.google.com/+JoTorsmyr"
+    }
+}

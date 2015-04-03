@@ -1,0 +1,21 @@
+{
+    "name"          : "node-red-contrib-geonames",
+    "version"       : "0.1.2",
+    "description"   : "A collection of Node-RED nodes to perform place and timezone lookup and search using Geonames.org.",
+    "dependencies"  : {
+    },
+    "license" : "Apache",
+    "keywords" : [ "node-red", "lookup-place", "lookup-timezone", "search-place" ],
+    "node-red"      : {
+        "nodes"     : {
+            "lookup-place" : "lookup-place/lookup-place.js",
+            "lookup-timezone" : "lookup-timezone/lookup-timezone.js",
+            "search-place" : "search-place/search-place.js"
+        }
+    },
+    "author": {
+        "name": "Jo Torsmyr",
+        "email": "jo@torsmyr.com",
+        "url": "http://plus.google.com/+JoTorsmyr"
+    }
+}
