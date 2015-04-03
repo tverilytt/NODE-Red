@@ -1,10 +1,10 @@
 <html><body>
 <h3>Node-RED nodes</h3>
 
-This repository contains <a target="_blank" href="http://nodered.org/" >Node-RED</a> nodes.
+This repository contains <a target="_blank" href="http://nodered.org/">Node-RED</a> nodes.
 
 <h3>Geonames</h3>
-These nodes use the <a target="_blank" href="http://geonames.org/" >geonames.org</a> API.
+These nodes use the <a target="_blank" href="http://geonames.org/">geonames.org</a> API.
 
 <h4>lookup-place</h4>
 A Node-RED node to perform reverse geolocation place lookup using Geonames.org.
@@ -16,7 +16,7 @@ A Node-RED node to perform timezone lookup using Geonames.org.
 A Node-RED node to perform search for geographical places using Geonames.org.
 
 <h3>Yr</h3>
-These nodes use the <a target="_blank" href="http://yr.no/" >yr.no</a> weather data and links.
+These nodes use the <a target="_blank" href="http://yr.no/">yr.no</a> weather data and links.
 
 <h4>weather-data</h4>
 A Node-RED node to lookup Yr.no weather data (in XML format).
