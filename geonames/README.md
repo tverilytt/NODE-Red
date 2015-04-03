@@ -1,8 +1,8 @@
 <html><body>
-node-red-contrib-geonames
-=========================
+<h3>node-red-contrib-geonames</h3>
 
-A collection of <a target="_blank" href="http://nodered.org/">Node-RED</a> nodes for Geonames.org
+A collection of <a target="_blank" href="http://nodered.org/">Node-RED</a> nodes for
+<a target="_blank" href="http://geonames.org/">geonames.org</a>
 
 ### Installation
 
