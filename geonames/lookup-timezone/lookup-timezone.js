@@ -44,6 +44,8 @@ module.exports = function(RED) {
              debugLog('END BODY: ' + payload);
              msg.statusCode = res.statusCode;
              msg.payload = JSON.parse(payload);
+             if (msg.payload.geonames && msg.payload.geonames[0])
+                msg.payload.geonames[0].timezone.onDST = onDST();
              node.send(msg);
            });
          }).on('error', function(error) {
@@ -67,3 +69,16 @@ module.exports = function(RED) {
   }
   RED.nodes.registerType('lookup timezone', LookupTimezone);
 };
+
+var year = new Date().getFullYear();
+
+function stdTimezoneOffset() {
+  var jan = new Date(year, 0, 1);
+  var jul = new Date(year, 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+
+function onDST(date) {
+  if (arguments.length === 0) date = new Date();
+  return date.getTimezoneOffset() < stdTimezoneOffset();
+}
