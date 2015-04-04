@@ -55,9 +55,11 @@ module.exports = function(RED) {
               node.send(msg);
            }
 
+           res.on('data', function() {
+             debugLog('DATA HEAD');
+           });
            res.on('end', function() {
              debugLog('END HEAD');
-             node.send(msg);
            });
          });
 
