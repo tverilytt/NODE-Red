@@ -3,6 +3,8 @@
 
 'use strict';
 
+var geoCommon = require('../geonames-common.js');
+
 var DEBUG_PREFIX = '[geonames: search-place]';
 
 module.exports = function(RED) {
@@ -14,6 +16,7 @@ module.exports = function(RED) {
 
     this.query = config.query;
     this.maxrows = config.maxrows;
+    this.style = config.style;
     this.username = config.username;
     this.debug = config.debug;
 
@@ -22,10 +25,11 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
       var query = msg.query || msg.payload.query;
       var maxrows = msg.maxrows || msg.payload.maxrows;
+      var style = msg.style || msg.payload.style;
       var username = msg.username || msg.payload.username;
 
-      if (setParameters(node, query, maxrows, username)) {
-         var geonamesURL = getGeonamesURL(node.query, node.maxrows, node.username);
+      if (geoCommon.setBaseParameters(node, username, style) && geoCommon.setQueryParameters(node, query, maxrows)) {
+         var geonamesURL = getGeonamesSearchPlaceURL(node.username, node.style, node.query, node.maxrows);
 
          debugLog('geonames URL:', geonamesURL);
 
@@ -47,12 +51,11 @@ module.exports = function(RED) {
            });
          }).on('error', function(error) {
            debugLog('Got error: ' + error.message);
-           msg.payload = JSON.stringify(error);
-           node.send(msg);
+           node.error(JSON.stringify(error));
          });
       } else {
-        msg.payload = {'error' : 'Query cannot be empty and maxrows must be an integer.',
-          'query' : query, 'maxrows' : maxrows};
+        msg.payload = {'error' : 'Query cannot be empty, maxrows must be an integer, style must be one of SHORT, MEDIUM, LONG or FULL.',
+          'query' : query, 'maxrows' : maxrows, 'style' : style};
         node.send(msg);
       }
     });
@@ -68,26 +71,13 @@ module.exports = function(RED) {
   RED.nodes.registerType('search place', SearchPlace);
 };
 
-function setParameters(node, query, maxrows, username) {
-  if (query) node.query = query;
-  if (maxrows) {
-     if (parseInt(maxrows)) node.maxrows = parseInt(maxrows);
-     else return false;
-  }
-  if (username) node.username = username;
-  return true;
-}
+function getGeonamesSearchPlaceURL(username, style, query, maxrows) {
+  var geonamesurl = geoCommon.getGeonamesBaseURL('searchJSON', username, style);
 
-function getGeonamesURL(query, maxrows, username) {
-  var geonamesurl = 'http://api.geonames.org/searchJSON';
-
-  if (username === undefined) username = 'demo';
   if (maxrows === undefined) maxrows = 10;
 
-  geonamesurl += '?username=' + username;
   geonamesurl += '&q=' + query;
   geonamesurl += '&maxRows=' + maxrows;
-  geonamesurl += '&style=FULL';
     
   return geonamesurl;
 }

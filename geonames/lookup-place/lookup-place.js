@@ -14,20 +14,22 @@ module.exports = function(RED) {
   function LookupPlace(config) {
     RED.nodes.createNode(this, config);
 
+    this.username = config.username;
+    this.style = config.style;
     this.latitude = config.latitude;
     this.longitude = config.longitude;
-    this.username = config.username;
     this.debug = config.debug;
 
     var node = this;
 
     this.on('input', function(msg) {
+      var username = msg.username || msg.payload.username;
+      var style = msg.style || msg.payload.style;
       var latitude = msg.latitude || msg.payload.latitude;
       var longitude = msg.longitude || msg.payload.longitude;
-      var username = msg.username || msg.payload.username;
 
-      if (geoCommon.setParameters(node, latitude, longitude, username)) {
-         var geonamesURL = geoCommon.getGeonamesURL(node.latitude, node.longitude, node.username);
+      if (geoCommon.setBaseParameters(node, username, style) && geoCommon.setLocationParameters(node, latitude, longitude)) {
+         var geonamesURL = getGeonamesLookupPlaceURL(node.username, node.style, node.latitude, node.longitude);
 
          debugLog('geonames URL:', geonamesURL);
 
@@ -52,8 +54,8 @@ module.exports = function(RED) {
            node.error(JSON.stringify(error));
          });
       } else {
-        msg.payload = {'error' : 'Latitude / Longitude validation error. Latitude must be between -90 - 90 and longitude between -180 - 180',
-          'latitude' : latitude, 'longitude' : longitude};
+        msg.payload = {'error' : 'Latitude must be between -90 - 90 and longitude between -180 - 180, style must be one of SHORT, MEDIUM, LONG or FULL.',
+          'latitude' : latitude, 'longitude' : longitude, 'style' : style};
         node.send(msg);
       }
     });
@@ -68,3 +70,12 @@ module.exports = function(RED) {
 
   RED.nodes.registerType('lookup place', LookupPlace);
 };
+
+function getGeonamesLookupPlaceURL(username, style, latitude, longitude) {
+  var geonamesurl = geoCommon.getGeonamesBaseURL('findNearbyJSON', username, style);
+
+  geonamesurl += '&lat=' + latitude;
+  geonamesurl += '&lng=' + longitude;
+
+  return geonamesurl;
+}

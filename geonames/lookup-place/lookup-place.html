@@ -9,6 +9,15 @@
         <input type="text" id="node-input-longitude" placeholder="Longitude">
     </div>
     <div class="form-row">
+        <label for="node-input-style"><i class="icon-tag"></i> Style</label>
+        <select id="node-input-style">
+          <option value="SHORT">Short</option>
+          <option value="MEDIUM" selected>Medium</option>
+          <option value="LONG">Long</option>
+          <option value="FULL">Full</option>
+        </select>
+    </div>
+    <div class="form-row">
         <label for="node-input-username"><i class="icon-tag"></i> Username</label>
         <input type="text" id="node-input-username" placeholder="Username">
     </div>
@@ -29,14 +38,14 @@
     <p>The node uses the service <strong>api.geonames.org/findNearbyJSON</strong></p>
     <p>Please note that geonames.org requires a <strong>valid username</strong> as parameter.</p>
     <h4>Input parameters</h4>
-    Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
+    <p>Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
     <ul>
       <li>Query parameters</li>
-    <p>URI: ?latitude=60&longitude=10&username=demo</p>
-    <p>Resulting in: msg.latitude=60, msg.longitude=10, username=demo</p>
+    <p>URI: ?username=demo&style=MEDIUM&latitude=51.5073&longitude=-0.1273</p>
+    <p>Resulting in: msg.username=demo, msg.style=MEDIUM, msg.latitude=51.5073, msg.longitude=-0.1273</p>
       <li>JSON payload</li>
-    <p>Payload: { 'latitude' : 60, 'longitude' : 10, 'username' : 'demo' }</p>
-    <p>Resulting in: msg.payload.latitude=60, msg.payload.longitude=10, msg.payload.username=demo</p>
+    <p>Payload: { "username" : "demo", "style" : "MEDIUM", "latitude" : "51.5073", "longitude" : "-0.1273" }</p>
+    <p>Resulting in: msg.payload.username=demo, msg.payload.style=MEDIUM, msg.payload.latitude=51.5073, msg.payload.longitude=-0.1273</p>
     </ul>
 </script>
 
@@ -45,8 +54,9 @@
         category : 'geonames',
         color : 'LightCyan',
         defaults: {
-            latitude : {value : 60, validate:function(lat) { var n = parseFloat(lat); return n <= 90 && n >= -90;} },
-            longitude : {value : 10, validate:function(lng) { var n = parseFloat(lng); return n <= 180 && n >= -180;} },
+            latitude : {value : 51.5073, validate:function(lat) { var n = parseFloat(lat); return n <= 90 && n >= -90;} },
+            longitude : {value : -0.1273, validate:function(lng) { var n = parseFloat(lng); return n <= 180 && n >= -180;} },
+            style : {value : 'MEDIUM'},
             username : {value : 'demo'},
             debug : {value : false },
             name : {value : ''}

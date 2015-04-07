@@ -9,6 +9,15 @@
         <input type="text" id="node-input-maxrows" placeholder="MaxRows">
     </div>
     <div class="form-row">
+        <label for="node-input-style"><i class="icon-tag"></i> Style</label>
+        <select id="node-input-style">
+          <option value="SHORT">Short</option>
+          <option value="MEDIUM" selected>Medium</option>
+          <option value="LONG">Long</option>
+          <option value="FULL">Full</option>
+        </select>
+    </div>
+    <div class="form-row">
         <label for="node-input-username"><i class="icon-tag"></i> Username</label>
         <input type="text" id="node-input-username" placeholder="Username">
     </div>
@@ -27,16 +36,16 @@
     <p>This node performs search for geographical places, using <a target="_blank" href="http://www.geonames.org">geonames.org</a></p>
     <p>Please note that geonames.org requires a <strong>valid username</strong> as parameter.</p>
     <p>The node uses the service <strong>api.geonames.org/searchJSON</strong></p>
-    <h4>Input parameters</h4> 
-    Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
+    <h4>Input parameters</h4>
+    <p>Parameters can either be provided using Node-RED msg URI query parameters, or secondly JSON payload</p>
     <ul>
       <li>Query parameters</li>
-        <p>URI: ?query=london&maxrows=10&username=demo</p>
-        <p>Resulting in: msg.query=london, msg.maxrows=10, username=demo</p>
+        <p>URI: ?username=demo&style=MEDIUM&query=The Grand at Trafalgar Square&maxrows=10</p>
+        <p>Resulting in: msg.username=demo, msg.style=MEDIUM, msg.query=The Grand at Trafalgar Square, msg.maxrows=10</p>
       <li>JSON payload</li>
-        <p>Payload: { 'query' : 'london', 'maxrows' : 10, 'username' : 'demo' }</p>
-        <p>Resulting in: msg.payload.query=london, msg.payload.maxrows=10, msg.payload.username=demo</p>
-    </ul>  
+        <p>Payload: { "username" : "demo", "style" : "MEDIUM", "query" : "The Grand at Trafalgar Square", "maxrows" : "1" }</p>
+        <p>Resulting in: msg.payload.username=demo, msg.payload.style=MEDIUM, msg.payload.query=The Grand at Trafalgar Square, msg.payload.maxrows=10</p>
+    </ul>
 </script>
 
 <script type="text/javascript">
@@ -45,7 +54,8 @@
         color : 'LightCyan',
         defaults: {
             query : {value : ''},
-            maxrows : {value : ''},
+            maxrows : {value : 10, validate : RED.validators.number()},
+            style : {value : 'MEDIUM'},
             username : {value : 'demo'},
             debug : {value : false },
             name : {value : ''}
