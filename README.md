@@ -29,12 +29,18 @@ Node-RED sample flows. The two flows are examples of using the Geonames and / or
 
 Sample test URL's:
 
+<p> Geonames reverse geolocation lookup:
+<a target="_blank" href="http://noderedjo2.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo">http://noderedjo2.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo</a>
+</p>
+
+<div><strong>Node-RED Geonames sample flow</strong></div>
+<img src="./samples/Node-RED-Geonames.jpg" alt="Node-RED Geonames sample flow">
+
 <p>Yr weather links:
 <a target="_blank" href="http://noderedjo2.mybluemix.net/yrinfo?latitude=59.93797728565216&longitude=10.720676915344256&username=demo">http://noderedjo2.mybluemix.net/yrinfo?latitude=59.93797728565216&longitude=10.720676915344256&username=demo</a>
 </p>
 
-<p> Geonames reverse geolocation lookup:
-<a target="_blank" href="http://noderedjo2.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo">http://noderedjo2.mybluemix.net/geonamesplace?latitude=59.93797728565216&longitude=10.720676915344256&username=demo</a>
-</p>
+<div><strong>Node-RED Yr sample flow</strong></div>
+<img src="./samples/Node-RED-Yr.jpg" alt="Node-RED Yr sample flow">
 
 </body></html>
