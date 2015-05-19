@@ -33,10 +33,17 @@ module.exports = (function() {
          uri += geoname.toponymName + '/';
 
          uri = uri.replace(/\s+/g, '_');
+
+         uri = encodeURI(uri);
+         uri = utf8quote(uri);
    
          return uri;
       } else
          return null;
-    }
+    },
   };
 }());
+
+// http://www.real-world-systems.com/docs/Characters.html
+// E2 80 9C = UTF-8 &apos ('')
+function utf8quote(s) { return ('' + s).replace(/'/g, '%E2%80%99'); }
