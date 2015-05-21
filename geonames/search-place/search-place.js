@@ -76,8 +76,13 @@ function getGeonamesSearchPlaceURL(username, style, query, maxrows) {
 
   if (maxrows === undefined) maxrows = 10;
 
-  geonamesurl += '&q=' + query;
   geonamesurl += '&maxRows=' + maxrows;
+  geonamesurl += '&q=' + (isEncoded(query) ? query : encodeURIComponent(query));
     
   return geonamesurl;
+}
+
+// http://stackoverflow.com/questions/1275948/how-to-detect-if-a-string-is-encoded-with-escape-or-encodeuricomponent
+function isEncoded(str) {
+    return typeof str == 'string' && decodeURIComponent(str) !== str;
 }
