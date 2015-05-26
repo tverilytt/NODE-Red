@@ -94,5 +94,6 @@ function getYrInfo(uri, geoinfo) {
   place += geoinfo.countryName ? ',' + geoinfo.countryName : '';
   if (place === '') place = 'No geoname for this location';
 
-  return { 'yr' : baseURL, 'meteogram' : baseURL + 'meteogram.png', 'weather-data' : baseURL + 'forecast.xml' , 'place' : place};
+  return { 'yr' : baseURL, 'meteogram' : baseURL + 'meteogram.png', 'weather-data' : baseURL + 'forecast.xml' , 'place' : place,
+    'latitude' : geoinfo.lat, 'longitude' : geoinfo.lng };
 }
