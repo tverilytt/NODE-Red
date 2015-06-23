@@ -6,11 +6,11 @@ The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybl
 or by clicking on the image.
 
 <br>
-<p>
+<div>
 <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms">
-<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/telenorsms.jpg" align="left">
+<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/telenorsms.jpg">
 </a>
-</p>
+</div>
 <br>
 <p>
 <strong>settings.js</strong> contains Node-RED settings, also also settings for 
