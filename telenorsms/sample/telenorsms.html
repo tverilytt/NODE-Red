@@ -44,7 +44,7 @@
 
 'use strict';
 
-var DEBUG_MODE = true;
+var DEBUG_MODE = false;
 var ALERT_MODE = false;
 
 function debugLog() {
@@ -99,6 +99,7 @@ function updateLoginStatus(loggedIn, loginStatusMessage) {
      document.getElementById('logintable').innerHTML = loginHTML;
      document.getElementById('freesms').innerHTML = '';
      document.getElementById('smsarchive').innerHTML = '';
+     document.getElementById('smscontacts').innerHTML = '';
      document.getElementById('sendsms').innerHTML = '';
   }
 }

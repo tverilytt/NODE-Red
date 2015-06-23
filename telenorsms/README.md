@@ -69,6 +69,6 @@ This is a screen shot of some Node-RED flows using the nodes. These are also use
 and is available in the sample directory.
 </p>
 
-<img src="telenorsms-flows.jpg" align="left">
+<img src="./telenorsms-flows.jpg" align="left">
 
 </body></html>
