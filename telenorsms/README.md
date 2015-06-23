@@ -62,13 +62,4 @@ This node can be used standalone.
 The sample directory contains a Web browser client using the Telenor SMS nodes.
 The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms/">here</a>
 
-<h1>Node-RED flows</h1>
-<p>
-This is a screen shot of some Node-RED flows using the nodes. These are also used by the
-<a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms/">Telenor SMS sample</a>
-and is available in the sample directory.
-</p>
-
-<img src="./telenorsms-flows.jpg" align="left">
-
 </body></html>

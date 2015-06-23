@@ -1,13 +1,13 @@
 {
     "name"          : "node-red-contrib-telenorsms",
-    "version"       : "0.0.2",
+    "version"       : "0.0.4",
     "description"   : "Telenor SMS node(s) Node-RED nodes for sending Telenor SMS.",
     "repository" : {
         "type" :"git",
         "url" : "https://github.com/tverilytt/NODE-Red/tree/master/telenorsms"
     },    
     "license" : "Apache",
-    "keywords" : [ "node-red", "telenorsms-login", "telenorsms-sendsms", "telenorsms-smscount", "telenorsms-smsarchive", "telenorsms-contacts", "telenorsms-logout" ],
+    "keywords" : [ "node-red", "telenorsms-login", "telenorsms-simplesms", "telenorsms-sendsms", "telenorsms-smscount", "telenorsms-smsarchive", "telenorsms-contacts", "telenorsms-logout" ],
     "node-red" : {
         "nodes" : {
             "telenorsms-login" : "telenorsms-login/telenorsms-login.js",
