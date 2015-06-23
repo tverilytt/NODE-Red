@@ -14,6 +14,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script language="JavaScript" type="text/javascript" src="cryptico.min.js"></script>
+
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 <title>Yr Meteogram</title>
 
@@ -39,7 +41,7 @@
 -->
 
 <script charset='UTF-8'>
-/* global console, alert */
+/* global console, alert, cryptico */
 /*jshint devel : true*/
 
 'use strict';
@@ -72,6 +74,14 @@ var animationHTML, animationTimeout, meteogramurl;
 function initOnLoad() {
   debugLog('yrjsdemo: JS loaded');
   animationHTML = document.getElementById('unicornanimation').innerHTML;
+}
+
+var publicKeyString = '63piY/6TULHHXUtYMBSKO1/1ARI2t53hkd7q+shkp9X2FZbDxhVAxVQi1e6Jm2qz0AkyBx4nxJfl+jcvr3tO7Q==';
+function getEncryptedValue(str) {
+  var EncryptionResult = cryptico.encrypt(str, publicKeyString);
+
+  var uriEncodedString = encodeURIComponent(EncryptionResult.cipher);
+  return uriEncodedString;
 }
 
 function showYrMeteogram() {
@@ -144,10 +154,10 @@ function doSMSYrMeteogram(sender, password, recipient, message) {
   if (!sender || !password || !recipient || !message) return;
 
   url = simpleSMSUrl;
-  url += '?sender=' + sender;
-  url += '&password=' + password;
-  url += '&recipients=' + recipient;
-  url += '&message=' + encodeURI(encodeURI(message));
+  url += '?sender=' + getEncryptedValue(sender);
+  url += '&password=' + getEncryptedValue(password);
+  url += '&recipients=' + getEncryptedValue(recipient);
+  url += '&message=' + getEncryptedValue(encodeURI(message));
   method = 'GET';
 
   debugLog('SMS url', url);
@@ -295,7 +305,10 @@ window.onload = initOnLoad;
   <tr>
   </tr>
 </table>
-  <strong><a href='mailto:jo.torsmyr@gmail.com?Subject=yrjsdemo' target='_blank'>Questions? Contact Jo Torsmyr</a></strong>
+  <strong><a href='mailto:jo.torsmyr@gmail.com?Subject=yrsms' target='_blank'>Questions? Contact Jo Torsmyr</a></strong>
+<font size="1">(For security - all input values are encrypted using
+<a href='https://www.npmjs.com/package/cryptico' target='_blank'>Cryptico</a>
+before sent to server)</font>
 </div>
 <br>
 

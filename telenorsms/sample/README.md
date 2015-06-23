@@ -2,7 +2,7 @@
 
 <h1>Sample</h1>
 The sample directory contains a Web browser client using the Telenor SMS nodes.
-The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms/">here</a>
+The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms">here</a>
 or by clicking on the image.
 
 <br>
@@ -12,6 +12,20 @@ or by clicking on the image.
 </a>
 </div>
 <br>
+
+<h2>Yr SMS</h2>
+The sample directory also contains a Web browser client using the Geonames, Yr and Telenor SMS nodes.
+This sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/yrsms">here</a>
+or by clicking on the image.
+
+<br>
+<div>
+<a target="_blank" href="http://noderedjo2.mybluemix.net/yrsms">
+<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/yrsms.jpg">
+</a>
+</div>
+<br>
+
 <p>
 <strong>settings.js</strong> contains Node-RED settings, also also settings for 
 <a target="_blank" href="https://www.npmjs.com/package/cryptico">Cryptico</a>

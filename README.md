@@ -26,8 +26,18 @@ A Node-RED node to lookup Yr.no weather info links.
 
 <h3>Samples</h3>
 
-The sample directory contains a Web browser client using the Geonames, Yr and Telenor SMS nodes.
-The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/yrsms/">here</a>
+<h4>Yr SMS</h4>
+The Telenor SMS sample directory contains a Web browser client using the Geonames, Yr and Telenor SMS nodes.
+The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/yrsms">here</a>
+or by clicking on the image.
+
+<br>
+<div>
+<a target="_blank" href="http://noderedjo2.mybluemix.net/yrsms">
+<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/yrsms.jpg">
+</a>
+</div>
+<br>
 
 <h3>Node-RED sample flows</h3>
 The sample flows are examples of using the Geonames and / or Yr nodes in Node-RED.
