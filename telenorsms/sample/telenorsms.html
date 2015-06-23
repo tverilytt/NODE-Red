@@ -1,0 +1,398 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<script language="JavaScript" type="text/javascript" src="cryptico.min.js"></script>
+
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>Telenor SMS</title>
+
+<style type='text/css'>
+#unicornanimation #animation img {
+    display: none;
+}
+#unicornanimation #animation img:first-child {
+    display: none;
+}
+#animation { 
+    background-repeat: no-repeat; 
+    height: 102px; 
+    width: 140px; 
+    display: none;
+}
+#smstable, #smstable tr, #smstable th, #smstable td {
+   border: 1px solid black;
+}
+</style>
+
+<script charset='UTF-8'>
+/* global console, alert */
+/*jshint devel : true*/
+
+'use strict';
+
+var DEBUG_MODE = true;
+var ALERT_MODE = false;
+
+function debugLog() {
+  if (DEBUG_MODE) {
+     Array.prototype.unshift.call(arguments, 'telenorsms');
+     var debugtext = '';
+     for (var i = 0; i < arguments.length; i++)
+         debugtext += arguments[i].toString() + (i < (arguments.length - 1) ? ', ' : '');
+     console.log(debugtext);
+
+     if (ALERT_MODE) alert(debugtext);
+  }
+}
+
+//var HOST = 'http://noderedjo2.mybluemix.net';
+var HOST = 'http://localhost:1880';
+var animationHTML, animationTimeout, loginHTML;
+var freeSMSUrl = HOST + '/smscount';
+var smsArchiveUrl = HOST + '/smsarchive';
+var smsContactsUrl = HOST + '/smscontacts';
+var logoutUrl = HOST + '/logout';
+var loginUrl = HOST + '/login';
+var sendsmsUrl = HOST + '/sendsms';
+var selectedRecipient = null;
+
+function initOnLoad() {
+  debugLog('telenorsms: JS loaded');
+  loginHTML = document.getElementById('logintable').innerHTML;
+  animationHTML = document.getElementById('unicornanimation').innerHTML;
+  document.getElementById('recipients').disabled = true;
+  document.getElementById('message').disabled = true;
+  document.getElementById('sendSMSbutton').disabled = true;
+}
+
+var publicKeyString = '63piY/6TULHHXUtYMBSKO1/1ARI2t53hkd7q+shkp9X2FZbDxhVAxVQi1e6Jm2qz0AkyBx4nxJfl+jcvr3tO7Q==';
+function getEncryptedValue(str) {
+  var EncryptionResult = cryptico.encrypt(str, publicKeyString);
+
+  var uriEncodedString = encodeURIComponent(EncryptionResult.cipher);
+  return uriEncodedString;
+}
+
+function updateLoginStatus(loggedIn, loginStatusMessage) {
+  document.getElementById('loginstatus').innerHTML = loginStatusMessage;
+
+  document.getElementById('recipients').disabled = !loggedIn;
+  document.getElementById('message').disabled = !loggedIn;
+  document.getElementById('sendSMSbutton').disabled = !loggedIn;
+  if (loggedIn) {
+     document.getElementById('logintable').innerHTML = '';
+  } else {
+     document.getElementById('logintable').innerHTML = loginHTML;
+     document.getElementById('freesms').innerHTML = '';
+     document.getElementById('smsarchive').innerHTML = '';
+     document.getElementById('sendsms').innerHTML = '';
+  }
+}
+
+function telenorLogout() {
+  telenorRequest(logoutUrl, function(responsePayload) {
+    updateLoginStatus(responsePayload.loggedIn, 'Logout successfull: ' + responsePayload.logoutStatus);
+  });
+}
+
+function telenorLogin() {
+  var username = document.getElementById('username').value;
+  var password = document.getElementById('password').value;
+
+  var url = loginUrl;
+
+  url += '?username=' + getEncryptedValue(username);
+  url += '&password=' + getEncryptedValue(password);
+
+  debugLog('url', url);
+
+  document.getElementById('errorstatus').innerHTML = '';
+  telenorRequest(url, function(responsePayload) {
+    debugLog(username);
+    if (responsePayload.loggedIn) {
+       var loggedInString = 'Logged in as ' + responsePayload.name + ' (cell ' + responsePayload.cell + ', username: ' +
+        username + ') ' + '<a href=\"javascript:void(0)\" onclick=\"telenorLogout()\">logout</a>';
+       updateLoginStatus(responsePayload.loggedIn, loggedInString);
+       telenorRequest(freeSMSUrl, function(responsePayload) {
+         if (responsePayload.error)
+            document.getElementById('errorstatus').innerHTML = document.getElementById('errorstatus').innerHTML + ', unable to get free SMS status';
+         else
+            document.getElementById('freesms').innerHTML = 'Free SMS left: ' + responsePayload.freesms;
+       });
+       telenorRequest(smsArchiveUrl, function(responsePayload) {
+         if (responsePayload.error)
+            document.getElementById('errorstatus').innerHTML = document.getElementById('errorstatus').innerHTML + ', unable to get sent SMS archive';
+         else
+           document.getElementById('smsarchive').innerHTML = formatSMSArchive(responsePayload.smsarchive);
+       });
+       telenorRequest(smsContactsUrl, function(responsePayload) {
+         if (responsePayload.error)
+            document.getElementById('smscontacts').innerHTML = document.getElementById('errorstatus').innerHTML + JSON.stringify(responsePayload);
+         else
+           document.getElementById('smscontacts').innerHTML = formatSMSContacts(responsePayload.contacts);
+       });
+    } else {
+       updateLoginStatus(responsePayload.loggedIn, 'Login failed');
+    }
+  });
+}
+
+function sendSMS() {
+  var recipients = document.getElementById('recipients').value;
+  var message = document.getElementById('message').value;
+
+  var url = sendsmsUrl;
+
+  url += '?recipients=' + getEncryptedValue(recipients);
+  url += '&message=' + getEncryptedValue(message);
+
+  debugLog('url', url);
+
+  document.getElementById('errorstatus').innerHTML = '';
+  telenorRequest(url, function(responsePayload) {
+    document.getElementById('sendsms').innerHTML = 'Send SMS status: ' + responsePayload.sent + ' (description: ' + responsePayload.messageStatus + ')';
+    if (responsePayload.sent)
+       telenorRequest(smsArchiveUrl, function(responsePayload) {
+         document.getElementById('smsarchive').innerHTML = formatSMSArchive(responsePayload.smsarchive);
+       });
+  });
+}
+
+function formatSMSArchive(smsArchive) {
+  if (smsArchive && smsArchive.length) {
+     var html = '<table id=\"smstable\" width=\"100%\"><tr><td colspan=\"3\" align=\"center\"><strong>Sent SMS</strong></td></tr><tr><th>Recipients</th><th>Message</th><th>Sent</th></tr>';
+     for (var i = 0; i < smsArchive.length; i++)
+         html += '<tr><td>' + smsArchive[i].to + '</td><td>' + smsArchive[i].message + '</td><td>' + smsArchive[i].date + '</td></tr>';
+     html += '</table>';
+     return html;
+  } else return '';
+}
+
+function addRecipient(recipient) {
+  var recipients = document.getElementById('recipients').value;
+  if (recipients && recipients.length > 0)
+     recipients += ',';
+  recipients += recipient;
+  document.getElementById('recipients').value = recipients;
+}
+
+function selectRecipient(recipient) {
+  selectedRecipient = recipient;
+  debugLog('Selected recipient', selectedRecipient);
+}
+function addContact() {
+  addRecipient(selectedRecipient);
+}
+
+function formatSMSContacts(smsContacts) {
+  if (smsContacts && smsContacts.length) {
+     var html = '<label>Contact list</label>';
+     html += '<input type=\"button\" value=\"Add\" onClick=\"addContact()\"><br>';
+     html += '<select id=\"contactstable\" size=\"10\" onclick=\"selectRecipient(this.value)\" ondblclick=\"addRecipient(this.value)\">';
+     html += '<optgroup label="Contact list">';
+     for (var i = 0; i < smsContacts.length; i++)
+         html += '<option value=\"' + smsContacts[i].number + '\">' + smsContacts[i].name + '</option>';
+     html += '</select>';
+debugLog(html);     
+     return html;
+  } else return '';
+}
+
+function telenorRequest(url, responseCallback) {
+  try {
+    var xmlhttpget = new XMLHttpRequest();
+
+    xmlhttpget.onerror = function(error) {
+      debugLog('response onerror', error);        
+    };
+
+    xmlhttpget.open('GET', url, true);
+
+    xmlhttpget.onloadstart = function() {
+      debugLog('onloadstart', xmlhttpget.status);
+//      document.getElementById('meteogram').innerHTML = 'Searching for Yr meteogram for ' + searchParam;
+      startAnimation();
+    };
+
+    xmlhttpget.onloadend = function() {
+      debugLog('onloadend', xmlhttpget.status);
+      stopAnimation();
+      try {
+        if (xmlhttpget.status === 200) {
+           var payload = JSON.parse(xmlhttpget.responseText);
+           debugLog('Response payload', JSON.stringify(payload));
+           if (payload.error)
+              document.getElementById('errorstatus').innerHTML = 'Error: ' + payload.errorMessage;
+           else
+              document.getElementById('errorstatus').innerHTML = '';
+
+           responseCallback(payload);
+        } else {
+           debugLog('onloadend not ok', xmlhttpget.responseText);
+           document.getElementById('errorstatus').innerHTML = 'Error: ' + xmlhttpget.responseText;
+        }
+      } catch (error) {
+        debugLog('onloadend error:', error);
+        document.getElementById('errorstatus').innerHTML = 'Error: ' + xmlhttpget.responseText;
+        document.getElementById('unicornanimation').innerHTML = '';
+      }
+    };
+    xmlhttpget.send(); 
+  } catch(error) {
+    debugLog('request error:', error.toString());
+    document.getElementById('errorstatus').innerHTML = 'Error: ' + error.toString();
+    document.getElementById('unicornanimation').innerHTML = '';
+  }
+}
+
+var unicorns = [
+  { name: 'cancan', height: 1755, width: 120, frames: 15, loop: 1 },
+  { name: 'balloon', height: 2020, width: 120, frames: 20, loop: 1 },
+  { name: 'charging', height: 1530, width: 140, frames: 15, loop: 0 },
+  { name: 'dart', height: 2280, width: 100, frames: 20, loop: 1 },
+  { name: 'kick', height: 2000, width: 151, frames: 20, loop: 1 },
+  { name: 'kiss', height: 2000, width: 172, frames: 20, loop: 1 },
+  { name: 'saber', height: 2160, width: 120, frames: 20, loop: 1 },
+  { name: 'shakehead', height: 1500, width: 125, frames: 10, loop: 0, loopback: 1 },
+  { name: 'thumbsup', height: 2400, width: 80, frames: 20, loop: 1 }
+];
+
+// http://jumpingfishes.com/dancingpurpleunicorns/
+function startAnimation() {
+  document.getElementById('unicornanimation').innerHTML = animationHTML;
+  var unicornno = Math.floor((Math.random() * 9));
+  var unicorn = unicorns[unicornno];
+  var frame = 0; 
+  var div = document.getElementById('animation'); 
+  animationTimeout = setInterval(function () { 
+    var frameHeight = unicorn.height / unicorn.frames;
+    div.style.width = unicorn.width + 'px';
+    div.style.height = frameHeight + 'px';
+    div.style.backgroundImage = 'url(\'http://jumpingfishes.com/dancingpurpleunicorns/' + unicorn.name + '.png\')';
+    div.style.backgroundPosition = '0px ' + ((frame % unicorn.frames) * -frameHeight) + 'px';        
+    div.style.display = 'block';
+    frame++;
+  }, 100); 
+} 
+function stopAnimation() {
+  clearTimeout(animationTimeout);
+  animationTimeout = -1;
+  document.getElementById('unicornanimation').innerHTML = '';
+}
+
+window.onload = initOnLoad;
+
+</script>
+
+</head>
+<body>
+<h1>Telenor SMS</h1><div id='loginstatus'><h2>Not logged in.</h2></div>
+
+<strong><a href='mailto:jo.torsmyr@gmail.com?Subject=telenorsms' target='_blank'>Questions? Contact Jo Torsmyr</a></strong>
+</p>
+<font size="1">(For security - all input values are encrypted using
+<a href='https://www.npmjs.com/package/cryptico' target='_blank'>Cryptico</a>
+before sent to server)</font>
+<br>
+
+<div id="logintable">
+<table>
+  <tr>
+    <td><strong>Login:</strong></td>
+  </tr>
+  <tr>
+    <td>Username </td>
+    <td>
+      <input type='text' id='username'/>
+    </td>
+    </td>
+  </tr>
+  <tr>
+    <td>Password: </td>
+    <td>
+      <input type='password' id='password'/>
+    </td>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type='button' value='Login' id='loginButton' onClick='telenorLogin()'/>
+    </td>
+    </td>
+  </tr>
+  </table>
+</div>
+  <table>
+  <tr>
+    <td><strong>Send SMS</strong></td>
+    <td width="100"/>
+    <td rowspan="8" width="200">
+<div id='unicornanimation'>
+  <div id='animation'>
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging01.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging02.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging03.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging04.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging05.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging06.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging07.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging08.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging09.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging10.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging11.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging12.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging13.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging14.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging15.png' />
+  </div> 
+</div> 
+    </td>
+  </tr>
+  <tr>
+    <td>Recipients </td>
+    <td>
+      <input type='text' id='recipients'/>
+    </td>
+    </td>
+  </tr>
+  <tr>
+    <td>Message </td>
+    <td>
+      <input type='text' id='message'/>
+    </td>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type='button' value='Send' id='sendSMSbutton' onClick='sendSMS()'/>
+    </td>
+    <td>
+      <div id='freesms'>
+      </div> 
+    </td>
+    </td>
+  </tr>
+</table>
+
+<div id='errorstatus'></div> 
+<div id='sendsms'></div> 
+<br>
+<div id='smscontacts'></div> 
+<br>
+<div id='smsarchive' style="width:500px; height:300px; overflow:auto;"></div> 
+</body>
+</html>

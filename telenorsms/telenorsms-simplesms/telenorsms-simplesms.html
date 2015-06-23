@@ -1,0 +1,107 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="simplesms">
+    <div class="form-row">
+        <label for="node-input-sender"><i class="icon-tag"></i> Sender</label>
+        <input type="text" id="node-input-sender" placeholder="Sender">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="icon-tag"></i> Password</label>
+        <input type="password" id="node-input-password" placeholder="Password">
+    </div>
+    <div class="form-row">
+        <label for="node-input-recipients"><i class="icon-tag"></i> Recipients</label>
+        <input type="text" id="node-input-recipients" placeholder="Recipients">
+    </div>
+    <div class="form-row">
+        <label for="node-input-message"><i class="icon-tag"></i> Message</label>
+        <input type="text" id="node-input-message" placeholder="Message">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="simplesms">
+    <h4>Telenor simple send SMS</h4>
+    <p>Simple send SMS, sender will be your Telenor cell phone number. </p>
+    <p>Please note that to use this service, a one-time activation is required. The actication is done by sending an SMS with 
+    the word "<strong>passord</strong>" (without the quotes) to <strong>1999</strong>. You will get a reply SMS with a genereated password.
+    You can also set your own password by following the instructions in the reply SMS. If the activation has not been done,
+    the response XML will contain an error message
+    with the text "Service not available for customer.", like in this sample response:</p>
+    <p>
+    <code>
+    &lt;SMAPI version="3.0"&gt;
+    &lt;RESPONSE processed="FAILED"&gt;
+    &lt;BASIC_DATA sender="+47nnnnnnnn" billedNumber="+47nnnnnnnn" sId="1000000000"/&gt;
+    &lt;ERROR code="3027"&gt;Service not available for customer.&lt;/ERROR&gt;
+    &lt;RECIPIENT status="FAILED" address="+47nnnnnnnn"/&gt;
+    &lt;/RESPONSE&gt;
+    &lt;/SMAPI&gt;
+    </code>
+    </p>
+    <h4>Input parameters</h4>
+    <p>Parameters can either be provided in the nodes property GUI, or using Node-RED msg URI query parameters, or secondly JSON payload</p>
+    <ul>
+      <li>Query parameters</li>
+        <p>URI: ?sender=&lt;sender cell phone number&gt;&password=&lt;password&gt;&recipients=&lt;recipient cell phone numbers (comma-separated)&gt;&message=&lt;SMS message text&gt;. For example
+          <code>
+           ?sender=nnnnnnnn&password=mypassword&recipients=nnnnnn01,nnnnnn02&message=my message
+           </code>
+        </p>
+        <p>Resulting in: msg.payload.sender=&lt;Sender cell phone number&gt;, msg.payload.password=&lt;Password&gt;,
+           msg.payload.recipients=&lt;recipient cell phone numbers (comma-separated)&gt;, msg.payload.message=&lt;SMS message text&gt;</p>
+      <li>JSON payload</li>
+        <p>Payload: { "sender" : "sender cell phone number", "password" : "password", "recipients" : "recipient cell phone numbers", "message" : "SMS message text" }</p>
+      <li>Response message</li>
+        <p>The response from the Telenor SMS service is in XML format, and this is returned as-is for potential further processing.</p>
+    <p>
+    <code>
+    &lt;SMAPI version="3.0"&gt;
+    &lt;RESPONSE processed="OK"&gt;
+    &lt;BASIC_DATA sender="+47nnnnnnnn" billedNumber="+47nnnnnnnn" sId="1000000000"/&gt;
+    &lt;RECIPIENT status="OK" address="+47nnnnnnnn"/&gt;
+    &lt;/RESPONSE&gt;
+    &lt;/SMAPI&gt;
+    </code>
+    </p>
+    </ul>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('simplesms', {
+        category : 'telenorsms',
+        color : 'LightSkyBlue',
+        defaults: {
+            sender : {value : ''},
+            password : {value : ''},
+            recipients : {value : ''},
+            message : {value : ''},
+            debug : {value : true },
+            name : {value : ''},
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'telenor.png',
+        label : function() {
+            return this.name || 'simplesms';
+        },
+    });
+</script>

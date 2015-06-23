@@ -1,0 +1,47 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="smsarchive">
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="smsarchive">
+    <h4>Telenor SMS sent message archive</h4>
+    <p>Get list of sent SMS text messages. Each list row contains recipient cell phone number, SMS text message and date and time.</p>
+    <p>Output: { "smsarchive" : [ { to: "&lt;recipient cell phone number&gt;", message: "&lt;SMS text message&gt;", date: "05.06.15 16:15" },
+  { to: "&lt;recipient cell phone number&gt;", message: "&lt;SMS text message&gt;", date: "03.06.15 22:55" }]}</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('smsarchive', {
+        category : 'telenorsms',
+        color : 'LightSkyBlue',
+        defaults: {
+            debug : {value : true },
+            name : {value : ''},
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'telenor.png',
+        label : function() {
+            return this.name || 'smsarchive';
+        },
+    });
+</script>
