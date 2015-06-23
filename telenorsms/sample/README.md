@@ -3,7 +3,15 @@
 <h1>Sample</h1>
 The sample directory contains a Web browser client using the Telenor SMS nodes.
 The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms/">here</a>
+or by clicking on the image.
 
+<br>
+<p>
+<a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms">
+<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/telenorsms.jpg" align="left">
+</a>
+</p>
+<br>
 <p>
 <strong>settings.js</strong> contains Node-RED settings, also also settings for 
 <a target="_blank" href="https://www.npmjs.com/package/cryptico">Cryptico</a>
@@ -21,6 +29,6 @@ This is a screen shot of some Node-RED flows using the nodes. These are also use
 and is available in the sample directory.
 </p>
 
-<img src="https://github.com/tverilytt/NODE-Red/blob/master/telenorsms/sample/telenorsms-flows.jpg" align="left">
+<img src="https://raw.githubusercontent.com/tverilytt/NODE-Red/master/telenorsms/sample/telenorsms-flows.jpg" align="left">
 
 </body></html>
