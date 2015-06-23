@@ -1,0 +1,326 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>Yr Meteogram</title>
+
+<style type='text/css'>
+#unicornanimation #animation img {
+    display: none;
+}
+#unicornanimation #animation img:first-child {
+    display: none;
+}
+#animation { 
+    background-repeat: no-repeat; 
+    height: 102px; 
+    width: 140px; 
+    display: none;
+}
+</style>
+
+
+<!--
+<script type='text/javascript' src='yrmeteogram.js'></script>
+<script type='text/javascript'>window.onload = initOnLoad;</script>
+-->
+
+<script charset='UTF-8'>
+/* global console, alert */
+/*jshint devel : true*/
+
+'use strict';
+
+var DEBUG_MODE = false;
+var ALERT_MODE = false;
+
+    function debugLog() {
+      if (DEBUG_MODE) {
+         Array.prototype.unshift.call(arguments, 'yrjsdemo');
+//         console.log.apply(console.log, arguments);
+         var debugtext = '';
+         for (var i = 0; i < arguments.length; i++)
+           debugtext += arguments[i].toString() + (i < (arguments.length - 1) ? ', ' : '');
+         console.log(debugtext);
+//         alert.apply(null, arguments);
+
+         if (ALERT_MODE) alert(debugtext);
+      }
+    }
+
+//var HOST = 'http://noderedjo2.mybluemix.net';
+var HOST = 'http://localhost:1880';
+var yrPlaceInfoUrl = HOST + '/yrplaceinfo?';
+var yrInfoUrl = HOST + '/yrinfo?';
+var simpleSMSUrl = HOST + '/simplesms';
+
+var animationHTML, animationTimeout, meteogramurl;
+
+function initOnLoad() {
+  debugLog('yrjsdemo: JS loaded');
+  animationHTML = document.getElementById('unicornanimation').innerHTML;
+}
+
+function showYrMeteogram() {
+  var latitude = document.getElementById('latitude').value;
+  var longitude = document.getElementById('longitude').value;
+  var place = document.getElementById('searchplace').value;
+  debugLog(latitude, longitude, place);
+  getYrMeteogram(latitude, longitude, place);
+}
+
+function getYrMeteogram(lat, lng, place) {
+  var url;
+  var searchParam;
+  if (place) {
+     url = yrPlaceInfoUrl;
+     url  += 'query='+ place;
+     searchParam = place;
+  } else {
+     url = yrInfoUrl;
+     url += 'latitude=' + lat;
+     url += '&longitude=' + lng + '&';
+     searchParam = lat + ', ' + lng;
+  }
+  debugLog('url', url);
+
+  meteogramurl = null;
+
+  httpRequest(url, function(yrinfo) {
+    if (yrinfo.meteogram === 'Unknown')
+       document.getElementById('meteogram').innerHTML = 'No Yr meteogram found for ' + searchParam;
+    else {
+       meteogramurl = yrinfo.meteogram;
+       document.getElementById('meteogram').innerHTML = 
+         'Meteogram for ' + yrinfo.place +
+         ' (' + yrinfo.latitude + ', ' + yrinfo.longitude + ') <BR>' +
+         '<a target=\'_self\' href=\'' + yrinfo.yr + '\'>' +
+         '<img src=\'' + yrinfo.meteogram + '\'>' + '</a>';
+    }
+  });
+}
+
+function smsYrMeteogram() {
+  var sender = document.getElementById('smsFrom').value;
+  var password = document.getElementById('smsPassword').value;
+  var recipient = document.getElementById('smsTo').value;
+  var message = meteogramurl;
+
+  if (typeof sender == 'undefined') {
+     debugLog('From undefined');
+     return;
+   } else if (typeof password == 'undefined') {
+     debugLog('Password undefined');
+     return;
+   } else if (typeof recipient == 'undefined') {
+     debugLog('Recipient undefined');
+     return;
+   } else if (typeof message == 'undefined') {
+     debugLog('Message undefined');
+     return;
+   }
+  debugLog(sender, password, recipient, message);
+//  debugLog(to, message);
+  doSMSYrMeteogram(sender, password, recipient, message);
+}
+
+function doSMSYrMeteogram(sender, password, recipient, message) {
+  var url;
+  var method;
+
+  if (!sender || !password || !recipient || !message) return;
+
+  url = simpleSMSUrl;
+  url += '?sender=' + sender;
+  url += '&password=' + password;
+  url += '&recipients=' + recipient;
+  url += '&message=' + encodeURI(encodeURI(message));
+  method = 'GET';
+
+  debugLog('SMS url', url);
+
+  httpRequest(url, function(smsstatus) {
+    document.getElementById('errorstatus').innerHTML = 'Send SMS status: ' + (smsstatus.sent ? 'sent' : 'not sent');
+  });
+}
+
+function httpRequest(url, responseCallback) {
+  try {
+    var xmlhttpget = new XMLHttpRequest();
+
+    xmlhttpget.onerror = function(error) {
+      debugLog('response onerror', error);        
+    };
+
+    xmlhttpget.open('GET', url, true);
+
+    xmlhttpget.onloadstart = function() {
+      debugLog('onloadstart', xmlhttpget.status);
+//      document.getElementById('meteogram').innerHTML = 'Searching for Yr meteogram for ' + searchParam;
+      startAnimation();
+    };
+
+    xmlhttpget.onloadend = function() {
+      debugLog('onloadend', xmlhttpget.status);
+      stopAnimation();
+      try {
+        if (xmlhttpget.status === 200) {
+           var payload = JSON.parse(xmlhttpget.responseText);
+           debugLog('Response payload', JSON.stringify(payload));
+           document.getElementById('errorstatus').innerHTML = '';
+           responseCallback(payload);
+        } else {
+           debugLog('onloadend not ok', xmlhttpget.responseText);
+           document.getElementById('errorstatus').innerHTML = xmlhttpget.responseText;
+        }
+      } catch (error) {
+        debugLog('onloadend error:', error);
+        document.getElementById('errorstatus').innerHTML = xmlhttpget.responseText;
+        document.getElementById('meteogram').innerHTML = '';
+      }
+    };
+    xmlhttpget.send(); 
+  } catch(error) {
+    debugLog('request error:', error.toString());
+    document.getElementById('errorstatus').innerHTML = error.toString();
+    document.getElementById('meteogram').innerHTML = '';
+  }
+}
+
+// http://stackoverflow.com/questions/9486961/animated-image-with-javascript
+// http://jsfiddle.net/twTab/
+function startAnimation() { 
+  document.getElementById('unicornanimation').innerHTML = animationHTML;
+  var unicornno = Math.floor((Math.random() * 9));
+  var unicorn = unicorns[unicornno];
+  var frame = 0; 
+  var div = document.getElementById('animation'); 
+  animationTimeout = setInterval(function () { 
+    var frameHeight = unicorn.height / unicorn.frames;
+    div.style.width = unicorn.width + 'px';
+    div.style.height = frameHeight + 'px';
+    div.style.backgroundImage = 'url(\'http://jumpingfishes.com/dancingpurpleunicorns/' + unicorn.name + '.png\')';
+    div.style.backgroundPosition = '0px ' + ((frame % unicorn.frames) * -frameHeight) + 'px';        
+    div.style.display = 'block';
+    frame++;
+  }, 100); 
+} 
+
+function stopAnimation() {
+  clearTimeout(animationTimeout);
+  animationTimeout = -1;
+  document.getElementById('unicornanimation').innerHTML = '';
+}
+
+var unicorns = [
+  { name: 'cancan', height: 1755, width: 120, frames: 15, loop: 1 },
+  { name: 'balloon', height: 2020, width: 120, frames: 20, loop: 1 },
+  { name: 'charging', height: 1530, width: 140, frames: 15, loop: 0 },
+  { name: 'dart', height: 2280, width: 100, frames: 20, loop: 1 },
+  { name: 'kick', height: 2000, width: 151, frames: 20, loop: 1 },
+  { name: 'kiss', height: 2000, width: 172, frames: 20, loop: 1 },
+  { name: 'saber', height: 2160, width: 120, frames: 20, loop: 1 },
+  { name: 'shakehead', height: 1500, width: 125, frames: 10, loop: 0, loopback: 1 },
+  { name: 'thumbsup', height: 2400, width: 80, frames: 20, loop: 1 }
+];
+
+window.onload = initOnLoad;
+
+</script>
+
+</head>
+<body>
+<div>
+<h3>Lookup Yr.no meteogram by geo position (latitude / longitude in decumal degree format), or place name search</h3>
+<table>
+  <tr>
+    <td><strong>Search by geo position:</strong></td>
+  </tr>
+  <tr>
+    <td>Latitude </td>
+    <td>
+      <input type='text' id='latitude'/>
+    </td>
+    <td>(-90 - 90)</td>
+  </tr>
+  <tr>
+    <td>Longitude: </td>
+    <td>
+      <input type='text' id='longitude'/>
+    </td>
+    <td>(-189 - 180)</td>
+  </tr>
+  <tr>
+    <td><strong>Search by place name:</strong></td>
+  </tr>
+  <tr>
+    <td>Place name: </td>
+    <td>
+      <input type='text' id='searchplace'/>
+    </td>
+    <td>
+      <input type='button' value='Meteogram' id='yrButton' onClick='showYrMeteogram()'/>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Share Meteogram by SMS</strong></td>
+  </tr>
+  <tr>
+    <td>
+      From: <input type='text' id='smsFrom'/>
+    </td>
+    <td>
+      Password: <input type='password' id='smsPassword'/>
+    </td>
+    <td>
+      To: <input type='text' id='smsTo'/>
+    </td>
+    <td>
+      <input type='button' value='SMS' id='smsButton' onClick='smsYrMeteogram()'/>
+    </td>
+  </tr>
+  <tr>
+  </tr>
+</table>
+  <strong><a href='mailto:jo.torsmyr@gmail.com?Subject=yrjsdemo' target='_blank'>Questions? Contact Jo Torsmyr</a></strong>
+</div>
+<br>
+
+<br>
+<div id='unicornanimation'>
+  <div id='animation'>
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging01.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging02.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging03.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging04.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging05.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging06.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging07.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging08.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging09.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging10.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging11.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging12.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging13.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging14.png' />
+    <img src='http://jumpingfishes.com/dancingpurpleunicorns/charging15.png' />
+  </div> 
+</div> 
+<div id='errorstatus'></div> 
+<div id='meteogram'></div>
+
+</body>
+</html>
