@@ -39,10 +39,10 @@ module.exports = function(RED) {
     var node = this;
 
     this.on('input', function(msg) {
-      var query = msg.query || msg.payload.query;
-      var maxrows = msg.maxrows || msg.payload.maxrows;
-      var style = msg.style || msg.payload.style;
-      var username = msg.username || msg.payload.username;
+      var query = msg.query || msg.payload.query || node.query;
+      var maxrows = msg.maxrows || msg.payload.maxrows || node.maxrows;
+      var username = msg.username || msg.payload.username || node.username;
+      var style = msg.style || msg.payload.style || node.style;
 
       if (geoCommon.setBaseParameters(node, username, style) && geoCommon.setQueryParameters(node, query, maxrows)) {
          var geonamesURL = getGeonamesSearchPlaceURL(node.username, node.style, node.query, node.maxrows);

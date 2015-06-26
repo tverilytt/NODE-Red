@@ -52,7 +52,8 @@ module.exports = (function() {
     setQueryParameters : function(node, query, maxrows) {
       if (query) node.query = query.trim();
       if (maxrows)
-         if (parseInt(maxrows.trim())) node.maxrows = parseInt(maxrows.trim());
+         if (typeof maxrows == 'number') node.maxrows = maxrows;
+         else if (parseInt(maxrows.trim())) node.maxrows = parseInt(maxrows.trim());
          else return false;
       return true;
     },

@@ -39,10 +39,13 @@ module.exports = function(RED) {
     var node = this;
 
     this.on('input', function(msg) {
-      var username = msg.username || msg.payload.username;
-      var style = msg.style || msg.payload.style;
-      var latitude = msg.latitude || msg.payload.latitude;
-      var longitude = msg.longitude || msg.payload.longitude;
+      var username = msg.username || msg.payload.username || node.username;
+      var style = msg.style || msg.payload.style || node.style;
+      var latitude = msg.latitude || msg.payload.latitude || node.latitude;
+      var longitude = msg.longitude || msg.payload.longitude || node.longitude;
+
+      debugLog(msg.latitude, msg.payload.latitude, node.latitude);
+      debugLog(username, style, latitude, longitude);
 
       if (geoCommon.setBaseParameters(node, username, style) && geoCommon.setLocationParameters(node, latitude, longitude)) {
          var geonamesURL = getGeonamesLookupPlaceURL(node.username, node.style, node.latitude, node.longitude);
