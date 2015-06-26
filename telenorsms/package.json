@@ -1,6 +1,6 @@
 {
     "name"          : "node-red-contrib-telenorsms",
-    "version"       : "0.0.5",
+    "version"       : "0.0.6",
     "description"   : "Telenor SMS node(s) Node-RED nodes for sending Telenor SMS.",
     "repository" : {
         "type" :"git",

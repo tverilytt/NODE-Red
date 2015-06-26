@@ -7,7 +7,8 @@ var cryptico = require('./cryptico.js').cryptico;
 
 module.exports.cryptico = cryptico;
 
-var passPhrase = 'your-passphrase';
+
+var passPhrase = 'yourpassphrase';
 var Bits = 512;
         
 console.log('passphrase: ' + passPhrase);
