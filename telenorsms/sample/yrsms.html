@@ -118,7 +118,9 @@ function getYrMeteogram(lat, lng, place) {
          'Meteogram for ' + yrinfo.place +
          ' (' + yrinfo.latitude + ', ' + yrinfo.longitude + ') <BR>' +
          '<a target=\'_self\' href=\'' + yrinfo.yr + '\'>' +
-         '<img src=\'' + yrinfo.meteogram + '\'>' + '</a>';
+         '<img src=\'' + yrinfo.meteogram + '\'>' + '</a>' +
+         '<br><a target=\'_self\' href=\'http://www.yr.no\'>' +
+         'Weather forecast from yr.no, delivered by the Norwegian Meteorological Institute and the NRK</a>';
     }
   });
 }
@@ -262,16 +264,14 @@ window.onload = initOnLoad;
   <tr>
     <td>Latitude </td>
     <td>
-      <input type='text' id='latitude'/>
+      <input type='text' id='latitude'/> (-90 - 90)
     </td>
-    <td>(-90 - 90)</td>
   </tr>
   <tr>
     <td>Longitude: </td>
     <td>
-      <input type='text' id='longitude'/>
+      <input type='text' id='longitude'/>     (-189 - 180)
     </td>
-    <td>(-189 - 180)</td>
   </tr>
   <tr>
     <td><strong>Search by place name:</strong></td>
@@ -280,13 +280,14 @@ window.onload = initOnLoad;
     <td>Place name: </td>
     <td>
       <input type='text' id='searchplace'/>
-    </td>
-    <td>
       <input type='button' value='Meteogram' id='yrButton' onClick='showYrMeteogram()'/>
     </td>
   </tr>
   <tr>
     <td><strong>Share Meteogram by SMS</strong></td>
+    <td>
+      (<font size="1">Limited to norwegian Telenor cell phone numbers for sender and recipient(s).</font>
+)</td>
   </tr>
   <tr>
     <td>
@@ -295,6 +296,8 @@ window.onload = initOnLoad;
     <td>
       Password: <input type='password' id='smsPassword'/>
     </td>
+  </tr>
+  <tr>
     <td>
       To: <input type='text' id='smsTo'/>
     </td>
