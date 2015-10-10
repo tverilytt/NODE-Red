@@ -39,6 +39,22 @@ or by clicking on the image.
 </div>
 <br>
 
+<h4>Yr Google Maps</h4>
+This sample adds Yr weather information lookup for a given geolocation. Move the "blue ball" marker by dragging it to a desired
+location and release it. Click on the marker to view place name (if available) for the geolocation. If Yr weather information
+is available, click the "Meteogram" link to view the Yr weather meteogram. You can click on the meteogram to jump to the Web page
+at Yr.no for the place.
+<br>
+<div>
+<a target="_blank" href="http://noderedjo2.mybluemix.net/yrmaps">http://noderedjo2.mybluemix.net/yrmaps</a>
+</div>
+<br>
+
+The yrmaps sample html is located in the samples directory:
+<a href="https://github.com/tverilytt/NODE-Red/tree/master/samples">https://github.com/tverilytt/NODE-Red/tree/master/samples</a>
+<br>
+
+
 <h3>Node-RED sample flows</h3>
 The sample flows are examples of using the Geonames and / or Yr nodes in Node-RED.
 

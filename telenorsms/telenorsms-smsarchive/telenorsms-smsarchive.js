@@ -40,7 +40,7 @@ module.exports = function(RED) {
     var telenorSMSArchiveURL = 'https://telenormobil.no/norm/win/sms/store/outbox/view.do';
 
     this.on('input', function(msg) {
-      node .status({fill : 'green', shape : 'ring', text : 'Fetching SMS archive...'});
+      node.status({fill : 'green', shape : 'ring', text : 'Fetching SMS archive...'});
       telenorsms.fullTelenorRequest(node, msg, telenorSMSURL, telenorSMSArchiveURL, function(payload){
         return {smsarchive : getSMSArchive(payload)};
       });

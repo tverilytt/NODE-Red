@@ -39,7 +39,7 @@ module.exports = function(RED) {
     var telenorLogoutURL = 'https://www.telenor.no/privat/minesider/logout';
 
     this.on('input', function(msg) {
-      node .status({fill : 'green', shape : 'ring', text : 'Logging out...'});
+      node.status({fill : 'green', shape : 'ring', text : 'Logging out...'});
 
       telenorsms.setDebug(node.debug, node.debugPrefix);
 
@@ -71,7 +71,7 @@ module.exports = function(RED) {
           debugLog('=====> response on end: node.send payload length', responsemsg.payload.length, responsemsg.payload);
           debugLog('Cookie jar', responsemsg.options.telenorcookies);
           debugLog('==========> END LOGOUT - Success <==========');
-          node .status({fill : 'green', shape : 'dot', text : 'Logged out'});
+          node.status({fill : 'green', shape : 'dot', text : 'Logged out'});
           node.send(responsemsg);
         });
     });

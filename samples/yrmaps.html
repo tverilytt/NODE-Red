@@ -1,0 +1,280 @@
+    <!--
+      Jo Torsmyr, 2014-15, https://plus.google.com/+JoTorsmyr
+    -->
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>yrmaps</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+
+        <style type="text/css">
+          html, body, #map-canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+          }
+        </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry"></script>
+    
+    <script charset="UTF-8">
+    /*global google */
+    /*jshint devel : true*/
+    
+    'use strict';
+
+    var HTTP_REQUEST_FINISHED = 4;
+    var HTTP_PROCESSING_REQUEST = 3;
+    var HTTP_OK = 200;
+
+    var map = null;
+
+    var hostnameOrigin = null;
+
+    var myCurrentMarker = null; // Current position - "blue ball"
+    var startPosition = new google.maps.LatLng(59.914693, 10.735774);
+    
+    var currentPosInfoWindow = new google.maps.InfoWindow();
+    var yrInfoWindow = new google.maps.InfoWindow();
+
+    var myPosMarkerImage = 'http://www.jbc.org/site/meeting2009/images/dots/blue_dot.png';
+    var YrLogoIcon = 'http://img.giveawaycrew.com/dd/4a/48/no.nrk.yr-icon.jpg';
+
+    function initialize() {
+      hostnameOrigin = window.location.hostname || 'noderedjo2.mybluemix.net';
+
+      var mapOptions = { 
+        zoom : 13,
+        panControl: true,
+        panControlOptions: {
+          position: google.maps.ControlPosition.LEFT_TOP
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_TOP
+        },
+        mapTypeControlOptions : { 
+          mapTypeIds: [
+            'OSM',
+            google.maps.MapTypeId.ROADMAP, 
+            google.maps.MapTypeId.SATELLITE,
+            google.maps.MapTypeId.HYBRID
+          ],
+          style : google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+          position : google.maps.ControlPosition.TOP_RIGHT
+        },
+        mapTypeControl: true,
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+          position: google.maps.ControlPosition.LEFT_TOP
+        },
+        overviewMapControl : true
+      };
+      map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+// http://wiki.openstreetmap.org/wiki/Google_Maps_Example
+      map.mapTypes.set('OSM', new google.maps.ImageMapType({
+        getTileUrl: function(coord, zoom) {
+          return 'http://tile.openstreetmap.org/' + zoom + '/' + coord.x + '/' + coord.y + '.png';
+        },
+        tileSize: new google.maps.Size(256, 256),
+        name: 'OSM',
+        maxZoom: 18
+      }));      
+
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(
+           function(position) {
+                console.log('+++> ', 'Navigator ok', position);
+                initializeMap(position.coords.latitude, position.coords.longitude);
+           },
+           function(error) {
+             console.log('+++> ', 'Initialize navigator error', JSON.stringify(error));
+             if (error.code == error.TIMEOUT) return;
+                initializeMap(startPosition.lat(), startPosition.lng());
+           },
+           {timeout : 10000
+         });
+      } else {
+         console.log('+++> ', 'Navigator unavailable');
+            initializeMap(startPosition.lat(), startPosition.lng());
+      }
+    }
+
+    function initializeMap(lat, lng) {
+      if (myCurrentMarker) return;
+
+      myCurrentMarker = new google.maps.Marker({
+        position : new google.maps.LatLng(lat, lng),
+        map : map,
+        icon : new google.maps.MarkerImage(myPosMarkerImage),
+        draggable : true,
+        zIndex : google.maps.Marker.MAX_ZINDEX + 1,
+        animation: google.maps.Animation.DROP,
+        title : getCurrentLatLngString(lat, lng)
+       });
+
+       myCurrentMarker.addListener('click', function() {
+         yrInfoWindow.close();
+         currentPosInfoWindow.open(map, myCurrentMarker);
+       });
+
+      google.maps.event.addListener(currentPosInfoWindow, 'closeclick', function() { yrInfoWindow.close();});
+      google.maps.event.addListener(myCurrentMarker, 'dragstart',
+        function(event) {
+          yrInfoWindow.close();
+      });
+      google.maps.event.addListener(myCurrentMarker, 'dragend',
+        function(event) {
+          myCurrentMarker.setPosition(event.latLng);
+          yrInfoWindow.close();
+          getClosestYr(event.latLng.lat(), event.latLng.lng());
+      });
+
+      getClosestYr(lat, lng);
+
+      map.setCenter(startPosition);
+
+      google.maps.event.addListener(map, 'click', function(event) {
+        yrInfoWindow.close();
+        currentPosInfoWindow.close();
+      });
+    }
+
+    function getCurrentLatLngString(currentLat, currentLon) {
+      return currentLat.toString() + ',' + currentLon.toString();
+    }
+
+  function createHTMLLink(link, linkText) {
+    return '<a target=\"_blank\" href=\"' + link + '\">' + linkText + '</a>';
+  }
+
+  function generateYrInfoWindowContent(yrdata) {
+    var meteogram = yrdata.meteogram;
+    var yrCredit = 'Weather forecast from yr.no, delivered by the Norwegian Meteorological Institute and the NRK';
+//    var contentString = createHTMLLink('\'' + yr + '\'', yrCredit);
+    var contentString = createHTMLLink(yrdata.yr, yrCredit);
+    contentString += createHTMLLink(yrdata.yr + 'hour_by_hour.html', '<img style=\"100%\" src=\"' + meteogram + '\">');
+
+    var tcontentString = null;
+    if (yrdata.meteogram == 'Unknown') {
+       tcontentString = '<strong>' + yrdata.place + '</strong>';
+       tcontentString += ' <img src=\"' + YrLogoIcon + '\" width=\"20\" height=\'20\'>';
+       tcontentString += ' Meteogram not available for this location.';
+    } else {
+       tcontentString = '<strong>' + yrdata.place + '</strong>';
+       tcontentString += ' <strong>' + createHTMLLink(yrdata.yr, '<img src=\"' + YrLogoIcon + '\" width=\"20\" height=\'20\'>');
+       tcontentString += '<a href=\"javascript:void(0)' + '\" onclick=\"viewYR(\'' + encodeURIComponent(quoteattr(contentString)) + '\')\"> Meteogram</a></strong>';
+    }
+
+    return tcontentString;
+  }
+
+    function viewYR(contentString) {
+      currentPosInfoWindow.close();
+      yrInfoWindow.setContent(unquoteattr(decodeURIComponent(contentString)));
+      yrInfoWindow.open(map, myCurrentMarker);
+    }
+
+    function getClosestYr(currentLat, currentLon) {
+      var url = 'http://' + hostnameOrigin + '/yrgeolocation';
+      url += '?latitude=' + currentLat; url += '&longitude=' + currentLon;
+
+      xmlHTTPGet(HTTP_PROCESSING_REQUEST, url, function(payload) {
+        var tcontentString = generateYrInfoWindowContent(payload) + '<BR>' + getCurrentLatLngString(currentLat, currentLon);
+        currentPosInfoWindow.setContent(tcontentString);
+        myCurrentMarker.setTitle(getCurrentLatLngString(currentLat, currentLon));
+      });
+    }
+
+    function xmlHTTPGet(minReadyState, url, callback) {
+      try {
+      var xmlhttp = new XMLHttpRequest();
+
+      xmlHTTPGet.onerror = function(error) {
+        console.info('+++> xmlHTTPGet onerror' + error.toString());
+      };
+
+      xmlhttp.open('GET', url, true);
+
+      xmlhttp.setRequestHeader('If-None-Match', null);
+
+      xmlhttp.onreadystatechange = function() {
+        try {
+        if (xmlhttp.status == HTTP_OK) {
+           if ((xmlhttp.readyState >= minReadyState) && xmlhttp.responseText) {
+              try {
+                var parsedJSON = JSON.parse(xmlhttp.responseText);
+                xmlhttp.abort();
+                callback(parsedJSON);
+//                console.debug('+++> xmlHTTPGet: url: ', url);
+              } catch (error) {
+                console.log('+++> xmlHTTPGet payload: ' + xmlhttp.responseText);
+                console.log('+++> xmlHTTPGet JSON.parse error' + error.toString());
+              }
+           } // else console.debug('+++> xmlHTTPGet: readyState: ', xmlhttp.readyState, url);
+        } else {
+           console.debug('+++> xmlHTTPGet: status: ', xmlhttp.status, url);
+//           if (xmlhttp.status === 0) {
+//              decLoadingCount();
+//              xmlhttp.abort();
+//           }
+        }
+        } catch (error) {
+          console.log('+++> xmlHTTPGet payload: ' + xmlhttp.responseText);
+          console.log('+++> xmlHTTPGet JSON.parse error' + error.toString());
+       }
+      };
+
+      xmlhttp.send();
+      } catch (error) {
+        console.log('+++> xmlHTTPGet error' + error.toString());
+      }
+    }
+
+
+    // http://stackoverflow.com/questions/7753448/how-do-i-escape-quotes-in-html-attribute-values
+    function unquoteattr(s) {
+        s = ('' + s);
+        /* Decode by reversing the initial order of replacements. */
+        s = s
+            .replace(/\r\n/g, '\n') /* To do before the next replacement. */ 
+            .replace(/[\r\n]/, '\n')
+            .replace(/&#13;&#10;/g, '\n') /* These 3 replacements keep whitespaces. */
+            .replace(/&#1[03];/g, '\n')
+            .replace(/&#9;/g, '\t')
+            .replace(/&gt;/g, '>') /* The 4 other predefined entities required. */
+            .replace(/&lt;/g, '<')
+            .replace(/&quot;/g, '"')
+            .replace(/&apos;/g, "'")
+            ;
+        return s;
+    }
+    function quoteattr(s, preserveCR) {
+        preserveCR = preserveCR ? '&#13;' : '\n';
+        return ('' + s) /* Forces the conversion to string. */
+            .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
+            .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            /*
+            You may add other replacements here for HTML only 
+            (but it's not necessary).
+            Or for XML, only if the named entities are defined in its DTD.
+            */ 
+            .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
+            .replace(/[\r\n]/g, preserveCR);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+   </script>
+
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+  </html>

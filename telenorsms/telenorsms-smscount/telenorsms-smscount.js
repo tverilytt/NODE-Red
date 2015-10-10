@@ -38,7 +38,7 @@ module.exports = function(RED) {
     var telenorSMSCountURL = 'https://telenormobil.no/norm/win/sms/send/popup/counter.do';
 
     this.on('input', function(msg) {
-      node .status({fill : 'green', shape : 'ring', text : 'Fetching free SMSs left...'});
+      node.status({fill : 'green', shape : 'ring', text : 'Fetching free SMSs left...'});
       telenorsms.fullTelenorRequest(node, msg, telenorSMSURL, telenorSMSCountURL, function(payload){
         return {freesms : getFreeSMSleft(payload)};
       });

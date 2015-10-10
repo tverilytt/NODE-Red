@@ -40,7 +40,7 @@ module.exports = function(RED) {
     var telenorContactsURL = 'https://telenormobil.no/norm/win/sms/async/addresslist.do';
 
     this.on('input', function(msg) {
-      node .status({fill : 'green', shape : 'ring', text : 'Fetching contacts...'});
+      node.status({fill : 'green', shape : 'ring', text : 'Fetching contacts...'});
       telenorsms.fullTelenorRequest(node, msg, telenorSMSURL, telenorContactsURL, function(payload){
         return {contacts : getContacts(payload)};
       });
