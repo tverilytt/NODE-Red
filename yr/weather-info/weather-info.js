@@ -64,6 +64,13 @@ module.exports = function(RED) {
               msg.payload = yrInfo;
               node.send(msg);
            }
+           else if (res.statusCode === 404) {
+              debugLog('HTTP status: ' + res.statusCode);
+              debugLog('status == 404: yr URI: ' + yrURI);
+              msg.payload = unknownResult;
+              msg.statusCode = 200;
+              node.send(msg);
+           }
            else {
               debugLog('HTTP status: ' + res.statusCode);
               debugLog('status != 200: yr URI: ' + yrURI);

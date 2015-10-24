@@ -65,7 +65,10 @@ module.exports = function(RED) {
              debugLog('END BODY: ' + payload);
              if (res.statusCode === 200)
                 msg.headers = {'Content-Type' : 'text/xml; charset=utf-8'};
-              else
+             else if (res.statusCode === 404) {
+                msg.headers = {'Content-Type' : 'text/html; charset=utf-8'};
+                msg.statusCode = 200;
+             } else
                 msg.headers = {'Content-Type' : 'text/html; charset=utf-8'};
              msg.statusCode = res.statusCode;
              msg.payload = payload;
