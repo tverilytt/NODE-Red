@@ -41,8 +41,8 @@ module.exports = function(RED) {
     this.on('input', function(msg) {
       var username = msg.username || msg.payload.username || node.username;
       var style = msg.style || msg.payload.style || node.style;
-      var latitude = msg.latitude || msg.payload.latitude || node.latitude;
-      var longitude = msg.longitude || msg.payload.longitude || node.longitude;
+      var latitude = getValue(msg.latitude, msg.payload.latitude, node.latitude);
+      var longitude = getValue(msg.longitude, msg.payload.longitude, node.longitude);
 
       debugLog(msg.latitude, msg.payload.latitude, node.latitude);
       debugLog(username, style, latitude, longitude);
@@ -85,16 +85,23 @@ module.exports = function(RED) {
          console.log.apply(null, arguments);
       }
     }
+
+    function getValue(a, b, c) {
+      if (typeof a != 'undefined') return a;
+      if (typeof b != 'undefined') return b;
+      if (typeof c != 'undefined') return c;
+      return null;
+    }
+
+    function getGeonamesLookupPlaceURL(username, style, latitude, longitude) {
+      var geonamesurl = geoCommon.getGeonamesBaseURL('findNearbyJSON', username, style);
+
+      geonamesurl += '&lat=' + latitude;
+      geonamesurl += '&lng=' + longitude;
+
+      return geonamesurl;
+    }
   }
 
   RED.nodes.registerType('lookup place', LookupPlace);
 };
-
-function getGeonamesLookupPlaceURL(username, style, latitude, longitude) {
-  var geonamesurl = geoCommon.getGeonamesBaseURL('findNearbyJSON', username, style);
-
-  geonamesurl += '&lat=' + latitude;
-  geonamesurl += '&lng=' + longitude;
-
-  return geonamesurl;
-}

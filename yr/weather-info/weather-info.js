@@ -105,18 +105,18 @@ module.exports = function(RED) {
          console.log.apply(null, arguments);
       }
     }
+
+    function getYrInfo(uri, geoinfo) {
+      var baseURL = 'http://' + yrCommon.yrHost + uri;
+      var place = '';
+      place += geoinfo.toponymName ? geoinfo.toponymName : '';
+      place += geoinfo.adminName1 ? ',' + geoinfo.adminName1 : '';
+      place += geoinfo.countryName ? ',' + geoinfo.countryName : '';
+      if (place === '') place = 'No geoname for this location';
+
+      return { 'yr' : baseURL, 'meteogram' : baseURL + 'meteogram.png', 'weather-data' : baseURL + 'forecast.xml' , 'place' : place,
+        'latitude' : geoinfo.lat, 'longitude' : geoinfo.lng };
+    }
   }
   RED.nodes.registerType('weather info', YrWeatherInfo);
 };
-
-function getYrInfo(uri, geoinfo) {
-  var baseURL = 'http://' + yrCommon.yrHost + uri;
-  var place = '';
-  place += geoinfo.toponymName ? geoinfo.toponymName : '';
-  place += geoinfo.adminName1 ? ',' + geoinfo.adminName1 : '';
-  place += geoinfo.countryName ? ',' + geoinfo.countryName : '';
-  if (place === '') place = 'No geoname for this location';
-
-  return { 'yr' : baseURL, 'meteogram' : baseURL + 'meteogram.png', 'weather-data' : baseURL + 'forecast.xml' , 'place' : place,
-    'latitude' : geoinfo.lat, 'longitude' : geoinfo.lng };
-}
