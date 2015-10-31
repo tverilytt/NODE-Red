@@ -41,3 +41,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Logs
+npm-debug.log
+*.backup
+.config.json
+
+.sessions.json
+
+telenorsms/sample/node-red-user/
+telenorsms/sample/node-red-user/flows_joW520.json

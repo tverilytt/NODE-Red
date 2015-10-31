@@ -135,7 +135,7 @@
 
       getClosestYr(lat, lng);
 
-      map.setCenter(startPosition);
+      map.setCenter(myCurrentMarker.getPosition());
 
       google.maps.event.addListener(map, 'click', function(event) {
         yrInfoWindow.close();
