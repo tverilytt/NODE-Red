@@ -1,1 +1,0 @@
-C:\Users\IBM_ADMIN\AppData\Roaming\npm\node-red -v --settings C:\home\jo\dev\Node-RED\hrg\settings.js -u C:\home\jo\dev\Node-RED\hrg\sample\node-red-user
