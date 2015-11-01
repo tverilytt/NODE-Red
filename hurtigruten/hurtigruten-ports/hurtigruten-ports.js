@@ -19,13 +19,13 @@
 
 'use strict';
 
-var DEBUG_PREFIX = '[hrg: port]';
+var DEBUG_PREFIX = '[hurtigruten: port]';
 
 module.exports = function(RED) {
 
   var https = require('https');
 
-  function HRGPorts(config) {
+  function HurtigrutenPorts(config) {
     RED.nodes.createNode(this, config);
 
     this.port = config.port;
@@ -83,8 +83,8 @@ module.exports = function(RED) {
             node.status({fill : 'green', shape : 'dot', text : 'Success'});
             node.send(msg);
           } catch (error) {
-            console.log('=====> Catch hrg ports  error:', error);
-            console.log('=====> Catch hrg ports error stack:', error.stack);
+            console.log('=====> Catch hurtigruten ports  error:', error);
+            console.log('=====> Catch hurtigruten ports error stack:', error.stack);
             node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
             msg.payload = JSON.stringify('[]');
             if (!msg.headers) msg.headers = [];
@@ -111,5 +111,5 @@ module.exports = function(RED) {
     }
   }
 
-  RED.nodes.registerType('ports', HRGPorts);
+  RED.nodes.registerType('ports', HurtigrutenPorts);
 };

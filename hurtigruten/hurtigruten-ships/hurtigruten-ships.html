@@ -74,7 +74,7 @@ webcam2: "http://btweb.vosskom.no/hurtigruten_05_02.jpg"
 
 <script type="text/javascript">
     RED.nodes.registerType('ships', {
-        category : 'hrg',
+        category : 'hurtigruten',
         color : 'Coral',
         defaults: {
             ship : {value : 'All'},
@@ -83,7 +83,7 @@ webcam2: "http://btweb.vosskom.no/hurtigruten_05_02.jpg"
         },
         inputs : 1,
         outputs : 1,
-        icon : 'HRGRosse.png',
+        icon : 'Hurtigruten.png',
         label : function() {
             return this.name || 'ships';
         },

@@ -21,13 +21,13 @@
 
 var parse5 = require('parse5');
 
-var DEBUG_PREFIX = '[hrg: portschedule]';
+var DEBUG_PREFIX = '[hurtigruten: portschedule]';
 
 module.exports = function(RED) {
 
   var https = require('https');
 
-  function HRGPortSchedule(config) {
+  function HurtigrutenPortSchedule(config) {
     RED.nodes.createNode(this, config);
 
     this.season = config.season;
@@ -77,8 +77,8 @@ module.exports = function(RED) {
             node.status({fill : 'green', shape : 'dot', text : 'Success'});
             node.send(msg);
           } catch (error) {
-            console.log('=====> Catch hrg port schedule error:', error);
-            console.log('=====> Catch hrg port schedule error stack:', error.stack);
+            console.log('=====> Catch hurtigruten port schedule error:', error);
+            console.log('=====> Catch hurtigruten port schedule error stack:', error.stack);
             node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
             portSchedules = [];
             msg.payload = JSON.stringify(portSchedules);
@@ -106,7 +106,7 @@ module.exports = function(RED) {
     }
   }
 
-  RED.nodes.registerType('portschedule', HRGPortSchedule);
+  RED.nodes.registerType('portschedule', HurtigrutenPortSchedule);
 };
 
   function _trimWhitespace(str) {

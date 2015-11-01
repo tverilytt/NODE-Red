@@ -19,7 +19,7 @@
 
 'use strict';
 
-var DEBUG_PREFIX = '[hrg: ship]';
+var DEBUG_PREFIX = '[hurtigruten: ship]';
 
   var hrgFinnmarken = 'MS Finnmarken';
   var hrgFram = 'MS Fram';
@@ -135,7 +135,7 @@ module.exports = function(RED) {
 
   var https = require('https');
 
-  function HRGShips(config) {
+  function HurtigrutenShips(config) {
     RED.nodes.createNode(this, config);
 
     this.ship = config.ship;
@@ -195,8 +195,8 @@ module.exports = function(RED) {
             node.status({fill : 'green', shape : 'dot', text : 'Success'});
             node.send(msg);
           } catch (error) {
-            console.log('=====> Catch hrg ships  error:', error);
-            console.log('=====> Catch hrg ships error stack:', error.stack);
+            console.log('=====> Catch hurtigruten ships  error:', error);
+            console.log('=====> Catch hurtigruten ships error stack:', error.stack);
             node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
             msg.payload = JSON.stringify('[]');
             if (!msg.headers) msg.headers = [];
@@ -223,5 +223,5 @@ module.exports = function(RED) {
     }
   }
 
-  RED.nodes.registerType('ships', HRGShips);
+  RED.nodes.registerType('ships', HurtigrutenShips);
 };
