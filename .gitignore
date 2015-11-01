@@ -49,5 +49,6 @@ npm-debug.log
 
 .sessions.json
 
+node-red-user/
 telenorsms/sample/node-red-user/
 telenorsms/sample/node-red-user/flows_joW520.json

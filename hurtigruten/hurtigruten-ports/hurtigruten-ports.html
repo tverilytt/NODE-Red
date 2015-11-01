@@ -1,0 +1,108 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="ports">
+    <div class="form-row">
+        <label for="node-input-port"><i class="icon-tag"></i> Port</label>
+        <select id="node-input-port">
+          <option value="All" selected>All</option>
+          <option value="Bergen">Bergen</option>
+          <option value="Florø">Florø</option>
+          <option value="Måløy">Måløy</option>
+          <option value="Torvik">Torvik</option>
+          <option value="Ålesund">Ålesund</option>
+          <option value="Geiranger">Geiranger</option>
+          <option value="Molde">Molde</option>
+          <option value="Kristiansund">Kristiansund</option>
+          <option value="Trondheim">Trondheim</option>
+          <option value="Rørvik">Rørvik</option>
+          <option value="Brønnøysund">Brønnøysund</option>
+          <option value="Sandnessjøen">Sandnessjøen</option>
+          <option value="Nesna">Nesna</option>
+          <option value="Ørnes">Ørnes</option>
+          <option value="Bodø">Bodø</option>
+          <option value="Stamsund">Stamsund</option>
+          <option value="Svolvær">Svolvær</option>
+          <option value="Stokmarknes">Stokmarknes</option>
+          <option value="Sortland">Sortland</option>
+          <option value="Risøyhamn">Risøyhamn</option>
+          <option value="Harstad">Harstad</option>
+          <option value="Finnsnes">Finnsnes</option>
+          <option value="Tromsø">Tromsø</option>
+          <option value="Skjervøy">Skjervøy</option>
+          <option value="Øksfjord">Øksfjord</option>
+          <option value="Hammerfest">Hammerfest</option>
+          <option value="Havøysund">Havøysund</option>
+          <option value="Honningsvåg">Honningsvåg</option>
+          <option value="Kjøllefjord">Kjøllefjord</option>
+          <option value="Mehamn">Mehamn</option>
+          <option value="Berlevåg">Berlevåg</option>
+          <option value="Båtsfjord">Båtsfjord</option>
+          <option value="Vardø">Vardø</option>
+          <option value="Vadsø">Vadsø</option>
+          <option value="Kirkenes">Kirkenes</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ports">
+    <h4> port schedules</h4>
+    <p>Get information about Hurtigruten ports.</p>
+    <p>Input / request parameter: port name, e.g. 'Kirkenes'.</p>
+    <p> Output example from request URL ...?port=Kirkenes
+<code>
+[
+{
+isMain: true,
+visibleInMap: true,
+code: "KKN",
+title: "Kirkenes",
+body: "Kirkenes is the turning point for Hurtigruten and a gateway to the Barents region.",
+imageUrl: "//www.hurtigruten.com/globalassets/photos/ports/kirkenes/1800x900_list-img_kirkenes_ms-polarlys_by_erik-gieseler_guest-image.jpg",
+pageUrl: "//www.hurtigruten.com/ports/kirkenes/",
+mapUrl: "http://www.hurtigruten.com/map/?portCode=KKN",
+coordinates: {
+latitude: "69.729147",
+longitude: "30.072354"
+},
+localizedType: "Port"
+}
+]</code>
+</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('ports', {
+        category : 'hrg',
+        color : 'Coral',
+        defaults: {
+            port : {value : 'All'},
+            debug : {value : true },
+            name : {value : ''},
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'HRGRosse.png',
+        label : function() {
+            return this.name || 'ports';
+        },
+    });
+</script>
