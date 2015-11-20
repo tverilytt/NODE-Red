@@ -64,116 +64,6 @@ function debugLog() {
     client_id + '&client_secret=' + client_secret;
   var hrgSingleYrUrl = 'https://api.apim.ibmcloud.com/torsmyrnoibmcom-dev/sb/hurtigruten/hrgshipweather?ship=';
 
-  var hrgFinnmarken = 'MS Finnmarken';
-  var hrgFram = 'MS Fram';
-  var hrgKongHarald = 'MS Kong Harald';
-  var hrgLofoten = 'MS Lofoten';
-  var hrgMidnatsol = 'MS Midnatsol';
-  var hrgNordkapp = 'MS Nordkapp';
-  var hrgNordlys = 'MS Nordlys';
-  var hrgNordnorge = 'MS Nordnorge';
-  var hrgNordstjernen = 'MS Nordstjernen';
-  var hrgPolarlys = 'MS Polarlys';
-  var hrgRichardWith = 'MS Richard With';
-  var hrgSpitsbergen = 'MS Spitsbergen';
-  var hrgTrollfjord = 'MS Trollfjord';
-  var hrgVesteralen = 'MS Vesterålen';
-
-  var hrgFlaate = 'https://www.hurtigruten.com/ships/';
-
-  var hrgShipInfo = [];
-
-  hrgShipInfo[hrgFinnmarken] = {
-    info : hrgFlaate + hrgFinnmarken.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Finnmarken/1474166032865915?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABFinnmarken%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_02_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_02_02.jpg'
-  };
-  hrgShipInfo[hrgFram] = {
-    info : hrgFlaate + hrgFram.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Fram/1508932116060479?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABFram%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_04_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_04_02.jpg'
-  };
-  hrgShipInfo[hrgKongHarald] = {
-    info : hrgFlaate + hrgKongHarald.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Kong-Harald/839994066033603?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABKong_Harald%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_05_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_05_02.jpg'
-  };
-  hrgShipInfo[hrgLofoten] = {
-    info : hrgFlaate + hrgLofoten.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Lofoten/580065118765195?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABLofoten%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_07_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_07_01.jpg'
-  };
-  hrgShipInfo[hrgMidnatsol] = {
-    info : hrgFlaate + hrgMidnatsol.toLowerCase(),
-    facebook : 'https://www.facebook.com/MSMidnatsol?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABMidnatsol%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_11_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_11_02.jpg'
-  };
-  hrgShipInfo[hrgNordkapp] = {
-    info : hrgFlaate + hrgNordkapp.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Nordkapp/724991130920652?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABNordkapp%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_10_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_10_02.jpg'
-  };
-  hrgShipInfo[hrgNordlys] = {
-    info : hrgFlaate + hrgNordlys.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Nordlys/344156699095701?fref=ts',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABNordlys%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/Hurtigruten_01_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/Hurtigruten_01_02.jpg'
-  };
-  hrgShipInfo[hrgNordnorge] = {
-    info : hrgFlaate + hrgNordnorge.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Nordnorge/1481836345420962?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABNordnorge%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_03_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_03_02.jpg'
-  };
-  hrgShipInfo[hrgNordstjernen] = {
-    info : hrgFlaate + hrgNordstjernen.toLowerCase()
-  };
-  hrgShipInfo[hrgPolarlys] = {
-    info : hrgFlaate + hrgPolarlys.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Polarlys/281204355413001?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABPolarlys%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_06_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_06_02.jpg'
-  };
-  hrgShipInfo[hrgRichardWith] = {
-    info : hrgFlaate + hrgRichardWith.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Richard-With/366283933521360',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABRichard_With%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_08_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_08_02.jpg'
-  };
-  hrgShipInfo[hrgSpitsbergen] = {
-    info : hrgFlaate + hrgSpitsbergen.toLowerCase()
-  };
-  hrgShipInfo[hrgTrollfjord] = {
-    info : hrgFlaate + hrgTrollfjord.toLowerCase(),
-    facebook : 'https://www.facebook.com/pages/MS-Trollfjord/457472707727555?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABTrollfjord%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_12_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_12_02.jpg'
-  };
-  hrgShipInfo[hrgVesteralen] = {
-    info : hrgFlaate + 'ms-vesteralen',
-    facebook : 'https://www.facebook.com/pages/MS-Vester%C3%A5len/1525709867669053?ref=hl',
-    wikipedia : 'https://no.wikipedia.org/wiki/MS_%C2%ABVester%C3%A5len%C2%BB',
-    webcam1 : 'http://btweb.vosskom.no/hurtigruten_09_01.jpg',
-    webcam2 : 'http://btweb.vosskom.no/hurtigruten_09_02.jpg'
-  };
-
 function initOnLoad() {
   debugLog('hrgyr: JS loaded');
   loginHTML = document.getElementById('hrgYrTable').innerHTML;
@@ -203,21 +93,19 @@ function hrgYrButton() {
        if (allShips)
           document.getElementById('hrgYrWeatherTable').innerHTML = formatHRGYrWeather(responsePayload);
        else {
-          if (responsePayload.Name && responsePayload.Name != 'Unknown') {
-             var hrgdata = {
-               'Name' : responsePayload.Name,
-               'latitude' : responsePayload.latitude,
-               'longitude' : responsePayload.longitude,
-               'Image' : responsePayload.Image
-             };
-             var yrdata = {
-               'yr' : responsePayload.yr,
-               'meteogram' : responsePayload.meteogram,
-               'place' : responsePayload.place
-             };
-             document.getElementById('hrgYrWeatherTable').innerHTML = formatHRGYrWeather({'hrg' : [hrgdata], 'yr' : [yrdata]});
-          } else
-             document.getElementById('errorstatus').innerHTML = document.getElementById('errorstatus').innerHTML + ', unable to get Hurtigruten Yr information for ship: ' + selectedShip;
+          var hrgdata = {
+            'Name' : responsePayload.Name,
+            'latitude' : responsePayload.latitude,
+            'longitude' : responsePayload.longitude,
+            'Image' : responsePayload.Image,
+            'webcam1' : responsePayload.webcam1
+          };
+          var yrdata = {
+            'yr' : responsePayload.yr,
+            'meteogram' : responsePayload.meteogram,
+            'place' : responsePayload.place
+          };
+          document.getElementById('hrgYrWeatherTable').innerHTML = formatHRGYrWeather({'hrg' : [hrgdata], 'yr' : [yrdata]});
        }
     }
   });
@@ -243,9 +131,10 @@ function formatHRGYrShip(hrg, yr) {
          html += '<a target=\'_blank\' href=\'' + hrg.Image + '\'>';
          html += '<img src=\'' + hrg.Image + '\' width=\"200px\" height=\"150px\"></a>';
          html += '</td><td>';
-         if (hrgShipInfo[hrg.Name] && hrgShipInfo[hrg.Name].webcam1) {
-            html += '<a target=\'_blank\' href=\'' + hrgShipInfo[hrg.Name].webcam1 + '\'>';
-            html += '<img src=\'' + hrgShipInfo[hrg.Name].webcam1 + '\' width=\"200px\" height=\"150px\"></a>';
+//         if (hrgShipInfo[hrg.Name] && hrgShipInfo[hrg.Name].webcam1) {
+         if (hrg.webcam1) {
+            html += '<a target=\'_blank\' href=\'' + hrg.webcam1 + '\'>';
+            html += '<img src=\'' + hrg.webcam1 + '\' width=\"200px\" height=\"150px\"></a>';
          }
          html += '</td><td>';
          if (yr.yr == 'Unknown')

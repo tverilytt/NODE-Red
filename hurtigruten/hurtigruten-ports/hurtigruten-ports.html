@@ -66,7 +66,8 @@
 <script type="text/x-red" data-help-name="ports">
     <h4> port schedules</h4>
     <p>Get information about Hurtigruten ports.</p>
-    <p>Input / request parameter: port name, e.g. 'Kirkenes'.</p>
+    <p>Input parameter: port - either All (default) or a specific port name (e.g. "Trondheim").
+    <p>The port parameters can either be provided as: msg.port or msg.payload.port, or by using Node-RED node UI port select field</p>
     <p> Output example from request URL ...?port=Kirkenes
 <code>
 [

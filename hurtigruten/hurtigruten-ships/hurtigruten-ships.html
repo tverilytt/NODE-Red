@@ -45,7 +45,8 @@
 <script type="text/x-red" data-help-name="ships">
     <h4> port schedules</h4>
     <p>Get information about Hurtigruten ships. This includes geoposition, web cameras (for 12 of 14 ships)</p>
-    <p>Input / request parameter: ship name, e.g. 'MS Trollfjord'.</p>
+    <p>Input parameter: ship - either All (default) or a specific ship name (e.g. "MS Trollfjord").
+    <p>The ship parameters can either be provided as: msg.ship or msg.payload.ship, or by using Node-RED node UI ship select field</p>
     <p> Output example from request URL> ...?ship=MS Kong Harald
 <code>
 {

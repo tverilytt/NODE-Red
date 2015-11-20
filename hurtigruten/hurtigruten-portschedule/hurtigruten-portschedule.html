@@ -33,10 +33,11 @@
 </script>
 
 <script type="text/x-red" data-help-name="portschedule">
-    <h4> port schedules</h4>
+    <h4>Port schedules</h4>
     <p>Get information on Hurtigruten ports with scheduled ship arrival and departure times,
     and deviations (if any). The schedules are per season, and includes both southbound and northbound schedules.</p>
-    <p>Input / request parameter: seasion - Current (default), Spring, Summer, Autumn, Winter.
+    <p>Input parameter: season - Current (default), Spring, Summer, Autumn, Winter.
+    <p>The season parameters can either be provided as: msg.season or msg.payload.season, or by using Node-RED node UI season select field</p>
     <p>Output example from request URL ?season=Autumn
 <code>
 {"season":"Current",
