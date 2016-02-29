@@ -22,6 +22,7 @@
 var parse5 = require('parse5');
 
 var DEBUG_PREFIX = '[hurtigruten: portschedule]';
+var debug;
 
 module.exports = function(RED) {
 
@@ -34,6 +35,7 @@ module.exports = function(RED) {
     this.debug = config.debug;
     this.debugPrefix = DEBUG_PREFIX;
     var node = this;
+    debug = node.debug;
     var seasons = ['Current', 'Spring', 'Summer', 'Autumn', 'Winter'];
 
     this.on('input', function(msg) {
@@ -61,11 +63,11 @@ module.exports = function(RED) {
 
         res.on('data', function(chunk) {
           payload += chunk;
-          debugLog('BODY CHUNK: ' + chunk);
-          debugLog('PAYLOAD: ' + payload);
+//          debugLog('BODY CHUNK: ' + chunk);
+//          debugLog('PAYLOAD: ' + payload);
         });
         res.on('end', function() {
-          debugLog('END BODY: ' + payload);
+//          debugLog('END BODY: ' + payload);
           msg.statusCode = res.statusCode;
           try {
             var portSchedules = { season : season, schedules : getHRGPortSchedule(payload)};
@@ -98,30 +100,33 @@ module.exports = function(RED) {
       });
     });
 
-    function debugLog() {
-      if (node.debug) {
-         Array.prototype.unshift.call(arguments, DEBUG_PREFIX);
-         console.log.apply(null, arguments);
-      }
-    }
   }
 
   RED.nodes.registerType('portschedule', HurtigrutenPortSchedule);
 };
+
+    function debugLog() {
+      if (debug) {
+         Array.prototype.unshift.call(arguments, DEBUG_PREFIX);
+         console.log.apply(null, arguments);
+      }
+    }
 
   function _trimWhitespace(str) {
     return str.trim().replace(/(\r\n|\n|\r)/gm, '');
   }
 
   function getHRGPortSchedule(html) {
-    var debug = false;
+    var detailedDebug = false;
     var matchColumn = -1;
     var portSchedules = {}, shipSchedule;
     var port, i;
     var direction = null, shipDirection;
 
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+    var htmlParser = new parse5.SAXParser();
+    htmlParser.on('startTag', function(tagName, attrs) {
+    //  startTag : function(tagName, attrs, selfClosing) {
         if (matchColumn == -1) {
            if (tagName == 'div') {
               for (i = 0; i < attrs.length; i++)
@@ -182,7 +187,7 @@ module.exports = function(RED) {
                   if (attrs[i].name == 'data-direction' && (attrs[i].value == 'NORTHBOUND' || attrs[i].value == 'SOUTHBOUND')) {
                      direction = attrs[i].value.toLowerCase();
                      portSchedules[direction] = [];
-                     if (debug) console.log(JSON.stringify(port));
+                     debugLog(JSON.stringify(port));
                      matchColumn = 0;
                      break;
                   }
@@ -196,53 +201,53 @@ module.exports = function(RED) {
         } else if (matchColumn == 17) {
            if (tagName == 'td') matchColumn++;
         }
-      },
-      text : function(text) {
+      });
+    htmlParser.on('text', function(text) {
+//      text : function(text) {
         if (matchColumn == 2) {
            port = {};
            port.name = _trimWhitespace(text);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 4) {
            port.arrival = _trimWhitespace(text);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 6) {
            port.departure = _trimWhitespace(text);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 8) {
            port.deviations = _trimWhitespace(text);
            portSchedules[direction].push(port);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 11) {
            shipDirection = _trimWhitespace(text);
            if (!port.shipSchedules) port.shipSchedules = {};
 
            port.shipSchedules[shipDirection] = [];
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 14) {
            shipSchedule = {};
            shipSchedule.name = _trimWhitespace(text);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 16) {
            shipSchedule.date = _trimWhitespace(text);
            matchColumn++;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
         } else if (matchColumn == 18) {
            shipSchedule.time = _trimWhitespace(text);
            port.shipSchedules[shipDirection].push(shipSchedule);
            matchColumn = 13;
-           if (debug) console.log(text);
+           if (detailedDebug) console.log(text);
+           debugLog(shipSchedule);
         }
-      },
-//      endTag : function(tagName) {
-//      }
-    });
-    htmlParser.parse(html);
+      });
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return portSchedules;
   }
