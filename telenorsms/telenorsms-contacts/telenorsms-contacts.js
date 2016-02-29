@@ -59,8 +59,11 @@ module.exports = function(RED) {
     var matchColumn = -1;
     var contacts = [];
     var contact, i;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchColumn == -1) {
            if (tagName == 'select') {
               for (i = 0; i < attrs.length; i++)
@@ -76,18 +79,18 @@ module.exports = function(RED) {
               matchColumn++;
            }
         }
-      },
-      text : function(text) {
+      });
+//      text : function(text) {
+    htmlParser.on('text', function(text) {
         if (matchColumn == 1) {
            if (!contact.name) contact.name = text;
            contacts.push(contact);
            matchColumn = 0;
         }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return contacts;
   }

@@ -131,30 +131,36 @@ module.exports = function(RED) {
     var matchPhase = -1;
     var htmlText;
     var telenorUsername = null;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
+//      startTag : function(tagName, attrs, selfClosing) {
         if (matchPhase == -1)
            if (tagName == 'h3') {
               for (var i = 0; i < attrs.length; i++)
                   if (attrs[i].name == 'title' && attrs[i].value == 'Til Mine sider')
                      matchPhase++;
         }
-      },
-      text : function(text) {
+      });
+    htmlParser.on('text', function(text) {
+//      text : function(text) {
         if (matchPhase == 0) {
            htmlText = text;
            matchPhase++;
         }
-      },
-      endTag : function(tagName) {
+      });
+    htmlParser.on('endTag', function(tagName, attrs) {
+//      endTag : function(tagName) {
         if (matchPhase == 1)
            if (tagName == 'h3') {
               telenorUsername = htmlText;
               matchPhase++;
            }
-        }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return telenorUsername;
   }
@@ -162,27 +168,28 @@ module.exports = function(RED) {
     var matchPhase = -1;
     var htmlText;
     var cellphone = null;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchPhase == -1)
            if (tagName == 'span') {
               for (var i = 0; i < attrs.length; i++)
                   if (attrs[i].name == 'class' && attrs[i].value == 'bkg mobile')
                      matchPhase++;
         }
-      },
-      text : function(text) {
+      });
+    htmlParser.on('text', function(text) {
         if (matchPhase == 0) {
            cellphone = text;
            matchPhase++;
         }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
-    return cellphone.substring(cellphone.indexOf('(') + 1, cellphone.indexOf(')'));
+    return cellphone ? cellphone.substring(cellphone.indexOf('(') + 1, cellphone.indexOf(')')) : null;
   }
 
   function createLoginPayload(username, password) {

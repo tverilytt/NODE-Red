@@ -56,25 +56,28 @@ module.exports = function(RED) {
   function getFreeSMSleft(html) {
     var matchPhase = -1;
     var freeSMS = null;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchPhase == -1)
            if (tagName == 'div') {
               for (var i = 0; i < attrs.length; i++)
                   if (attrs[i].name == 'id' && attrs[i].value == 'normContent')
                      matchPhase++;
         }
-      },
-      text : function(text) {
+      });
+//      text : function(text) {
+    htmlParser.on('text', function(text) {
         if (matchPhase == 0) {
            freeSMS = text.substring(text.lastIndexOf(':') + 1).trim();
            matchPhase++;
         }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return freeSMS;
   }

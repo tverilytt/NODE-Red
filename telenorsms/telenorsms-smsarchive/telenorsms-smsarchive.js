@@ -59,8 +59,11 @@ module.exports = function(RED) {
     var matchColumn = -1;
     var smss = [];
     var sms;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchColumn == -1) {
            if (tagName == 'input') {
               for (var i = 0; i < attrs.length; i++)
@@ -71,8 +74,9 @@ module.exports = function(RED) {
            if (matchColumn == 0) sms = {};
            matchColumn++;
         }
-      },
-      text : function(text) {
+      });
+//      text : function(text) {
+    htmlParser.on('text', function(text) {
         if (matchColumn > -1)        
            if (matchColumn == 1) {
               if (!sms.to) sms.to = text;
@@ -87,11 +91,10 @@ module.exports = function(RED) {
                  matchColumn = -1;
               }
            }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return smss;
   }

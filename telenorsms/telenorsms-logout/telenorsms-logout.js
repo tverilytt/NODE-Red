@@ -88,25 +88,28 @@ module.exports = function(RED) {
   function getLogoutStatus(html) {
     var matchPhase = -1;
     var logoutMessage = null;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchPhase == -1)
            if (tagName == 'div') {
               for (var i = 0; i < attrs.length; i++)
                   if (attrs[i].name == 'id' && attrs[i].value == 'notificationLogout')
                      matchPhase++;
            }
-      },
-      text : function(text) {
+      });
+//      text : function(text) {
+    htmlParser.on('text', function(text) {
         if (matchPhase == 0) {
            logoutMessage = text;
            matchPhase++;
         }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return logoutMessage;
   }

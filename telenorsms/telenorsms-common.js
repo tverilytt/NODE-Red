@@ -289,23 +289,25 @@ module.exports = (function() {
       function notLoggedIn(html) {
       var matchPhase = -1;
       var notLoggedInStatus = false;
-      var htmlParser = new parse5.SimpleApiParser({
-        startTag : function(tagName, attrs, selfClosing) {
+//      var htmlParser = new parse5.SimpleApiParser({
+//        startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
           if (matchPhase == -1)
              if (tagName == 'title') matchPhase++;
-        },
-        text : function(text) {
+        });
+//        text : function(text) {
+    htmlParser.on('text', function(text) {
           if (matchPhase == 0)
              if (text == 'Logg inn hos Telenor') {
                 notLoggedInStatus = true;
                 matchPhase++;
                 return;
              }
-        },
-        endTag : function(tagName) {
-        }
-      });
-      htmlParser.parse(html);
+        });
+//      htmlParser.parse(html);
+    htmlParser.write(html);
 
       return notLoggedInStatus;
     }
@@ -313,23 +315,27 @@ module.exports = (function() {
     function technicalProblem(html) {
       var matchPhase = -1;
       var problemMessage = null;
-      var htmlParser = new parse5.SimpleApiParser({
-        startTag : function(tagName, attrs, selfClosing) {
+//      var htmlParser = new parse5.SimpleApiParser({
+//        startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
           if (matchPhase == -1)
           if (tagName == 'div') {
              for (var i = 0; i < attrs.length; i++)
                  if (attrs[i].name == 'class' && attrs[i].value == 'servererror')
                     matchPhase++;
           }
-        },
-        text : function(text) {
+        });
+//        text : function(text) {
+    htmlParser.on('text', function(text) {
           if (matchPhase == 0) {
              problemMessage = text;
              matchPhase++;
           }
-        }
       });
-      htmlParser.parse(html);
+//      htmlParser.parse(html);
+    htmlParser.write(html);
       return problemMessage;
     }
 

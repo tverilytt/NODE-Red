@@ -91,8 +91,11 @@ module.exports = function(RED) {
   function getSendSMSStatus(html) {
     var matchPhase = -1;
     var sendSMSstatus = null;
-    var htmlParser = new parse5.SimpleApiParser({
-      startTag : function(tagName, attrs, selfClosing) {
+//    var htmlParser = new parse5.SimpleApiParser({
+//      startTag : function(tagName, attrs, selfClosing) {
+    var htmlParser = new parse5.SAXParser();
+
+    htmlParser.on('startTag', function(tagName, attrs) {
         if (matchPhase == -1) {
            if (tagName == 'tbody') matchPhase++;
         } else if (matchPhase == 0) {
@@ -100,8 +103,9 @@ module.exports = function(RED) {
         } else if (matchPhase == 1) {
            if (tagName == 'td') matchPhase++;
         }
-      },
-      text : function(text) {
+      });
+//      text : function(text) {
+    htmlParser.on('text', function(text) {
         if (matchPhase == 2) {
            var sendSMSstatusText = text.trim();
            if (sendSMSstatusText == 'Sendt')
@@ -110,11 +114,10 @@ module.exports = function(RED) {
               sendSMSstatus = {sent : false, messageStatus : sendSMSstatusText};
             matchPhase = -3;
         }
-      },
-      endTag : function(tagName) {
-      }
-    });
-    htmlParser.parse(html);
+      });
+
+//    htmlParser.parse(html);
+    htmlParser.write(html);
 
     return sendSMSstatus;
   }

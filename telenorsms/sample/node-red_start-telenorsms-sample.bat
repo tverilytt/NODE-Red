@@ -1,1 +1,0 @@
-C:\Users\IBM_ADMIN\AppData\Roaming\npm\node-red -v --settings C:\home\jo\dev\github\NODE-Red\telenorsms\sample\._settings_private.js -u C:\home\jo\dev\github\NODE-Red\telenorsms\sample\node-red-user
