@@ -28,12 +28,19 @@
 
 <script type="text/x-red" data-help-name="sok">
     <h4> SLV legemiddel lookup</h4>
-    <p>Lookup legemiddel and return information on WADA doping classification </p>
-    <p>Green : Står ikke på WADAs dopingliste, yellow : Forbudt iht. WADAs dopingliste, med visse unntak/restriksjoner,
-      red : Forbudt iht. WADAs dopingliste </p>
+    <p>Lookup drugs and return information on WADA (World Anti-Doping Agency) doping classification </p>
+    <ul>
+      <li>Green</li>
+        <p>Not on WADA Prohibited List</p>
+      <li>Yellow</li>
+        <p>On WADA Prohibited List, with certain exceptions / restrictions</p>
+      <li>Red</li>
+        <p>On WADA Prohibited List</p>
+    </ul>
+    <p>Parameter &lt;legemiddel&gt; can either be entered in the Node GUI Editor field, or specified at runtime as msg.legemiddel or msg.payload.legemiddel.</p>
     <p>Output: [ { Klasse : "&lt;green | yellow | red&gt;", Preparat : { url : "&lt;url&gt;", name : "&lt;name&gt;",
-      Gruppe : "&lt;gruppe&gt;", Kommentar : "&lt;Kommentar&gt;" } ]</p>
-    <p>Example: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-weifa-562631", "name": "Paralgin forte" }, "Gruppe": "", "Kommentar": "" } ]</p>
+      Substans : "&lt;substans&gt;",  Gruppe : "&lt;gruppe&gt;", Kommentar : "&lt;Kommentar&gt;" } ]</p>
+    <p>Example: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-weifa-562631", "name": "Paralgin forte" }, "Substans": "", "Gruppe": "", "Kommentar": "" } ]</p>
 </script>
 
 <script type="text/javascript">
