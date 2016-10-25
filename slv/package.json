@@ -1,0 +1,20 @@
+{
+    "name"          : "node-red-contrib-slv",
+    "version"       : "0.0.1",
+    "description"   : "SLV node(s) Node-RED nodes.",
+    "license" : "Apache",
+    "keywords" : [ "node-red", "slv-sok" ],
+    "node-red" : {
+        "nodes" : {
+            "slv-sok" : "slv-sok/slv-sok.js"
+        }
+    },
+    "dependencies": {
+        "parse5": "~2.x"
+      },
+    "author": {
+        "name" : "Jo Torsmyr",
+        "email" : "jo@torsmyr.com",
+        "url" : "http://plus.google.com/+JoTorsmyr"
+    }
+}

@@ -1,0 +1,55 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="sok">
+    <div class="form-row">
+        <label for="node-input-legemiddel"><i class="icon-tag"></i> Legemiddel</label>
+        <input type="text" id="node-input-legemiddel" placeholder="Legemiddel">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="sok">
+    <h4> SLV legemiddel lookup</h4>
+    <p>Lookup legemiddel and return information on WADA doping classification </p>
+    <p>Green : Står ikke på WADAs dopingliste, yellow : Forbudt iht. WADAs dopingliste, med visse unntak/restriksjoner,
+      red : Forbudt iht. WADAs dopingliste </p>
+    <p>Output: [ { Klasse : "&lt;green | yellow | red&gt;", Preparat : { url : "&lt;url&gt;", name : "&lt;name&gt;",
+      Gruppe : "&lt;gruppe&gt;", Kommentar : "&lt;Kommentar&gt;" } ]</p>
+    <p>Example: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-weifa-562631", "name": "Paralgin forte" }, "Gruppe": "", "Kommentar": "" } ]</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('sok', {
+        category : 'slv',
+        color : 'Aqua',
+        defaults: {
+            legemiddel : {value : ''},
+            debug : {value : true },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'slv.jpg',
+        label : function() {
+            return this.name || 'søk';
+        },
+    });
+</script>
