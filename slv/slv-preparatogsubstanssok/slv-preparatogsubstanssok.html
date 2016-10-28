@@ -1,0 +1,69 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="preparatogsubstanssok">
+    <div class="form-row">
+        <label for="node-input-legemiddel"><i class="icon-tag"></i> Preparat eller substans</label>
+        <input type="text" id="node-input-legemiddel" placeholder="Preparat eller substans">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="preparatogsubstanssok">
+    <h4> SLV preparat and substans lookup</h4>
+    <p>Lookup drugs (legemiddel / preparat) or substance (substans). If match on drug, 
+     return information on WADA (World Anti-Doping Agency) doping classification.
+     If match on substance, return information from WADA Prohibited List.</p>
+    <h4>Drug</h4>
+    <ul>
+      <li>Green</li>
+        <p>Not on WADA Prohibited List</p>
+      <li>Yellow</li>
+        <p>On WADA Prohibited List, with certain exceptions / restrictions</p>
+      <li>Red</li>
+        <p>On WADA Prohibited List</p>
+    </ul>
+    <p>Parameter &lt;legemiddel&gt; can either be entered in the Node GUI Editor field, or specified at runtime as msg.legemiddel or msg.payload.legemiddel.</p>
+    <p>Output: [ { Klasse : "&lt;green | yellow | red&gt;", Preparat : { url : "&lt;url&gt;", name : "&lt;name&gt;",
+      Substans : "&lt;substans&gt;",  Gruppe : "&lt;gruppe&gt;", Kommentar : "&lt;Kommentar&gt;" } ]</p>
+    <p>Example: Parameter: Paracet, result: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paracet-weifa-562628", "name": "Paracet" }, "Gruppe": "", "Kommentar": "", "type": "legemiddel" } ]
+    </p>
+    <h4>Substance</h4>
+    <p>Example: Parameter: Etamivan, result: [ { "Substans": "etamivan", "Gruppe": { "url": "/hjem/regler/dopinglisten/dopinggruppe-s6/", "name": "Dopinggruppe S6" }, "Kommentar": "2. Forbudt i konkurranse", "type": "substans" } ]
+    </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('preparatogsubstanssok', {
+        category : 'slv',
+        color : 'Aqua',
+        defaults: {
+            legemiddel : {value : ''},
+            debug : {value : true },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'slv.jpg',
+        label : function() {
+            return this.name || 'preparatogsubstanssøk';
+        },
+    });
+</script>

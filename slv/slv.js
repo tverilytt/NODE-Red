@@ -95,11 +95,12 @@ module.exports = (function() {
         } else if (matchColumn === -3) {
            label = trimText(text);
 //           console.log(label);
-           if (colno === 1)
+           if (colno === 1) {
               legemiddelItem[labels[colno]].name = label;
-           else
+              matchColumn = -4;
+           } else
               legemiddelItem[labels[colno]] = label;
-           matchColumn++;
+//             matchColumn++;
         }
     });
 

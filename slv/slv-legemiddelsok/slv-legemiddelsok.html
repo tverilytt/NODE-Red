@@ -11,7 +11,7 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="sok">
+<script type="text/x-red" data-template-name="legemiddelsok">
     <div class="form-row">
         <label for="node-input-legemiddel"><i class="icon-tag"></i> Legemiddel</label>
         <input type="text" id="node-input-legemiddel" placeholder="Legemiddel">
@@ -26,9 +26,9 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="sok">
+<script type="text/x-red" data-help-name="legemiddelsok">
     <h4> SLV legemiddel lookup</h4>
-    <p>Lookup drugs and return information on WADA (World Anti-Doping Agency) doping classification </p>
+    <p>Lookup drugs (legemiddel) and return information on WADA (World Anti-Doping Agency) doping classification </p>
     <ul>
       <li>Green</li>
         <p>Not on WADA Prohibited List</p>
@@ -40,11 +40,11 @@
     <p>Parameter &lt;legemiddel&gt; can either be entered in the Node GUI Editor field, or specified at runtime as msg.legemiddel or msg.payload.legemiddel.</p>
     <p>Output: [ { Klasse : "&lt;green | yellow | red&gt;", Preparat : { url : "&lt;url&gt;", name : "&lt;name&gt;",
       Substans : "&lt;substans&gt;",  Gruppe : "&lt;gruppe&gt;", Kommentar : "&lt;Kommentar&gt;" } ]</p>
-    <p>Example: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-weifa-562631", "name": "Paralgin forte" }, "Substans": "", "Gruppe": "", "Kommentar": "" } ]</p>
+    <p>Example: Parameter: Paralgin Forte, result: [ { "Klasse": "green", "Preparat": { "url": "http://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-weifa-562631", "name": "Paralgin forte" }, "Substans": "", "Gruppe": "", "Kommentar": "" } ]</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('sok', {
+    RED.nodes.registerType('legemiddelsok', {
         category : 'slv',
         color : 'Aqua',
         defaults: {

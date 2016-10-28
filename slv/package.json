@@ -1,16 +1,17 @@
 {
     "name"          : "node-red-contrib-slv",
-    "version"       : "0.0.1",
+    "version"       : "0.0.2",
     "description"   : "SLV node(s) Node-RED nodes.",
     "repository" : {
         "type" :"git",
         "url" : "https://github.com/tverilytt/NODE-Red/tree/master/slv"
     },    
     "license" : "Apache",
-    "keywords" : [ "node-red", "slv-sok" ],
+    "keywords" : [ "node-red", "slv-legemiddelsok", "slv-preparatogsubstanssok" ],
     "node-red" : {
         "nodes" : {
-            "slv-sok" : "slv-sok/slv-sok.js"
+            "slv-legemiddelsok" : "slv-legemiddelsok/slv-legemiddelsok.js",
+            "slv-preparatogsubstanssok" : "slv-preparatogsubstanssok/slv-preparatogsubstanssok.js"
         }
     },
     "dependencies": {

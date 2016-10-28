@@ -19,14 +19,14 @@
 
 'use strict';
 
-var DEBUG_PREFIX = '[SLV: sok]';
+var DEBUG_PREFIX = '[SLV: preparatogsubstanssok]';
 
 module.exports = function(RED) {
 
   var http = require('http');
   var slv = require('../slv.js');
 
-  function SLVSok(config) {
+  function SLVPreparatOgSubstanssok(config) {
     RED.nodes.createNode(this, config);
 
     this.debug = config.debug;
@@ -43,7 +43,7 @@ module.exports = function(RED) {
 
       var httpOptions = {
         hostname : 'www.antidoping.no',
-        path : '/regler/legemiddelsok/?q=' + encodeURIComponent(legemiddel),
+        path : '/sokeresultat/?q=' + encodeURIComponent(legemiddel),
         headers : {'Content-Type' : 'text/html; charset=UTF-8',
           'Accept' : 'application/json'}
       };
@@ -62,15 +62,17 @@ module.exports = function(RED) {
           debugLog('END BODY: ' + payload);
           msg.statusCode = res.statusCode;
           try {
-            msg.payload = slv.legemiddelsok(payload);
+            msg.payload = addType(slv.legemiddelsok(payload));
+
+
             if (!msg.headers) msg.headers = [];
             msg.headers['Content-Length'] = Buffer.byteLength(msg.payload, ['utf8']);
             msg.headers['Content-Type'] = 'application/json; charset=UTF-8';
             node.status({fill : 'green', shape : 'dot', text : 'Success'});
             node.send(msg);
           } catch (error) {
-            console.log('=====> Catch SLV sok  error:', error);
-            console.log('=====> Catch SLV sok error stack:', error.stack);
+            console.log('=====> Catch SLV preparatogsubstanssok  error:', error);
+            console.log('=====> Catch SLV preparatogsubstanssok error stack:', error.stack);
             node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
             msg.payload = JSON.stringify('[]');
             if (!msg.headers) msg.headers = [];
@@ -89,6 +91,14 @@ module.exports = function(RED) {
       });
     });
 
+    function addType(payload) {
+      if (payload && payload.length)
+         for (var i = 0; i < payload.length; i++)
+             if (payload[i].Klasse) payload[i].type = 'legemiddel';
+             else payload[i].type = 'substans';
+      return payload;
+    }
+
     function debugLog() {
       if (node.debug) {
          Array.prototype.unshift.call(arguments, DEBUG_PREFIX);
@@ -97,5 +107,5 @@ module.exports = function(RED) {
     }
   }
 
-  RED.nodes.registerType('sok', SLVSok);
+  RED.nodes.registerType('preparatogsubstanssok', SLVPreparatOgSubstanssok);
 };
