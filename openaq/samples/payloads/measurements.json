@@ -1,0 +1,33 @@
+{
+	"latitude" : 59.9,
+	"longitude" : 10.6,
+	"radius" : 10000,
+	"city" : "Oslo",
+	"country" : "NO",
+	"parameter" : "pm25",
+	"has_geo" : true,
+   "value_from" : 10,
+   "value_to" : 100,
+   "date_from" : "2018-10-01T09:00:00",
+   "date_to" : "2018-10-31T09:00:00",
+	"limit" : 100,
+	"page" : 1,
+   "orderby":[
+      {
+         "orderby":"location",
+         "sort":"desc"
+      },
+      {
+         "orderby":"city",
+         "sort":"desc"
+      },
+      {
+         "orderby":"country",
+         "sort":"desc"
+      },
+      {
+         "orderby":"distance",
+         "sort":null
+      }
+   ]
+}

@@ -1,0 +1,103 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/x-red" data-template-name="fetches">
+    <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
+    <div class="form-row">
+      <div>
+      <span for="node-input-orderby_timeStarted"> Time started</span>
+      <input type="checkbox" id="node-input-orderby_timeStarted" style="width:20px;">
+      <select id="node-input-sort_timeStarted" style="width:100px;">
+        <option value="desc">Descending</option>
+        <option value="asc" selected>Ascending</option>
+      </select>
+      <span for="node-input-orderby_timeEnded"> Time ended</span>
+      <input type="checkbox" id="node-input-orderby_timeEnded" style="width:20px;">
+      <select id="node-input-sort_timeEnded" style="width:100px;">
+        <option value="desc">Descending</option>
+        <option value="asc" selected>Ascending</option>
+      </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <span for="node-input-limit"> Limit</span>
+      <input type="text" id="node-input-limit" placeholder="Limit" style="width:100px;">
+      <span for="node-input-page"> Page</span>
+      <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="fetches">
+    <h4>Fetches</h4>
+    <p>Providing data about individual fetch operations that are used to populate data in the platform.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload</dt>
+        <dd>Sent as the body of the request.</dd>
+
+        <dt class="optional">orderby <span class="property-type">array</span></dt>
+        <dd>If not configured in the node, this optional property sets the orderby of the request.
+            Each array element object contains two properties. <code>orderby</code> - name of field to order by.
+            <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
+
+        <dt class="optional">limit <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
+        <dt class="optional">page <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the page of the request.</dd>
+
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>The body of the response. The <code>results</code> property contains the response data,
+        whilst the <code>meta</code> property contains meta data </dd>
+    </dl>
+    <h3>Details</h3>
+      <p> All the following (optional) parameters can be set in the payload.</p>
+      <p>The <code>samples</code> directory contains example of payload and flow.</p>
+      <p>For details about the available options, see 
+        <a target="_blank" href="https://docs.openaq.org/#api-Fetches">OpenAQ API Fetches</a>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('fetches', {
+        category : 'openaq',
+        color : 'DeepSkyBlue',
+        defaults: {
+            orderby_timeStarted : {value : false },
+            sort_timeStarted : {value : 'asc' },
+            orderby_timeEnded : {value : false },
+            sort_timeEnded : {value : 'asc' },
+            limit : {value : 100 },
+            page : {value : 1 },
+            debug : {value : false },
+            name : {value : ''}
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'openaq.png',
+        label : function() {
+            return this.name|| 'fetches';
+        },
+    });
+</script>

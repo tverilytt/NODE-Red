@@ -1,0 +1,40 @@
+{
+    "name": "node-red-contrib-openaq",
+    "version": "0.0.1",
+    "description": "Node-RED nodes for Open AQ",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tverilytt/NODE-Red/tree/master/openaq"
+    },
+    "license": "Apache",
+    "keywords": [
+        "node-red",
+        "openaq",
+        "air quality measurements",
+        "air pollution",
+        "open data",
+        "open source",
+        "global grassroot community"
+    ],
+    "node-red": {
+        "nodes": {
+            "cities": "cities/cities.js",
+            "countries": "countries/countries.js",
+            "fetches": "fetches/fetches.js",
+            "latest": "latest/latest.js",
+            "locations": "locations/locations.js",
+            "measurements": "measurements/measurements.js",
+            "parameters": "parameters/parameters.js",
+            "sources": "sources/sources.js"
+        }
+    },
+    "author": {
+        "name": "Jo Torsmyr",
+        "email": "jo@torsmyr.com",
+        "url": "http://plus.google.com/+JoTorsmyr"
+    },
+    "dependencies": {
+        "node-fetch": "^2.2.x",
+        "log4js": "^3.0"
+    }
+}

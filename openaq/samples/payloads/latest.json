@@ -1,0 +1,30 @@
+{
+	"latitude" : 59.9,
+	"longitude" : 10.6,
+	"radius" : 10000,
+	"location" : "Kirkeveien",
+	"city" : "Oslo",
+	"country" : "NO",
+	"parameter" : "pm25",
+	"has_geo" : true,
+	"limit" : 2,
+	"page" : 1,
+   "orderby":[
+      {
+         "orderby":"location",
+         "sort":"desc"
+      },
+      {
+         "orderby":"city",
+         "sort":"desc"
+      },
+      {
+         "orderby":"country",
+         "sort":"desc"
+      },
+      {
+         "orderby":"distance",
+         "sort":null
+      }
+   ]
+}

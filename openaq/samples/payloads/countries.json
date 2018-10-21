@@ -1,0 +1,19 @@
+{
+	"parameter" : "pm25",
+	"limit" : 2,
+	"page" : 1,
+   "orderby":[
+      {
+         "orderby":"city",
+         "sort":"desc"
+      },
+      {
+         "orderby":"country",
+         "sort":"desc"
+      },
+      {
+         "orderby":"count",
+         "sort":"desc"
+      }
+   ]
+}

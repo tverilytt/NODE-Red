@@ -1,0 +1,192 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/x-red" data-template-name="latest">
+    <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
+      <div class="form-row">
+        <span for="node-input-location"> Location</span>
+        <input type="text" id="node-input-location" placeholder="Location">
+      </div>
+      <div class="form-row">
+        <span for="node-input-city"> City</span>
+        <input type="text" id="node-input-city" placeholder="City">
+      </div>
+      <div class="form-row">
+        <span for="node-input-country"> Country</span>
+        <input type="text" id="node-input-country" placeholder="Location">
+      </div>
+    </div>
+    <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
+    <div class="form-row">
+      <span for="node-input-latitude"> Latitude</span>
+      <input type="text" id="node-input-latitude" placeholder="Latitude" style="width:100px;">
+      <span for="node-input-longitude"> Longitude</span>
+      <input type="text" id="node-input-longitude" placeholder="Longitude" style="width:100px;">
+      <div>
+      <span for="node-input-radius"> Radius (in meters)</span>
+      <input type="number" id="node-input-radius" placeholder="2500" style="width:100px;">
+      </div>
+    </div>
+    <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
+    <div class="form-row">
+      <span for="node-input-parameter"> Parameter</span>
+      <select id="node-input-parameter" style="width:100px;">
+        <option value="" selected>None</option>
+        <option value="pm25">PM 25.</option>
+        <option value="pm10">PM 10</option>
+        <option value="so2">SO2</option>
+        <option value="no2">NO2</option>
+        <option value="o3">O3</option>
+        <option value="co">CO</option>
+        <option value="bc">BC</option>
+      </select>
+      <span for="node-input-hasGeo"> Has geo</span>
+      <input type="checkbox" id="node-input-hasGeo" style="width:20px;">
+    </div>
+    <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
+    <div class="form-row">
+      <div>
+      <span for="node-input-orderby_distance"> Distance</span>
+      <input type="checkbox" id="node-input-orderby_distance" style="width:20px;">
+      <select id="node-input-sort_distance" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      </div>
+      <div>
+      <span for="node-input-orderby_location"> Location</span>
+      <input type="checkbox" id="node-input-orderby_location" style="width:20px;">
+      <select id="node-input-sort_location" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_city"> City</span>
+      <input type="checkbox" id="node-input-orderby_city" style="width:20px;">
+      <select id="node-input-sort_city" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_country"> Country</span>
+      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
+      <select id="node-input-sort_country" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <span for="node-input-limit"> Limit</span>
+      <input type="text" id="node-input-limit" placeholder="Limit" style="width:100px;">
+      <span for="node-input-page"> Page</span>
+      <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="latest">
+    <h4>Latest</h4>
+    <p>Provides the latest value of each available parameter for every location in the system.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">payload</dt>
+        <dd>Sent as the body of the request.</dd>
+
+        <dt class="optional">latitude <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the latitude of the request.</dd>
+        <dt class="optional">longitude <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the longitude of the request.</dd>
+        <dt class="optional">radius <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the radius of the request.</dd>
+
+        <dt class="optional">location <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the location of the request.</dd>
+        <dt class="optional">city <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the city of the request.</dd>
+        <dt class="optional">country <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the country of the request.</dd>
+
+        <dt class="optional">parameter <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the parameter of the request.
+            Must be one of <code>pm25</code>, <code>pm10</code>, <code>so2</code>, <code>no2</code>,
+            <code>o3</code>, <code>co</code> or <code>bc</code>.</dd>
+
+        <dt class="optional">has_geo <span class="property-type">boolean</span></dt>
+        <dd>If not configured in the node, this optional property sets the has_geo of the request.</dd>
+
+        <dt class="optional">orderby <span class="property-type">array</span></dt>
+        <dd>If not configured in the node, this optional property sets the orderby of the request.
+            Each array element object contains two properties. <code>orderby</code> - name of field to order by.
+            <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
+
+        <dt class="optional">limit <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
+        <dt class="optional">page <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the page of the request.</dd>
+
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>The body of the response. The <code>results</code> property contains the response data,
+        whilst the <code>meta</code> property contains meta data </dd>
+    </dl>
+    <h3>Details</h3>
+      <p> All the following (optional) parameters can be set in the payload.</p>
+      <p>The <code>samples</code> directory contains example of payload and flow.</p>
+      <p>For details about the available options, see 
+        <a target="_blank" href="https://docs.openaq.org/#api-Latest">OpenAQ API Latest</a>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('latest', {
+        category : 'openaq',
+        color : 'DeepSkyBlue',
+        defaults: {
+            location : {value : null },
+            city : {value : null },
+            country : {value : null },
+          latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
+          longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
+          radius : {value : 2500 },
+          orderby_location : {value : true },
+          sort_location : {value : 'asc' },
+          orderby_city : {value : false },
+          sort_city : {value : null },
+          orderby_country : {value : false },
+          sort_country : {value : null },
+          orderby_distance : {value : false },
+          sort_distance : {value : null },
+          parameter : {value : null },
+          hasGeo : {value : false },
+          limit : {value : 100 },
+          page : {value : 1 },
+          debug : {value : false },
+          name : {value : null }
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'openaq.png',
+        label : function() {
+            return this.name|| 'latest';
+        },
+    });
+</script>

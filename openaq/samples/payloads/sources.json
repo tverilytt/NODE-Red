@@ -1,0 +1,14 @@
+{
+	"limit" : 100,
+	"page" : 1,
+   "orderby":[
+      {
+         "orderby":"city",
+         "sort":"desc"
+      },
+      {
+         "orderby":"country",
+         "sort":"desc"
+      }
+   ]
+}
