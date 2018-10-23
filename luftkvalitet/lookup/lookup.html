@@ -1,0 +1,105 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/x-red" data-template-name="lookup">
+    <div class="form-row">
+      <span for="node-input-metadata"> Metadata</span>
+      <select id="node-input-metadata" style="width:100px;">
+        <option value="areas" selected>Areas</option>
+        <option value="stations">Stations</option>
+        <option value="components">Components</option>
+        <option value="aqis">AQ indices</option>
+      </select>
+    </div>
+    <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
+      <label for="node-input-area"><i class="icon-globe"></i> Area</label>
+      <input type="text" id="node-input-area" placeholder="Area">
+    </div>
+    <div class="form-row">
+      <span for="node-input-parameter"> Component</span>
+      <select id="node-input-parameter" style="width:100px;">
+        <option value="" selected>None</option>
+        <option value="CO">CO</option>
+        <option value="NO">NO</option>
+        <option value="NO2">NO2</option>
+        <option value="O3">O3</option>
+        <option value="PM2.5">PM 2.5.</option>
+        <option value="PM10">PM 10</option>
+        <option value="PM1">PM 1</option>
+        <option value="SO2">SO2</option>
+      </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="lookup">
+    <h4>Lookup</h4>
+    <p>Provides metadata lookup for areas, stations, components and aqis.</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+      <dt class="optional">payload</dt>
+      <dd>Sent as the body of the request.</dd>
+
+      <dt class="required">metadata <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the metadata of the request.
+          Must be one of <code>areas</code>, <code>stations</code>, <code>components</code> or
+          <code>aqis</code>.</dd>
+
+      <dt class="optional">area <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the area of the request.</dd>
+
+      <dt class="optional">parameter <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the parameter of the request.
+          Must be one of <code>CO</code>, <code>NO</code>, <code>NO2</code>, <code>O3</code>,
+          <code>PM1</code>, <code>PM2.5</code>, <code>PM10</code> or <code>SO2</code>.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+      <dt>payload <span class="property-type">object</span></dt>
+      <dd>The body of the response.</dd>
+    </dl>
+    <h3>Details</h3>
+      <p> All the following (optional) parameters can be set in the payload.</p>
+      <p>The <code>samples</code> directory contains example of payload and flow.</p>
+      <p>For details about the available options, see 
+        <a target="_blank" href="https://api.nilu.no/docs/">luftkvalitet.info API</a>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('lookup', {
+        category : 'luftkvalitet',
+        color : '#00aef2',
+        defaults: {
+          metadata : { required : true, value : 'areas' },
+          area : { value : null },
+          parameter : {value : null },
+          debug : {value : false },
+          name : {value : null }
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'luftkvalitet.png',
+        label : function() {
+            return this.name|| 'lookup';
+        },
+    });
+</script>

@@ -1,0 +1,6 @@
+{
+  "fromtime" : "2018-10-01T13:00",
+  "totime" : "2018-10-23T15:00",
+  "station" : "Kirkeveien",
+  "parameter" : "PM2.5"
+}

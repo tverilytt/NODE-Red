@@ -1,0 +1,7 @@
+{
+  "latitude" : 59.91,
+  "longitude" : 10.75,
+  "radius" : 5,
+  "within" : true,
+  "parameter" : "PM2.5"
+}

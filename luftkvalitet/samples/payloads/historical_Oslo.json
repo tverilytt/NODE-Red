@@ -1,0 +1,9 @@
+{
+  "fromtime" : "2018-10-01T13:00",
+  "totime" : "2018-10-23T15:00",
+  "latitude" : 59.91,
+  "longitude" : 10.75,
+  "radius" : 5,
+  "within" : true,
+  "parameter" : "PM2.5"
+}

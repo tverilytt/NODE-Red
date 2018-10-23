@@ -1,0 +1,35 @@
+{
+    "name": "node-red-contrib-luftkvalitet",
+    "version": "0.0.1",
+    "description": "Node-RED nodes for luftkvalitet.info",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tverilytt/NODE-Red/tree/master/luftkvalitet"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "node-red",
+        "luftkvalitet",
+        "NILU",
+        "air quality measurements",
+        "air pollution",
+        "Norway"
+    ],
+    "node-red": {
+        "nodes": {
+            "latest": "latest/latest.js",
+            "historical": "historical/historical.js",
+            "daily": "daily/daily.js",
+            "lookup": "lookup/lookup.js"
+        }
+    },
+    "author": {
+        "name": "Jo Torsmyr",
+        "email": "jo@torsmyr.com",
+        "url": "http://plus.google.com/+JoTorsmyr"
+    },
+    "dependencies": {
+        "node-fetch": "^2.2.x",
+        "log4js": "^3.0"
+    }
+}

@@ -1,0 +1,133 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/x-red" data-template-name="daily">
+    <div class="form-row"><i class="fa fa-calendar"></i> <span>Date time</span>:</div>
+      <div class="form-row">
+      <span for="node-input-fromtime"> From</span>
+      <input type="text" id="node-input-fromtime" placeholder="yyyy-mm-ddThh24:mm" style="width:200px;">
+      <span for="node-input-totime"> To</span>
+      <input type="text" id="node-input-totime" placeholder="yyyy-mm-ddThh24:mm" style="width:200px;">
+    </div>
+    <div class="form-row"><i class="fa fa-globe"></i> <span>Station</span>:</div>
+      <div class="form-row">
+        <span for="node-input-station"> Location</span>
+        <input type="text" id="node-input-station" placeholder="Station">
+      </div>
+    </div>
+    <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
+    <div class="form-row">
+      <span for="node-input-latitude"> Latitude</span>
+      <input type="text" id="node-input-latitude" placeholder="Latitude" style="width:100px;">
+      <span for="node-input-longitude"> Longitude</span>
+      <input type="text" id="node-input-longitude" placeholder="Longitude" style="width:100px;">
+      <div>
+        <span for="node-input-radius"> Radius (in km)</span>
+        <input type="number" id="node-input-radius" placeholder="2500" style="width:100px;">
+        <span for="node-input-within"> Within</span>
+        <input type="checkbox" id="node-input-within" style="width:20px;">
+      </div>
+    </div>
+    <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
+    <div class="form-row">
+      <span for="node-input-parameter"> Component</span>
+      <select id="node-input-parameter" style="width:100px;">
+        <option value="" selected>None</option>
+        <option value="CO">CO</option>
+        <option value="NO">NO</option>
+        <option value="NO2">NO2</option>
+        <option value="O3">O3</option>
+        <option value="PM2.5">PM 2.5.</option>
+        <option value="PM10">PM 10</option>
+        <option value="PM1">PM 1</option>
+        <option value="SO2">SO2</option>
+      </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"> Console log</label>
+        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="daily">
+    <h4>Daily</h4>
+    <p>Provides daily (24 hour) mean value for a given period (e.g. a month)..</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+      <dt class="optional">payload</dt>
+      <dd>Sent as the body of the request.</dd>
+
+      <dt class="optional">fromtime <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the fromtime of the request.</dd>
+      <dt class="optional">totime <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the totime of the request.</dd>
+
+      <dt class="optional">station <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the station of the request.</dd>
+
+      <dt class="optional">latitude <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the latitude of the request.</dd>
+      <dt class="optional">longitude <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the longitude of the request.</dd>
+      <dt class="optional">radius <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the radius of the request.</dd>
+      <dt class="optional">within <span class="property-type">boolean</span></dt>
+      <dd>If not configured in the node, this optional property sets the within of the request.</dd>
+
+      <dt class="optional">parameter <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the parameter of the request.
+          Must be one of <code>CO</code>, <code>NO</code>, <code>NO2</code>, <code>O3</code>,
+          <code>PM1</code>, <code>PM2.5</code>, <code>PM10</code> or <code>SO2</code>.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+      <dt>payload <span class="property-type">object</span></dt>
+      <dd>The body of the response.</dd>
+    </dl>
+    <h3>Details</h3>
+      <p> All the following (optional) parameters can be set in the payload.</p>
+      <p>The <code>samples</code> directory contains example of payload and flow.</p>
+      <p>For details about the available options, see 
+        <a target="_blank" href="https://api.nilu.no/docs/">luftkvalitet.info API</a>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('daily', {
+        category : 'luftkvalitet',
+        color : '#00aef2',
+        defaults: {
+          fromtime : {value : null, required : true },
+          totime : {value : null, required : true },
+          station : {value : null },
+          latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
+          longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
+          radius : {value : 5, validate:function(lng) { return radius > 0 && radius < 21; }  },
+          within : {value : false },
+          parameter : {value : null },
+          debug : {value : false },
+          name : {value : null }
+        },
+        inputs : 1,
+        outputs : 1,
+        icon : 'luftkvalitet.png',
+        label : function() {
+            return this.name|| 'daily';
+        },
+    });
+</script>
