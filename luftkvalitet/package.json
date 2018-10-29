@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-luftkvalitet",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Node-RED nodes for luftkvalitet.info",
     "repository": {
         "type": "git",
@@ -17,10 +17,10 @@
     ],
     "node-red": {
         "nodes": {
-            "latest": "latest/latest.js",
-            "historical": "historical/historical.js",
-            "daily": "daily/daily.js",
-            "lookup": "lookup/lookup.js"
+            "luftkvalitet-latest": "latest/luftkvalitet-latest.js",
+            "luftkvalitet-historical": "historical/luftkvalitet-historical.js",
+            "luftkvalitet-daily": "daily/luftkvalitet-daily.js",
+            "luftkvalitet-lookup": "lookup/luftkvalitet-lookup.js"
         }
     },
     "author": {

@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var luftkvalitet = require('../luftkvalitet.js');
 
-  var DEBUG_PREFIX = '[luftkvalitet: latest]';
+  var DEBUG_PREFIX = '[luftkvalitet: historical]';
 
-  function Latest(config) {
+  function Historical(config) {
     RED.nodes.createNode(this, config);
 
     luftkvalitet.setDebugLogging(config.debug);
@@ -36,24 +36,25 @@ module.exports = function(RED) {
       debugLog('config', config);
 
       var queryParameters = {
+        fromtime : msg.fromtime || msg.payload.fromtime || config.fromtime,
+        totime : msg.totime || msg.payload.totime || config.totime,
+        station : msg.station || msg.payload.station || config.station,
         latitude : msg.latitude || msg.payload.latitude || config.latitude,
         longitude : msg.longitude || msg.payload.longitude || config.longitude,
         radius : msg.radius || msg.payload.radius || config.radius,
+        parameter : msg.parameter || msg.payload.parameter || config.parameter,
         within : msg.within || msg.payload.within || config.within,
-        areas : msg.areas || msg.payload.areas || config.areas,
-        stations : msg.stations || msg.payload.stations || config.stations,
-        parameter : msg.parameter || msg.payload.parameter || config.parameter
       };
 
       debugLog(queryParameters);
 
       var parameters = luftkvalitet.getQueryParameters(queryParameters);
 
-       node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
-       luftkvalitet.luftkvalitetAPI('aq/utd', parameters)
+       node.status({fill : 'green', shape : 'ring', text : 'Requesting historical...'});
+       luftkvalitet.luftkvalitetAPI('aq/historical', parameters)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
-         console.info('latest.js', 'luftkvalitetAPI response', response);
+         console.info('historical.js', 'luftkvalitetAPI response', response);
          msg.payload = response;
          node.send(msg);
        })
@@ -73,5 +74,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('latest', Latest);
+  RED.nodes.registerType('luftkvalitet-historical', Historical);
 };

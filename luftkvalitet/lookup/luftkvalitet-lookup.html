@@ -12,7 +12,7 @@
 
 -->
 
-<script type="text/x-red" data-template-name="lookup">
+<script type="text/x-red" data-template-name="luftkvalitet-lookup">
     <div class="form-row">
       <span for="node-input-metadata"> Metadata</span>
       <select id="node-input-metadata" style="width:100px;">
@@ -50,7 +50,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="lookup">
+<script type="text/x-red" data-help-name="luftkvalitet-lookup">
     <h4>Lookup</h4>
     <p>Provides metadata lookup for areas, stations, components and aqis.</p>
 
@@ -85,7 +85,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('lookup', {
+    RED.nodes.registerType('luftkvalitet-lookup', {
         category : 'luftkvalitet',
         color : '#00aef2',
         defaults: {
@@ -101,5 +101,8 @@
         label : function() {
             return this.name|| 'lookup';
         },
+        paletteLabel : function() {
+            return this.name|| 'lookup';
+        }
     });
 </script>

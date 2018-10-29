@@ -12,7 +12,7 @@
 
 -->
 
-<script type="text/x-red" data-template-name="historical">
+<script type="text/x-red" data-template-name="luftkvalitet-historical">
     <div class="form-row"><i class="fa fa-calendar"></i> <span>Date time</span>:</div>
       <div class="form-row">
       <span for="node-input-fromtime"> From</span>
@@ -64,7 +64,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="historical">
+<script type="text/x-red" data-help-name="luftkvalitet-historical">
     <h4>Historical</h4>
     <p>Provides measurement values within a given time period.</p>
 
@@ -108,7 +108,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('historical', {
+    RED.nodes.registerType('luftkvalitet-historical', {
         category : 'luftkvalitet',
         color : '#00aef2',
         defaults: {
@@ -129,5 +129,8 @@
         label : function() {
             return this.name|| 'historical';
         },
+        paletteLabel : function() {
+            return this.name|| 'historical';
+        }
     });
 </script>

@@ -12,7 +12,20 @@
 
 -->
 
-<script type="text/x-red" data-template-name="latest">
+<script type="text/x-red" data-template-name="luftkvalitet-daily">
+    <div class="form-row"><i class="fa fa-calendar"></i> <span>Date time</span>:</div>
+      <div class="form-row">
+      <span for="node-input-fromtime"> From</span>
+      <input type="text" id="node-input-fromtime" placeholder="yyyy-mm-ddThh24:mm" style="width:200px;">
+      <span for="node-input-totime"> To</span>
+      <input type="text" id="node-input-totime" placeholder="yyyy-mm-ddThh24:mm" style="width:200px;">
+    </div>
+    <div class="form-row"><i class="fa fa-globe"></i> <span>Station</span>:</div>
+      <div class="form-row">
+        <span for="node-input-station"> Location</span>
+        <input type="text" id="node-input-station" placeholder="Station">
+      </div>
+    </div>
     <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
     <div class="form-row">
       <span for="node-input-latitude"> Latitude</span>
@@ -27,12 +40,6 @@
       </div>
     </div>
     <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
-    <div class="form-row">
-      <span for="node-input-areas"> Areas</span>
-      <input type="text" id="node-input-areas" placeholder="Areas" style="width:200px;">
-      <span for="node-input-stations"> Stations</span>
-      <input type="text" id="node-input-stations" placeholder="Stations" style="width:200px;">
-    </div>
     <div class="form-row">
       <span for="node-input-parameter"> Component</span>
       <select id="node-input-parameter" style="width:100px;">
@@ -57,40 +64,41 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="latest">
-    <h4>Latest</h4>
-    <p>Providing latest (newest) measurement values.</p>
+<script type="text/x-red" data-help-name="luftkvalitet-daily">
+    <h4>Daily</h4>
+    <p>Provides daily (24 hour) mean value for a given period (e.g. a month)..</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
-        <dt class="optional">payload</dt>
-        <dd>Sent as the body of the request.</dd>
+      <dt class="optional">payload</dt>
+      <dd>Sent as the body of the request.</dd>
 
-        <dt class="optional">latitude <span class="property-type">number</span></dt>
-        <dd>If not configured in the node, this optional property sets the latitude of the request.</dd>
-        <dt class="optional">longitude <span class="property-type">number</span></dt>
-        <dd>If not configured in the node, this optional property sets the longitude of the request.</dd>
-        <dt class="optional">radius <span class="property-type">number</span></dt>
-        <dd>If not configured in the node, this optional property sets the radius of the request.</dd>
-        <dt class="optional">within <span class="property-type">boolean</span></dt>
-        <dd>If not configured in the node, this optional property sets the within of the request.</dd>
+      <dt class="optional">fromtime <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the fromtime of the request.</dd>
+      <dt class="optional">totime <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the totime of the request.</dd>
 
-        <dt class="optional">Areas <span class="property-type">string</span></dt>
-        <dd>If not configured in the node, this optional property sets the areas of the request.
-          Separate multiple areas with ;</dd>
-        <dt class="optional">Stations <span class="property-type">string</span></dt>
-        <dd>If not configured in the node, this optional property sets the stations of the request.
-          Separate multiple areas with ;</dd>
+      <dt class="optional">station <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the station of the request.</dd>
 
-        <dt class="optional">parameter <span class="property-type">string</span></dt>
-        <dd>If not configured in the node, this optional property sets the parameter of the request.
-            Must be one of <code>CO</code>, <code>NO</code>, <code>NO2</code>, <code>O3</code>,
-            <code>PM1</code>, <code>PM2.5</code>, <code>PM10</code> or <code>SO2</code>.</dd>
+      <dt class="optional">latitude <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the latitude of the request.</dd>
+      <dt class="optional">longitude <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the longitude of the request.</dd>
+      <dt class="optional">radius <span class="property-type">number</span></dt>
+      <dd>If not configured in the node, this optional property sets the radius of the request.</dd>
+      <dt class="optional">within <span class="property-type">boolean</span></dt>
+      <dd>If not configured in the node, this optional property sets the within of the request.</dd>
+
+      <dt class="optional">parameter <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the parameter of the request.
+          Must be one of <code>CO</code>, <code>NO</code>, <code>NO2</code>, <code>O3</code>,
+          <code>PM1</code>, <code>PM2.5</code>, <code>PM10</code> or <code>SO2</code>.</dd>
     </dl>
     <h3>Outputs</h3>
     <dl class="message-properties">
-        <dt>payload <span class="property-type">object</span></dt>
-        <dd>The body of the response.</dd>
+      <dt>payload <span class="property-type">object</span></dt>
+      <dd>The body of the response.</dd>
     </dl>
     <h3>Details</h3>
       <p> All the following (optional) parameters can be set in the payload.</p>
@@ -100,17 +108,18 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('latest', {
+    RED.nodes.registerType('luftkvalitet-daily', {
         category : 'luftkvalitet',
         color : '#00aef2',
         defaults: {
+          fromtime : {value : null, required : true },
+          totime : {value : null, required : true },
+          station : {value : null },
           latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
           longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
           radius : {value : 5, validate:function(lng) { return radius > 0 && radius < 21; }  },
           within : {value : false },
           parameter : {value : null },
-          areas : {value : null },
-          stations : {value : null },
           debug : {value : false },
           name : {value : null }
         },
@@ -118,7 +127,10 @@
         outputs : 1,
         icon : 'luftkvalitet.png',
         label : function() {
-            return this.name|| 'latest';
+            return this.name|| 'daily';
         },
+        paletteLabel : function() {
+            return this.name|| 'daily';
+        }
     });
 </script>
