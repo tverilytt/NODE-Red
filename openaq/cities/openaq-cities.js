@@ -73,5 +73,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('cities', Cities);
+  RED.nodes.registerType('openaq-cities', Cities);
 };

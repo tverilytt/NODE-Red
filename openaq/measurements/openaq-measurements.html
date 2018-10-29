@@ -12,7 +12,7 @@
 
 -->
 
-<script type="text/x-red" data-template-name="latest">
+<script type="text/x-red" data-template-name="openaq-measurements">
     <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
       <div class="form-row">
         <span for="node-input-location"> Location</span>
@@ -38,6 +38,18 @@
       <input type="number" id="node-input-radius" placeholder="2500" style="width:100px;">
       </div>
     </div>
+    <div class="form-row"><i class="fa fa-calculator"></i> <span>Value</span>:</div>
+      <span for="node-input-value_from"> Value from</span>
+      <input type="text" id="node-input-value_from" placeholder="From value" style="width:100px;">
+      <span for="node-input-value_to"> Value to</span>
+      <input type="text" id="node-input-value_to" placeholder="To value" style="width:100px;">
+    </div>
+    <div class="form-row"><i class="fa fa-calendar"></i> <span>Date</span>:</div>
+      <span for="node-input-date_from"> Date from</span>
+      <input type="text" id="node-input-date_from" placeholder="yyyy-mm-ddThh:mm:ss" style="width:100px;">
+      <span for="node-input-date_to"> Date to</span>
+      <input type="text" id="node-input-date_to" placeholder="yyyy-mm-ddThh:mm:ss" style="width:100px;">
+    </div>
     <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
     <div class="form-row">
       <span for="node-input-parameter"> Parameter</span>
@@ -56,14 +68,6 @@
     </div>
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
-      <div>
-      <span for="node-input-orderby_distance"> Distance</span>
-      <input type="checkbox" id="node-input-orderby_distance" style="width:20px;">
-      <select id="node-input-sort_distance" style="width:100px;">
-        <option value="asc" selected>Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-      </div>
       <div>
       <span for="node-input-orderby_location"> Location</span>
       <input type="checkbox" id="node-input-orderby_location" style="width:20px;">
@@ -101,9 +105,9 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="latest">
-    <h4>Latest</h4>
-    <p>Provides the latest value of each available parameter for every location in the system.</p>
+<script type="text/x-red" data-help-name="openaq-measurements">
+    <h4>Measurements</h4>
+    <p>Provides data about individual measurements</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -116,6 +120,17 @@
         <dd>If not configured in the node, this optional property sets the longitude of the request.</dd>
         <dt class="optional">radius <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the radius of the request.</dd>
+
+
+        <dt class="optional">valur_from <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the value_from of the request.</dd>
+        <dt class="optional">valur_to <span class="property-type">number</span></dt>
+        <dd>If not configured in the node, this optional property sets the value_to of the request.</dd>
+
+        <dt class="optional">date_from <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the date_from of the request.</dd>
+        <dt class="optional">date_to <span class="property-type">string</span></dt>
+        <dd>If not configured in the node, this optional property sets the date_to of the request.</dd>
 
         <dt class="optional">location <span class="property-type">string</span></dt>
         <dd>If not configured in the node, this optional property sets the location of the request.</dd>
@@ -153,28 +168,30 @@
       <p> All the following (optional) parameters can be set in the payload.</p>
       <p>The <code>samples</code> directory contains example of payload and flow.</p>
       <p>For details about the available options, see 
-        <a target="_blank" href="https://docs.openaq.org/#api-Latest">OpenAQ API Latest</a>
+        <a target="_blank" href="https://docs.openaq.org/#api-Measurements">OpenAQ API Measurements</a>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('latest', {
+    RED.nodes.registerType('openaq-measurements', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            location : {value : null },
-            city : {value : null },
-            country : {value : null },
+          location : {value : null },
+          city : {value : null },
+          country : {value : null },
           latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
           longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
           radius : {value : 2500 },
+          value_from : {value : null },
+          value_to : {value : null },
+          date_from : {value : null },
+          date_to : {value : null },
           orderby_location : {value : true },
           sort_location : {value : 'asc' },
           orderby_city : {value : false },
           sort_city : {value : null },
           orderby_country : {value : false },
           sort_country : {value : null },
-          orderby_distance : {value : false },
-          sort_distance : {value : null },
           parameter : {value : null },
           hasGeo : {value : false },
           limit : {value : 100 },
@@ -186,7 +203,10 @@
         outputs : 1,
         icon : 'openaq.png',
         label : function() {
-            return this.name|| 'latest';
+            return this.name|| 'measurements';
         },
+        paletteLabel : function() {
+            return this.name|| 'measurements';
+        }
     });
 </script>

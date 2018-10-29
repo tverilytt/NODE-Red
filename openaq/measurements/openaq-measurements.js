@@ -99,5 +99,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('measurements', Measurements);
+  RED.nodes.registerType('openaq-measurements', Measurements);
 };

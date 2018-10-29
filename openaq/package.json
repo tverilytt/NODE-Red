@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-openaq",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Node-RED nodes for Open AQ",
     "repository": {
         "type": "git",
@@ -18,14 +18,14 @@
     ],
     "node-red": {
         "nodes": {
-            "cities": "cities/cities.js",
-            "countries": "countries/countries.js",
-            "fetches": "fetches/fetches.js",
-            "latest": "latest/latest.js",
-            "locations": "locations/locations.js",
-            "measurements": "measurements/measurements.js",
-            "parameters": "parameters/parameters.js",
-            "sources": "sources/sources.js"
+            "openaq-cities": "cities/openaq-cities.js",
+            "openaq-countries": "countries/openaq-countries.js",
+            "openaq-fetches": "fetches/openaq-fetches.js",
+            "openaq-latest": "latest/openaq-latest.js",
+            "openaq-locations": "locations/openaq-locations.js",
+            "openaq-measurements": "measurements/openaq-measurements.js",
+            "openaq-parameters": "parameters/openaq-parameters.js",
+            "openaq-sources": "sources/openaq-sources.js"
         }
     },
     "author": {

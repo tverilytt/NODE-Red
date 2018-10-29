@@ -12,30 +12,19 @@
 
 -->
 
-<script type="text/x-red" data-template-name="cities">
-    <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
-    <div class="form-row">
-      <label for="node-input-country"><i class="icon-globe"></i> Country</label>
-      <input type="text" id="node-input-country" placeholder="Country">
-    </div>
+<script type="text/x-red" data-template-name="openaq-fetches">
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
       <div>
-      <span for="node-input-orderby_country"> Country</span>
-      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
-      <select id="node-input-sort_country" style="width:100px;">
+      <span for="node-input-orderby_timeStarted"> Time started</span>
+      <input type="checkbox" id="node-input-orderby_timeStarted" style="width:20px;">
+      <select id="node-input-sort_timeStarted" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
-      <span for="node-input-orderby_city"> City</span>
-      <input type="checkbox" id="node-input-orderby_city" style="width:20px;">
-      <select id="node-input-sort_city" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      <span for="node-input-orderby_count"> Count</span>
-      <input type="checkbox" id="node-input-orderby_count" style="width:20px;">
-      <select id="node-input-sort_count" style="width:100px;">
+      <span for="node-input-orderby_timeEnded"> Time ended</span>
+      <input type="checkbox" id="node-input-orderby_timeEnded" style="width:20px;">
+      <select id="node-input-sort_timeEnded" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
@@ -57,17 +46,14 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="cities">
-    <h4>Cities</h4>
-    <p>Provides a simple listing of cities within the platform.</p>
+<script type="text/x-red" data-help-name="openaq-fetches">
+    <h4>Fetches</h4>
+    <p>Providing data about individual fetch operations that are used to populate data in the platform.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">payload</dt>
         <dd>Sent as the body of the request.</dd>
-
-        <dt class="optional">country <span class="property-type">string</span></dt>
-        <dd>If not configured in the node, this optional property sets the country of the request.</dd>
 
         <dt class="optional">orderby <span class="property-type">array</span></dt>
         <dd>If not configured in the node, this optional property sets the orderby of the request.
@@ -90,21 +76,18 @@
       <p> All the following (optional) parameters can be set in the payload.</p>
       <p>The <code>samples</code> directory contains example of payload and flow.</p>
       <p>For details about the available options, see 
-        <a target="_blank" href="https://docs.openaq.org/#api-Cities">OpenAQ API Cities</a>
+        <a target="_blank" href="https://docs.openaq.org/#api-Fetches">OpenAQ API Fetches</a>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('cities', {
+    RED.nodes.registerType('openaq-fetches', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            orderby_country : {value : true },
-            sort_country : {value : 'asc' },
-            orderby_count : {value : false },
-            sort_count : {value : 'asc' },
-            orderby_city : {value : false },
-            sort_city : {value : 'asc' },
-            country : {value : null },
+            orderby_timeStarted : {value : false },
+            sort_timeStarted : {value : 'asc' },
+            orderby_timeEnded : {value : false },
+            sort_timeEnded : {value : 'asc' },
             limit : {value : 100 },
             page : {value : 1 },
             debug : {value : false },
@@ -114,7 +97,10 @@
         outputs : 1,
         icon : 'openaq.png',
         label : function() {
-            return this.name|| 'cities';
+            return this.name|| 'fetches';
         },
+        paletteLabel : function() {
+            return this.name|| 'fetches';
+        }
     });
 </script>

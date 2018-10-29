@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
-  var DEBUG_PREFIX = '[openaq: parameters]';
+  var DEBUG_PREFIX = '[openaq: sources]';
 
-  function Parameters(config) {
+  function Sources(config) {
     RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
@@ -38,17 +38,21 @@ module.exports = function(RED) {
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
           openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+        simpleParameters : {
+          limit : msg.limit || msg.payload.limit || config.limit,
+          page : msg.page || msg.payload.page || config.page
+        }
       };
 
       debugLog(queryParameters);
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
-      node.status({fill : 'green', shape : 'ring', text : 'Requesting parameters...'});
-      openaq.openaqAPI('parameters', parameters)
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting sources...'});
+      openaq.openaqAPI('sources', parameters)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('parameters.js', 'openAPI response', response);
+        console.info('sources.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -68,5 +72,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('parameters', Parameters);
+  RED.nodes.registerType('openaq-sources', Sources);
 };

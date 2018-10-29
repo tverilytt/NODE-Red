@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
-  var DEBUG_PREFIX = '[openaq: locations]';
+  var DEBUG_PREFIX = '[openaq: fetches]';
 
-  function Locations(config) {
+  function Fetches(config) {
     RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
@@ -36,17 +36,9 @@ module.exports = function(RED) {
       debugLog('config', config);
 
       var queryParameters = {
-        latitude : msg.latitude || msg.payload.latitude || config.latitude,
-        longitude : msg.longitude || msg.payload.longitude || config.longitude,
         orderby : msg.orderby || msg.payload.orderby || 
           openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
         simpleParameters : {
-          location : msg.location || msg.payload.location || config.location,
-          city : msg.city || msg.payload.city || config.city,
-          country : msg.country || msg.payload.country || config.country,
-          radius : msg.radius || msg.payload.radius || config.radius,
-          parameter : msg.parameter || msg.payload.parameter || config.parameter,
-          has_geo : msg.hasGeo || msg.payload.hasGeo || config.hasGeo,
           limit : msg.limit || msg.payload.limit || config.limit,
           page : msg.page || msg.payload.page || config.page
         }
@@ -56,21 +48,22 @@ module.exports = function(RED) {
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
-       node.status({fill : 'green', shape : 'ring', text : 'Requesting locations...'});
-       openaq.openaqAPI('locations', parameters)
-       .then(function(response) {
-         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-         console.info('locations.js', 'openAPI response', response);
-         msg.payload = response;
-         node.send(msg);
-       })
-       .catch(function (error) {
-         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
-         debugLog('Got error: ' + error);
-         msg.payload = error;
-         node.send(msg);
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting fetches...'});
+      openaq.openaqAPI('fetches', parameters)
+      .then(function(response) {
+        node.status({fill : 'green', shape : 'dot', text : 'Success'});
+        console.info('fetches.js', 'openAPI response', response);
+        msg.payload = response;
+        node.send(msg);
+      })
+      .catch(function (error) {
+        node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
+        debugLog('Got error: ' + error);
+        msg.payload = error;
+        node.send(msg);
 //           node.error(JSON.stringify(error), msg);
-       });
+      });
+
     });
 
     function debugLog(...args) {
@@ -79,5 +72,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('locations', Locations);
+  RED.nodes.registerType('openaq-fetches', Fetches);
 };

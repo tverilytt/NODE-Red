@@ -12,7 +12,7 @@
 
 -->
 
-<script type="text/x-red" data-template-name="countries">
+<script type="text/x-red" data-template-name="openaq-parameters">
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
       <div>
@@ -22,31 +22,19 @@
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
-      <span for="node-input-orderby_cities"> Cities</span>
-      <input type="checkbox" id="node-input-orderby_cities" style="width:20px;">
-      <select id="node-input-sort_cities" style="width:100px;">
+      <span for="node-input-orderby_preferredUnit"> Preferred unit</span>
+      <input type="checkbox" id="node-input-orderby_preferredUnit" style="width:20px;">
+      <select id="node-input-sort_preferredUnit" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
-      <span for="node-input-orderby_locations"> Locations</span>
-      <input type="checkbox" id="node-input-orderby_locations" style="width:20px;">
-      <select id="node-input-sort_locations" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      <span for="node-input-orderby_count"> Count</span>
-      <input type="checkbox" id="node-input-orderby_count" style="width:20px;">
-      <select id="node-input-sort_count" style="width:100px;">
+      <span for="node-input-orderby_id"> Id</span>
+      <input type="checkbox" id="node-input-orderby_id" style="width:20px;">
+      <select id="node-input-sort_id" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
       </div>
-    </div>
-    <div class="form-row">
-      <span for="node-input-limit"> Limit</span>
-      <input type="text" id="node-input-limit" placeholder="Limit" style="width:100px;">
-      <span for="node-input-page"> Page</span>
-      <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
     </div>
     <div class="form-row">
         <label for="node-input-debug"> Console log</label>
@@ -58,9 +46,9 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="countries">
-    <h4>Countries</h4>
-    <p>Provides a simple listing of countries within the platform.</p>
+<script type="text/x-red" data-help-name="openaq-parameters">
+    <h4>Parameters</h4>
+    <p>Provides a simple listing of parameters within the platform.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -71,11 +59,6 @@
         <dd>If not configured in the node, this optional property sets the orderby of the request.
             Each array element object contains two properties. <code>orderby</code> - name of field to order by.
             <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
-
-        <dt class="optional">limit <span class="property-type">number</span></dt>
-        <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
-        <dt class="optional">page <span class="property-type">number</span></dt>
-        <dd>If not configured in the node, this optional property sets the page of the request.</dd>
 
     </dl>
     <h3>Outputs</h3>
@@ -88,22 +71,20 @@
       <p> All the following (optional) parameters can be set in the payload.</p>
       <p>The <code>samples</code> directory contains example of payload and flow.</p>
       <p>For details about the available options, see 
-        <a target="_blank" href="https://docs.openaq.org/#api-Countries">OpenAQ API Countries</a>
+        <a target="_blank" href="https://docs.openaq.org/#api-Parameters">OpenAQ API Parameters</a>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('countries', {
+    RED.nodes.registerType('openaq-parameters', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
             orderby_name : {value : true },
             sort_name : {value : 'asc' },
-            orderby_count : {value : false },
-            sort_count : {value : 'asc' },
-            orderby_cities : {value : false },
-            sort_cities : {value : 'asc' },
-            orderby_locations : {value : false },
-            sort_locations : {value : 'asc' },
+            orderby_preferredUnit : {value : false },
+            sort_preferredUnit : {value : null },
+            orderby_id : {value : false },
+            sort_id : {value : null },
             limit : {value : 100 },
             page : {value : 1 },
             debug : {value : false },
@@ -113,7 +94,10 @@
         outputs : 1,
         icon : 'openaq.png',
         label : function() {
-            return this.name|| 'countries';
+            return this.name|| 'parameters';
         },
+        paletteLabel : function() {
+            return this.name|| 'parameters';
+        }
     });
 </script>

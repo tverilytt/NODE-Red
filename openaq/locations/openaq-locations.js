@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
-  var DEBUG_PREFIX = '[openaq: latest]';
+  var DEBUG_PREFIX = '[openaq: locations]';
 
-  function Latest(config) {
+  function Locations(config) {
     RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
@@ -56,17 +56,16 @@ module.exports = function(RED) {
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
-       node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
-       openaq.openaqAPI('latest', parameters)
+       node.status({fill : 'green', shape : 'ring', text : 'Requesting locations...'});
+       openaq.openaqAPI('locations', parameters)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
-         console.info('latest.js', 'openAPI response', response);
+         console.info('locations.js', 'openAPI response', response);
          msg.payload = response;
          node.send(msg);
        })
        .catch(function (error) {
-         node.status({fill : 'red', shape : 'dot', text : 'Error ' + 
-           (error.error ? error.error : error) });
+         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
          debugLog('Got error: ' + error);
          msg.payload = error;
          node.send(msg);
@@ -74,29 +73,11 @@ module.exports = function(RED) {
        });
     });
 
-    function getOrderByConfigSample() {
-      return {
-        "orderby" : [
-          {
-            "orderby" : "location", "sort" : "desc"
-          },
-          {
-            "orderby" : "city", "sort" : "desc"
-          },
-          {
-            "orderby" : "country", "sort" : "desc"
-          },
-          {
-            "orderby" : "distance", "sort" : null
-          }
-        ]};
-    }
-
     function debugLog(...args) {
       console.debug(DEBUG_PREFIX, ...args);
     }
 
   }
 
-  RED.nodes.registerType('latest', Latest);
+  RED.nodes.registerType('openaq-locations', Locations);
 };

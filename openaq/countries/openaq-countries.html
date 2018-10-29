@@ -12,19 +12,31 @@
 
 -->
 
-<script type="text/x-red" data-template-name="sources">
+<script type="text/x-red" data-template-name="openaq-countries">
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
       <div>
-      <span for="node-input-orderby_city"> City</span>
-      <input type="checkbox" id="node-input-orderby_city" style="width:20px;">
-      <select id="node-input-sort_city" style="width:100px;">
+      <span for="node-input-orderby_name"> Name</span>
+      <input type="checkbox" id="node-input-orderby_name" style="width:20px;">
+      <select id="node-input-sort_name" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
-      <span for="node-input-orderby_country"> Country</span>
-      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
-      <select id="node-input-sort_country" style="width:100px;">
+      <span for="node-input-orderby_cities"> Cities</span>
+      <input type="checkbox" id="node-input-orderby_cities" style="width:20px;">
+      <select id="node-input-sort_cities" style="width:100px;">
+        <option value="desc">Descending</option>
+        <option value="asc" selected>Ascending</option>
+      </select>
+      <span for="node-input-orderby_locations"> Locations</span>
+      <input type="checkbox" id="node-input-orderby_locations" style="width:20px;">
+      <select id="node-input-sort_locations" style="width:100px;">
+        <option value="desc">Descending</option>
+        <option value="asc" selected>Ascending</option>
+      </select>
+      <span for="node-input-orderby_count"> Count</span>
+      <input type="checkbox" id="node-input-orderby_count" style="width:20px;">
+      <select id="node-input-sort_count" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
@@ -46,9 +58,9 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="sources">
-    <h4>Sources</h4>
-    <p>Provides a list of data sources.</p>
+<script type="text/x-red" data-help-name="openaq-countries">
+    <h4>Countries</h4>
+    <p>Provides a simple listing of countries within the platform.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -76,18 +88,22 @@
       <p> All the following (optional) parameters can be set in the payload.</p>
       <p>The <code>samples</code> directory contains example of payload and flow.</p>
       <p>For details about the available options, see 
-        <a target="_blank" href="https://docs.openaq.org/#api-Sources">OpenAQ API Sources</a>
+        <a target="_blank" href="https://docs.openaq.org/#api-Countries">OpenAQ API Countries</a>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('sources', {
+    RED.nodes.registerType('openaq-countries', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            orderby_city : {value : false },
-            sort_city : {value : 'asc' },
-            orderby_country : {value : false },
-            sort_country : {value : 'asc' },
+            orderby_name : {value : true },
+            sort_name : {value : 'asc' },
+            orderby_count : {value : false },
+            sort_count : {value : 'asc' },
+            orderby_cities : {value : false },
+            sort_cities : {value : 'asc' },
+            orderby_locations : {value : false },
+            sort_locations : {value : 'asc' },
             limit : {value : 100 },
             page : {value : 1 },
             debug : {value : false },
@@ -97,7 +113,10 @@
         outputs : 1,
         icon : 'openaq.png',
         label : function() {
-            return this.name|| 'sources';
+            return this.name|| 'countries';
         },
+        paletteLabel : function() {
+            return this.name|| 'countries';
+        }
     });
 </script>

@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
-  var DEBUG_PREFIX = '[openaq: sources]';
+  var DEBUG_PREFIX = '[openaq: countries]';
 
-  function Sources(config) {
+  function Countries(config) {
     RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
@@ -48,11 +48,11 @@ module.exports = function(RED) {
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
-      node.status({fill : 'green', shape : 'ring', text : 'Requesting sources...'});
-      openaq.openaqAPI('sources', parameters)
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting countries...'});
+      openaq.openaqAPI('countries', parameters)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('sources.js', 'openAPI response', response);
+        console.info('countries.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -72,5 +72,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('sources', Sources);
+  RED.nodes.registerType('openaq-countries', Countries);
 };

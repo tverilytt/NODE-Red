@@ -22,9 +22,9 @@
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
-  var DEBUG_PREFIX = '[openaq: countries]';
+  var DEBUG_PREFIX = '[openaq: parameters]';
 
-  function Countries(config) {
+  function Parameters(config) {
     RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
@@ -38,21 +38,17 @@ module.exports = function(RED) {
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
           openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
-        simpleParameters : {
-          limit : msg.limit || msg.payload.limit || config.limit,
-          page : msg.page || msg.payload.page || config.page
-        }
       };
 
       debugLog(queryParameters);
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
-      node.status({fill : 'green', shape : 'ring', text : 'Requesting countries...'});
-      openaq.openaqAPI('countries', parameters)
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting parameters...'});
+      openaq.openaqAPI('parameters', parameters)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('countries.js', 'openAPI response', response);
+        console.info('parameters.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -72,5 +68,5 @@ module.exports = function(RED) {
 
   }
 
-  RED.nodes.registerType('countries', Countries);
+  RED.nodes.registerType('openaq-parameters', Parameters);
 };

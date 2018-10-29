@@ -12,7 +12,7 @@
 
 -->
 
-<script type="text/x-red" data-template-name="locations">
+<script type="text/x-red" data-template-name="openaq-latest">
     <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
       <div class="form-row">
         <span for="node-input-location"> Location</span>
@@ -28,6 +28,7 @@
       </div>
     </div>
     <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
+    <div class="form-row">
       <span for="node-input-latitude"> Latitude</span>
       <input type="text" id="node-input-latitude" placeholder="Latitude" style="width:100px;">
       <span for="node-input-longitude"> Longitude</span>
@@ -35,36 +36,6 @@
       <div>
       <span for="node-input-radius"> Radius (in meters)</span>
       <input type="number" id="node-input-radius" placeholder="2500" style="width:100px;">
-    </div>
-    <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
-    <div class="form-row">
-      <div>
-      <span for="node-input-orderby_distance"> Distance</span>
-      <input type="checkbox" id="node-input-orderby_distance" style="width:20px;">
-      <select id="node-input-sort_distance" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      </div>
-      <div>
-      <span for="node-input-orderby_location"> Location</span>
-      <input type="checkbox" id="node-input-orderby_location" style="width:20px;">
-      <select id="node-input-sort_location" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      <span for="node-input-orderby_city"> City</span>
-      <input type="checkbox" id="node-input-orderby_city" style="width:20px;">
-      <select id="node-input-sort_city" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      <span for="node-input-orderby_country"> Country</span>
-      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
-      <select id="node-input-sort_country" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
       </div>
     </div>
     <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
@@ -83,6 +54,37 @@
       <span for="node-input-hasGeo"> Has geo</span>
       <input type="checkbox" id="node-input-hasGeo" style="width:20px;">
     </div>
+    <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
+    <div class="form-row">
+      <div>
+      <span for="node-input-orderby_distance"> Distance</span>
+      <input type="checkbox" id="node-input-orderby_distance" style="width:20px;">
+      <select id="node-input-sort_distance" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      </div>
+      <div>
+      <span for="node-input-orderby_location"> Location</span>
+      <input type="checkbox" id="node-input-orderby_location" style="width:20px;">
+      <select id="node-input-sort_location" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_city"> City</span>
+      <input type="checkbox" id="node-input-orderby_city" style="width:20px;">
+      <select id="node-input-sort_city" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_country"> Country</span>
+      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
+      <select id="node-input-sort_country" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      </div>
+    </div>
     <div class="form-row">
       <span for="node-input-limit"> Limit</span>
       <input type="text" id="node-input-limit" placeholder="Limit" style="width:100px;">
@@ -99,9 +101,9 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="locations">
-    <h4>Locations</h4>
-    <p>Provides a list of measurement locations and their meta data.</p>
+<script type="text/x-red" data-help-name="openaq-latest">
+    <h4>Latest</h4>
+    <p>Provides the latest value of each available parameter for every location in the system.</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -151,40 +153,43 @@
       <p> All the following (optional) parameters can be set in the payload.</p>
       <p>The <code>samples</code> directory contains example of payload and flow.</p>
       <p>For details about the available options, see 
-        <a target="_blank" href="https://docs.openaq.org/#api-Locations">OpenAQ API Locations</a>
+        <a target="_blank" href="https://docs.openaq.org/#api-Latest">OpenAQ API Latest</a>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('locations', {
+    RED.nodes.registerType('openaq-latest', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
             location : {value : null },
             city : {value : null },
             country : {value : null },
-            latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
-            longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
-            radius : {value : 2500 },
-            orderby_location : {value : true },
-            sort_location : {value : 'asc' },
-            orderby_city : {value : false },
-            sort_city : {value : 'asc' },
-            orderby_country : {value : false },
-            sort_country : {value : 'asc' },
-            orderby_distance : {value : false },
-            sort_distance : {value : 'asc' },
-            parameter : {value : null },
-            hasGeo : {value : true },
-            limit : {value : 100 },
-            page : {value : 1 },
-            debug : {value : false },
-            name : {value : ''}
+          latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
+          longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
+          radius : {value : 2500 },
+          orderby_location : {value : true },
+          sort_location : {value : 'asc' },
+          orderby_city : {value : false },
+          sort_city : {value : null },
+          orderby_country : {value : false },
+          sort_country : {value : null },
+          orderby_distance : {value : false },
+          sort_distance : {value : null },
+          parameter : {value : null },
+          hasGeo : {value : false },
+          limit : {value : 100 },
+          page : {value : 1 },
+          debug : {value : false },
+          name : {value : null }
         },
         inputs : 1,
         outputs : 1,
         icon : 'openaq.png',
         label : function() {
-            return this.name|| 'locations';
+            return this.name|| 'latest';
         },
+        paletteLabel : function() {
+            return this.name|| 'latest';
+        }
     });
 </script>
