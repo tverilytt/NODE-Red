@@ -1,4 +1,8 @@
-#### 0.0.2: New node names
+#### 0.0.3: Character handling
+
+ - Fix error when using area / station name containing æ,ø,å etc.
+
+ #### 0.0.2: New node names
 
  - New node names to prevent name clash with nodes from other packages. Name prefixed with "luftkvalitet-"
  - Note that you need to either modify 0.0.1 openaq nodes "type" property from e.g. "latest" to "luftkvalitet-latest",

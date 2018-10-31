@@ -52,9 +52,9 @@ module.exports = (function() {
     }
   }
 
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
+  function debugLog(...args) {
+    console.debug(DEBUG_PREFIX, ...args);
+  }
   
   return {
     setDebugLogging : function(debug) {
@@ -84,7 +84,7 @@ module.exports = (function() {
     },
 
     getStation : function(parameters) {
-      if (parameters.station) return '/' + parameters.station;
+      if (parameters.station) return '/' + encodeURIComponent(parameters.station);
     },
     
     getTimePeriod : function(parameters) {
@@ -98,7 +98,7 @@ module.exports = (function() {
     getLookupQueryParameters : function(parameters) {
       var queryURI = '/' + parameters.metadata;
 
-      if (parameters.area) queryURI += '?area=' + parameters.area;
+      if (parameters.area) queryURI += '?area=' + encodeURIComponent(parameters.area);
 
       if (parameters.parameter) {
          var prefix = parameters.area ? '&' : '?';
@@ -119,11 +119,11 @@ module.exports = (function() {
             if (parameters.within) prefix = '&';
          } else {
             if (parameters.areas) {
-               queryURI += prefix + 'areas=' + parameters.areas;
+               queryURI += prefix + 'areas=' + encodeURIComponent(parameters.areas);
                prefix = '&';
             }
             if (parameters.stations) {
-               queryURI += prefix + 'stations=' + parameters.stations;
+               queryURI += prefix + 'stations=' + encodeURIComponent(parameters.stations);
                prefix = '&';
             }
          }
@@ -137,7 +137,7 @@ module.exports = (function() {
 
     luftkvalitetAPI : function(operation, queryParameters, options) {
       return new Promise(function(resolve, reject) {
-        var url = luftkvalitetAPI + operation + queryParameters;
+        var url = luftkvalitetAPI + operation +  queryParameters;
 //        url = 'http://127.0.0.1:1880/errortest/';
         debugLog('URL', 'luftkvalitetAPI', url);
         fetch(url, options)
