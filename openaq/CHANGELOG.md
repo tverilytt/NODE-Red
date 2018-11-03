@@ -1,3 +1,7 @@
+#### 0.0.3: Handle msg.payload
+
+ - Handle msg.payload null or undefined.
+ 
 #### 0.0.2: New node names
 
  - New node names to prevent name clash with nodes from other packages. Name prefixed with "openaq-"

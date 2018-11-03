@@ -35,6 +35,8 @@ module.exports = function(RED) {
       debugLog('node',  node);
       debugLog('config', config);
 
+      msg.payload = msg.payload || {};
+
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
           openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
