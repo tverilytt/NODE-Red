@@ -55,7 +55,34 @@ module.exports = (function() {
   function debugLog(...args) {
     console.debug(DEBUG_PREFIX, ...args);
   }
-  
+
+  // https://stackoverflow.com/a/3224854/4878494
+  function daysBetweenDates(date1, date2) {
+    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    var days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    debugLog('daysBetweenDates', days);
+    return days;
+  }
+
+  function validTimePeriod(fromtime, totime) {
+    var fromDate = new Date(fromtime);
+    var toDate = new Date(totime);
+
+    if (toDate <= fromDate)
+       throw new Error('Invalid time period: to time must be greater than from time');
+    if (daysBetweenDates(fromDate, toDate) >
+       daysInMonth(fromDate))
+       throw new Error('Invalid time period: limit of 1 month exceeded.');
+    return true;
+  }
+
+  // https://stackoverflow.com/a/1185068/4878494
+  function daysInMonth(date) {
+    var days = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    debugLog('daysBetweenDates', days);
+    return days;
+  }
+
   return {
     setDebugLogging : function(debug) {
       logger.level = debug ? 'debug' : 'error';
@@ -90,7 +117,8 @@ module.exports = (function() {
     getTimePeriod : function(parameters) {
       var period = '';
       if (parameters.fromtime && parameters.totime) {
-         period +=  '/' + parameters.fromtime + '/' + parameters.totime;
+         if (validTimePeriod(parameters.fromtime, parameters.totime))
+            period +=  '/' + parameters.fromtime + '/' + parameters.totime;
       }
       return period;
     },

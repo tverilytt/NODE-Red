@@ -1,3 +1,7 @@
+#### 0.0.4: Handle msg.payload null or undefined.
+
+ - Check if msg.payload is null or undefined.
+
 #### 0.0.3: Character handling
 
  - Fix error when using area / station name containing æ,ø,å etc.

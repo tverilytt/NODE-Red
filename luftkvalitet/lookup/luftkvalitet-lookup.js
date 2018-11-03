@@ -35,6 +35,8 @@ module.exports = function(RED) {
       debugLog('node',  node);
       debugLog('config', config);
 
+      msg.payload = msg.payload || {};
+
       var queryParameters = {
         metadata : msg.metadata || msg.payload.metadata || config.metadata,
         area : msg.area || msg.payload.area || config.area,

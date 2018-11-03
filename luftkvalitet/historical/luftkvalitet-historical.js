@@ -35,6 +35,8 @@ module.exports = function(RED) {
       debugLog('node',  node);
       debugLog('config', config);
 
+      msg.payload = msg.payload || {};
+
       var queryParameters = {
         fromtime : msg.fromtime || msg.payload.fromtime || config.fromtime,
         totime : msg.totime || msg.payload.totime || config.totime,

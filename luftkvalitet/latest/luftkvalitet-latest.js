@@ -35,6 +35,8 @@ module.exports = function(RED) {
       debugLog('node',  node);
       debugLog('config', config);
 
+      msg.payload = msg.payload || {};
+
       var queryParameters = {
         latitude : msg.latitude || msg.payload.latitude || config.latitude,
         longitude : msg.longitude || msg.payload.longitude || config.longitude,
