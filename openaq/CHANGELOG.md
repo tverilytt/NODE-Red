@@ -1,3 +1,7 @@
+#### 0.0.4: orderby enhancements
+
+ - More orderby options date (default), value and parameter for node measurements.
+ 
 #### 0.0.3: Handle msg.payload
 
  - Handle msg.payload null or undefined.

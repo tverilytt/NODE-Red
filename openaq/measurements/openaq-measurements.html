@@ -46,9 +46,9 @@
     </div>
     <div class="form-row"><i class="fa fa-calendar"></i> <span>Date</span>:</div>
       <span for="node-input-date_from"> Date from</span>
-      <input type="text" id="node-input-date_from" placeholder="yyyy-mm-ddThh:mm:ss" style="width:100px;">
+      <input type="text" id="node-input-date_from" placeholder="yyyy-mm-ddThh:mm:ss" style="width:200px;">
       <span for="node-input-date_to"> Date to</span>
-      <input type="text" id="node-input-date_to" placeholder="yyyy-mm-ddThh:mm:ss" style="width:100px;">
+      <input type="text" id="node-input-date_to" placeholder="yyyy-mm-ddThh:mm:ss" style="width:200px;">
     </div>
     <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
     <div class="form-row">
@@ -84,6 +84,28 @@
       <span for="node-input-orderby_country"> Country</span>
       <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
       <select id="node-input-sort_country" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+      <span for="node-input-orderby_date"> Date</span>
+      <input type="checkbox" id="node-input-orderby_date" style="width:20px;">
+      <select id="node-input-sort_date" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_value"> Value</span>
+      <input type="checkbox" id="node-input-orderby_value" style="width:20px;">
+      <select id="node-input-sort_value" style="width:100px;">
+        <option value="asc" selected>Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+      <span for="node-input-orderby_parameter"> Parameter</span>
+      <input type="checkbox" id="node-input-orderby_parameter" style="width:20px;">
+      <select id="node-input-sort_parameter" style="width:100px;">
         <option value="asc" selected>Ascending</option>
         <option value="desc">Descending</option>
       </select>
@@ -128,7 +150,9 @@
         <dd>If not configured in the node, this optional property sets the value_to of the request.</dd>
 
         <dt class="optional">date_from <span class="property-type">string</span></dt>
-        <dd>If not configured in the node, this optional property sets the date_from of the request.</dd>
+        <dd>If not configured in the node, this optional property sets the date_from of the request.
+          E.g. 2018-10-01 or 2018-10-01T09:00:00.
+        </dd>
         <dt class="optional">date_to <span class="property-type">string</span></dt>
         <dd>If not configured in the node, this optional property sets the date_to of the request.</dd>
 
@@ -186,12 +210,18 @@
           value_to : {value : null },
           date_from : {value : null },
           date_to : {value : null },
-          orderby_location : {value : true },
-          sort_location : {value : 'asc' },
+          orderby_location : {value : false },
+          sort_location : {value : null },
           orderby_city : {value : false },
           sort_city : {value : null },
           orderby_country : {value : false },
           sort_country : {value : null },
+          orderby_date : {value : true },
+          sort_date : {value : 'asc' },
+          orderby_value : {value : false },
+          sort_value : {value : null },
+          orderby_parameter : {value : false },
+          sort_parameter : {value : null },
           parameter : {value : null },
           hasGeo : {value : false },
           limit : {value : 100 },
