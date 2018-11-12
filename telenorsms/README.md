@@ -1,6 +1,8 @@
 <html><body>
 <h1>node-red-contrib-telenorsms</h1>
 
+Please note: This package has been deprecated.
+
 A collection of <a target="_blank" href="http://nodered.org/">Node-RED</a> nodes for accessing
 <a target="_blank" href="https://www.telenor.no/privat/minesider/logginnfelles.cms?skin=telenor">Telenor Mine Sider</a>
 to send SMS text messages, view sent SMS text messages etc.
@@ -60,6 +62,5 @@ This node can be used standalone.
 
 <h1>Sample</h1>
 The sample directory contains a Web browser client using the Telenor SMS nodes.
-The sample Web page can be found <a target="_blank" href="http://noderedjo2.mybluemix.net/telenorsms/">here</a>
 
 </body></html>

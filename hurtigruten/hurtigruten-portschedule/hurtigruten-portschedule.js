@@ -51,7 +51,7 @@ module.exports = function(RED) {
       }
       node .status({fill : 'green', shape : 'ring', text : 'Fetching port '+ season + 'schedule...'});
 
-      var url = 'https://www.hurtigruten.com/pages/practical-information/sailing-plan/';
+      var url = 'https://www.hurtigruten.com/practical-information/sailing-plan/';
       url += season != 'Current' ? '?season=' + season : '';
 
       debugLog('url', url);

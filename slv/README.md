@@ -1,6 +1,8 @@
 <html><body>
 <h3>node-red-contrib-slv</h3>
 
+Please note: This package has been deprecated.
+
 A collection of <a target="_blank" href="http://nodered.org/">Node-RED</a> nodes for
 <a target="_blank" href="https://legemiddelverket.no/">Statens Legemiddelverk (SLV)</a>
 
