@@ -101,7 +101,7 @@ module.exports = (function() {
       return Object.keys(simpleParameters)
       .filter(key => simpleParameters[key])
       .map(key =>
-        '&' + key + '=' + simpleParameters[key]
+        '&' + key + '=' + encodeURIComponent(simpleParameters[key])
       )
       .join('');
     },

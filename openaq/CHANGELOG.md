@@ -1,3 +1,7 @@
+#### 0.0.5: URI
+
+ - Encode URI components, e.g. country, city, location names.
+
 #### 0.0.4: orderby enhancements
 
  - More orderby options date (default), value and parameter for node measurements.
