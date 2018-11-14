@@ -22,3 +22,17 @@ Live version can be found here:
 The source flows can be found here:
 <a target="_blank" href="./flows/flows_openaq_dashboard.json">Open AQ dashboard flows</a>
 </p>
+<p>
+Before importing the flows, please install: 
+<ul>
+  <li>
+    <a target="_blank" href="https://github.com/node-red/node-red-dashboard">node-red-dashboard</a>.
+  </li>
+  <li>
+    <a target="_blank" href="https://github.com/totallyinformation/node-red-contrib-moment">node-red-contrib-moment</a>.
+  </li>
+  <li>
+    <a target="_blank" href="https://github.com/tverilytt/NODE-Red/tree/master/openaq">node-red-contrib-openaq</a>.
+  </li>
+</ul>
+</p>
