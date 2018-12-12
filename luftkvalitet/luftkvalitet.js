@@ -130,7 +130,7 @@ module.exports = (function() {
 
       if (parameters.parameter) {
          var prefix = parameters.area ? '&' : '?';
-         queryURI += prefix + 'components=' + parameters.parameter;
+         queryURI += prefix + 'component=' + parameters.parameter;
       }
       return queryURI;
     },
@@ -158,7 +158,7 @@ module.exports = (function() {
       }
       
       if (parameters.parameter) {
-         queryURI += prefix + 'components=' + parameters.parameter;
+         queryURI += prefix + 'component=' + parameters.parameter;
       }
       return queryURI;
     },

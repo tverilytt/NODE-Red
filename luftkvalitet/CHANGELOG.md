@@ -1,3 +1,8 @@
+#### 0.0.5: Lookup node fixes
+
+ - Lookup node - filter on station
+ - Lookup node - filter fixes etc.
+
 #### 0.0.4: Handle msg.payload null or undefined.
 
  - Check if msg.payload is null or undefined.

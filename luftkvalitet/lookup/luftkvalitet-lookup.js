@@ -50,6 +50,10 @@ module.exports = function(RED) {
        node.status({fill : 'green', shape : 'ring', text : 'Requesting lookup...'});
        luftkvalitet.luftkvalitetAPI('lookup', parameters)
        .then(function(response) {
+         if (queryParameters.metadata === 'stations') {
+            const station = msg.station || msg.payload.station || config.station;
+            if (station) response = lookupStation(station, response);
+         }
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
          console.info('lookup.js', 'luftkvalitetAPI response', response);
          msg.payload = response;
@@ -64,6 +68,10 @@ module.exports = function(RED) {
 //           node.error(JSON.stringify(error), msg);
        });
     });
+
+    function lookupStation(lookupStation, stations) {
+       return stations.filter( station => station.station === lookupStation);
+    }
 
     function debugLog(...args) {
       console.debug(DEBUG_PREFIX, ...args);

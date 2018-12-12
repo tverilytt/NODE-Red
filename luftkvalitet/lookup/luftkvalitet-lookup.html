@@ -23,8 +23,11 @@
       </select>
     </div>
     <div class="form-row"><i class="fa fa-filter"></i> <span>Filter</span>:</div>
-      <label for="node-input-area"><i class="icon-globe"></i> Area</label>
-      <input type="text" id="node-input-area" placeholder="Area">
+    <div class="form-row">
+      <span for="node-input-area"> Area</span>
+      <input type="text" id="node-input-area" placeholder="Area" style="width:200px;">
+      <span for="node-input-station"> Station</span>
+      <input type="text" id="node-input-station" placeholder="Station" style="width:200px;">
     </div>
     <div class="form-row">
       <span for="node-input-parameter"> Component</span>
@@ -60,12 +63,14 @@
       <dd>Sent as the body of the request.</dd>
 
       <dt class="required">metadata <span class="property-type">string</span></dt>
-      <dd>If not configured in the node, this optional property sets the metadata of the request.
+      <dd>If not configured in the node, this property sets the metadata of the request.
           Must be one of <code>areas</code>, <code>stations</code>, <code>components</code> or
           <code>aqis</code>.</dd>
 
-      <dt class="optional">area <span class="property-type">string</span></dt>
+      <dt class="optional">Area <span class="property-type">string</span></dt>
       <dd>If not configured in the node, this optional property sets the area of the request.</dd>
+      <dt class="optional">Station <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the station of the request.</dd>
 
       <dt class="optional">parameter <span class="property-type">string</span></dt>
       <dd>If not configured in the node, this optional property sets the parameter of the request.
@@ -91,6 +96,7 @@
         defaults: {
           metadata : { required : true, value : 'areas' },
           area : { value : null },
+          station : {value : null },
           parameter : {value : null },
           debug : {value : false },
           name : {value : null }
