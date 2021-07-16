@@ -38,7 +38,7 @@ module.exports = (function() {
 
   const fetch = require('node-fetch');
 
-  const openaqAPI = 'https://api.openaq.org/v1/';
+  const openaqAPI = 'https://u50g7n0cbj.execute-api.us-east-1.amazonaws.com/';
   const DEBUG_PREFIX = '[openaq: openaq]';
 
   function checkFetchStatus(response) {
