@@ -24,6 +24,9 @@ log4js.configure({
   appenders: { console: { type: 'file', filename: 'openaq.log' } },
   categories: { default: { appenders: ['console'], level: 'debug' } }
 });
+
+const haversine = require('haversine-distance')
+
 const logger = log4js.getLogger('console');
 logger.level = 'debug';
 console.trace = logger.debug.bind(logger);
@@ -38,7 +41,8 @@ module.exports = (function() {
 
   const fetch = require('node-fetch');
 
-  const openaqAPI = 'https://api.openaq.org/v1/';
+//  const openaqAPI = 'https://api.openaq.org/v1/';
+  const openaqAPIURL = 'https://api.openaq.org/v2/';
   const DEBUG_PREFIX = '[openaq: openaq]';
 
   function checkFetchStatus(response) {
@@ -73,8 +77,9 @@ module.exports = (function() {
     getOrderByQueryString : function(orderbys) {
       var orders = orderbys
         .filter(field => field.orderby);
-      var multi = orders.length > 1 ? '[]' : '';
+      var multi = orders.length > 1 ? '' : '';
       return orders
+        .filter(field => field.orderby !== 'distance') // Open AQ API no longer supports order_by "distance"...
         .map(field => {
           return '&order_by' + multi + '=' + field.orderby +
             (field.sort ? '&sort' + multi + '=' + field.sort : '');
@@ -138,11 +143,11 @@ module.exports = (function() {
       return queryURI;
     },
 
-    openaqAPI : function(operation, queryParameters, options) {
+    openaqAPI : function(operation, queryParameters, apiURL, options) {
       return new Promise(function(resolve, reject) {
-        var url = openaqAPI + operation + queryParameters;
-//        url = 'http://127.0.0.1:1880/errortest/';
+        var url = (apiURL || openaqAPIURL) + operation + queryParameters;
         debugLog('URL', 'openaqAPI', url);
+
         fetch(url, options)
         .then(checkFetchStatus)
         .then(responseBody => {
@@ -170,7 +175,18 @@ module.exports = (function() {
           reject(error);
         });
       });
-    }
+    },
 
+    sortByDistance: function(locations, origin, sort = 'asc') {
+      debugLog('sortByDistance', locations, origin);
+      const sortedLocations = locations
+        .map(location => Object.assign(location, { distance: haversine(origin, location.coordinates) }))
+        .sort((a, b) => a.distance - b.distance);
+      return sort === 'desc' ? sortedLocations.reverse() : sortedLocations;
+    },
+
+    getSortByDistance: function(queryParameters) {
+      return queryParameters && queryParameters.orderby && queryParameters.orderby.find(order => order.orderby === 'distance');
+    }
   };
 }());

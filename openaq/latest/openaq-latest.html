@@ -12,9 +12,13 @@
 
 -->
 
-<script type="text/x-red" data-template-name="openaq-latest">
-    <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
-      <div class="form-row">
+<script type="text/html" data-template-name="openaq-latest">
+  <div class="form-row">
+    <span for="node-input-config"> API</span>
+    <input type="text" id="node-input-config">
+  </div>
+  <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
+    <div class="form-row">
         <span for="node-input-location"> Location</span>
         <input type="text" id="node-input-location" placeholder="Location">
       </div>
@@ -101,7 +105,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="openaq-latest">
+<script type="text/html" data-help-name="openaq-latest">
     <h4>Latest</h4>
     <p>Provides the latest value of each available parameter for every location in the system.</p>
 
@@ -156,14 +160,16 @@
         <a target="_blank" href="https://docs.openaq.org/#api-Latest">OpenAQ API Latest</a>
 </script>
 
+
 <script type="text/javascript">
     RED.nodes.registerType('openaq-latest', {
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            location : {value : null },
-            city : {value : null },
-            country : {value : null },
+          config: { value: '', type: "openaq-config", required: false },
+          location : {value : null },
+          city : {value : null },
+          country : {value : null },
           latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
           longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
           radius : {value : 2500 },

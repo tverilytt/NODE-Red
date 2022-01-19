@@ -19,6 +19,7 @@
 
 'use strict';
 
+
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
@@ -26,6 +27,9 @@ module.exports = function(RED) {
 
   function Latest(config) {
     RED.nodes.createNode(this, config);
+
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
 
     openaq.setDebugLogging(config.debug);
 
@@ -58,11 +62,18 @@ module.exports = function(RED) {
 
       var parameters = openaq.getQueryParameters(queryParameters);
 
+      debugLog('latest.js', 'openAPI query parameters', queryParameters, 'Config node API URL:', node.config && node.config.api);
+
        node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
-       openaq.openaqAPI('latest', parameters)
+       openaq.openaqAPI('latest', parameters, node.config && node.config.api)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
          console.info('latest.js', 'openAPI response', response);
+         let orderByDistance = null;
+         if (orderByDistance = openaq.getSortByDistance(queryParameters)) {
+          response.results = openaq.sortByDistance(response.results, { latitude: queryParameters.latitude, longitude: queryParameters.longitude }, orderByDistance.sort)
+          debugLog('latest.js', 'openAPI response sorted', response);
+         }
          msg.payload = response;
          node.send(msg);
        })

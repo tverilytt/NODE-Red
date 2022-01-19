@@ -1,0 +1,43 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/html" data-template-name="openaq-config">
+    <div class="form-row">
+      <label for="node-config-input-api"><i class="icon-globe"></i> API</label>
+      <input type="text" id="node-config-input-api" placeholder="Open AQ API URL">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-debug"> Console log</label>
+      <input type="checkbox" id="node-config-input-debug" style="width:20px;">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="openaq-config">
+    <h4>Config</h4>
+    <p>Common configuration for all Open AQ nodes</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('openaq-config', {
+        category : 'config',
+        color : 'DeepSkyBlue',
+        defaults: {
+          api: { value: 'https://api.openaq.org/v2/', required: true },
+          debug : { value : false }
+        },
+        label : function() {
+            return this.api || 'Open AQ API';
+        }
+    });
+</script>
