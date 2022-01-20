@@ -77,12 +77,11 @@ module.exports = (function() {
     getOrderByQueryString : function(orderbys) {
       var orders = orderbys
         .filter(field => field.orderby);
-      var multi = orders.length > 1 ? '' : '';
       return orders
         .filter(field => field.orderby !== 'distance') // Open AQ API no longer supports order_by "distance"...
         .map(field => {
-          return '&order_by' + multi + '=' + field.orderby +
-            (field.sort ? '&sort' + multi + '=' + field.sort : '');
+          return '&order_by' + '=' + field.orderby +
+            (field.sort ? '&sort' + '=' + field.sort : '');
         })
         .join('');
     },
@@ -151,11 +150,12 @@ module.exports = (function() {
         fetch(url, options)
         .then(checkFetchStatus)
         .then(responseBody => {
-          debugLog('openaqAPI', 'fetch responseBody', responseBody);
           responseBody.text()
           .then(text => {
             try {
-              resolve(JSON.parse(text));
+              const data = JSON.parse(text);
+              resolve(data);
+              debugLog('openaqAPI', 'fetch responseBody', data);
             } catch(error) {
               debugLog('openaqAPI', 'json parse error', error);
               debugLog('openaqAPI', 'text body', text);
@@ -187,6 +187,12 @@ module.exports = (function() {
 
     getSortByDistance: function(queryParameters) {
       return queryParameters && queryParameters.orderby && queryParameters.orderby.find(order => order.orderby === 'distance');
+    },
+
+    filterMeasurementParameters: function(locations, measurementParamenters) {
+      return locations.map(location => {
+        return { ...location, ...{ measurements: location.measurements.filter(measurement => measurementParamenters.includes(measurement.parameter)) }}
+      });
     }
   };
 }());

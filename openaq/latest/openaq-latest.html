@@ -109,6 +109,10 @@
     <h4>Latest</h4>
     <p>Provides the latest value of each available parameter for every location in the system.</p>
 
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Open AQ API URL</dd>
+
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">payload</dt>
@@ -131,7 +135,9 @@
         <dt class="optional">parameter <span class="property-type">string</span></dt>
         <dd>If not configured in the node, this optional property sets the parameter of the request.
             Must be one of <code>pm25</code>, <code>pm10</code>, <code>so2</code>, <code>no2</code>,
-            <code>o3</code>, <code>co</code> or <code>bc</code>.</dd>
+            <code>o3</code>, <code>co</code> or <code>bc</code>, or a comma separated lists of these,
+            e.g. <code>pm10,pm25</code>
+        </dd>
 
         <dt class="optional">has_geo <span class="property-type">boolean</span></dt>
         <dd>If not configured in the node, this optional property sets the has_geo of the request.</dd>
@@ -141,6 +147,9 @@
             Each array element object contains two properties. <code>orderby</code> - name of field to order by.
             <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
 
+            <p>New: If a coordinate (latitude and longitude) is specified, and <code>orderby</code> = <code>distance</code>,
+            the response will contain a <code>distance</code> property, with the distance (in meters) from the given coordinate.</p>
+        </dd>
         <dt class="optional">limit <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
         <dt class="optional">page <span class="property-type">number</span></dt>

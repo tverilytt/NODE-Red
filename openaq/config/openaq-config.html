@@ -14,7 +14,7 @@
 
 <script type="text/html" data-template-name="openaq-config">
     <div class="form-row">
-      <label for="node-config-input-api"><i class="icon-globe"></i> API</label>
+      <label for="node-config-input-api"><i class="fa fa-database"></i> API</label>
       <input type="text" id="node-config-input-api" placeholder="Open AQ API URL">
     </div>
     <div class="form-row">
@@ -26,7 +26,13 @@
 <script type="text/html" data-help-name="openaq-config">
     <h4>Config</h4>
     <p>Common configuration for all Open AQ nodes</p>
-</script>
+
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Open AQ API URL. Default is https://api.openaq.org/v2/</dd>
+    <dt class="optional">Console log <span class="property-type">checkbox</span></dt>
+    <dd>Debug log to console</dd>
+
+  </script>
 
 <script type="text/javascript">
     RED.nodes.registerType('openaq-config', {

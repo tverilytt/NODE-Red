@@ -60,6 +60,9 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
+      const measurementParamenters = queryParameters.simpleParameters.parameter ? queryParameters.simpleParameters.parameter.split(',') : [];
+      queryParameters.simpleParameters.parameter = measurementParamenters.length === 1 ? measurementParamenters[0] : '';
+
       var parameters = openaq.getQueryParameters(queryParameters);
 
       debugLog('latest.js', 'openAPI query parameters', queryParameters, 'Config node API URL:', node.config && node.config.api);
@@ -73,6 +76,9 @@ module.exports = function(RED) {
          if (orderByDistance = openaq.getSortByDistance(queryParameters)) {
           response.results = openaq.sortByDistance(response.results, { latitude: queryParameters.latitude, longitude: queryParameters.longitude }, orderByDistance.sort)
           debugLog('latest.js', 'openAPI response sorted', response);
+         }
+         if (measurementParamenters.length > 0) {
+          response.results = openaq.filterMeasurementParameters(response.results, measurementParamenters);
          }
          msg.payload = response;
          node.send(msg);
