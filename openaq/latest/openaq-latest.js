@@ -19,7 +19,6 @@
 
 'use strict';
 
-
 module.exports = function(RED) {
   var openaq = require('../openaq.js');
 
@@ -60,37 +59,23 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      const measurementParamenters = queryParameters.simpleParameters.parameter ? queryParameters.simpleParameters.parameter.split(',') : [];
-      queryParameters.simpleParameters.parameter = measurementParamenters.length === 1 ? measurementParamenters[0] : '';
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
-      debugLog('latest.js', 'openAPI query parameters', queryParameters, 'Config node API URL:', node.config && node.config.api);
-
-       node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
-       openaq.openaqAPI('latest', parameters, node.config && node.config.api)
-       .then(function(response) {
-         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-         console.info('latest.js', 'openAPI response', response);
-         let orderByDistance = null;
-         if (orderByDistance = openaq.getSortByDistance(queryParameters)) {
-          response.results = openaq.sortByDistance(response.results, { latitude: queryParameters.latitude, longitude: queryParameters.longitude }, orderByDistance.sort)
-          debugLog('latest.js', 'openAPI response sorted', response);
-         }
-         if (measurementParamenters.length > 0) {
-          response.results = openaq.filterMeasurementParameters(response.results, measurementParamenters);
-         }
-         msg.payload = response;
-         node.send(msg);
-       })
-       .catch(function (error) {
-         node.status({fill : 'red', shape : 'dot', text : 'Error ' + 
-           (error.error ? error.error : error) });
-         debugLog('Got error: ' + error);
-         msg.payload = error;
-         node.send(msg);
+      openaq.openaqAPI('latest', queryParameters, node.config && node.config.api)
+      .then(function(response) {
+        node.status({fill : 'green', shape : 'dot', text : 'Success'});
+        console.info('latest.js', 'openAPI response', response);
+        msg.payload = response;
+        node.send(msg);
+      })
+      .catch(function (error) {
+        node.status({fill : 'red', shape : 'dot', text : 'Error ' + 
+          (error.error ? error.error : error) });
+        debugLog('Got error: ' + error);
+        msg.payload = error;
+        node.send(msg);
 //           node.error(JSON.stringify(error), msg);
-       });
+      });
     });
 
     function getOrderByConfigSample() {
