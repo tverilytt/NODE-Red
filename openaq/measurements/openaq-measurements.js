@@ -27,6 +27,9 @@ module.exports = function(RED) {
   function Measurements(config) {
     RED.nodes.createNode(this, config);
 
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
+
     openaq.setDebugLogging(config.debug);
 
     var node = this;
@@ -60,10 +63,9 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
        node.status({fill : 'green', shape : 'ring', text : 'Requesting measurements...'});
-       openaq.openaqAPI('measurements', parameters)
+
+       openaq.openaqAPI('measurements', queryParameters, node.config && node.config.api)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
          console.info('measurements.js', 'openAPI response', response);

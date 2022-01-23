@@ -152,9 +152,13 @@ function getSortByDistance(queryParameters) {
   return queryParameters && queryParameters.orderby && queryParameters.orderby.find(order => order.orderby === 'distance');
 }
 
-function filterMeasurementParameters(locations, measurementParamenters) {
+function filterMeasurementParameters(measurements, measurementParamenters) {
+  return measurements.filter(measurement => measurementParamenters.includes(measurement.parameter));
+}
+
+function filterLocationsMeasurementParameters(locations, measurementParamenters) {
   return locations.map(location => {
-    return { ...location, ...{ measurements: location.measurements.filter(measurement => measurementParamenters.includes(measurement.parameter)) } }
+    return { ...location, ...{ measurements: filterMeasurementParameters(location.measurements, measurementParamenters) }}
   });
 }
 
@@ -187,7 +191,12 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
               }
 
               if (measurementParamenters && measurementParamenters.length > 0) {
-                response.results = filterMeasurementParameters(response.results, measurementParamenters);
+                if (operation === 'latest') {
+                  response.results = filterLocationsMeasurementParameters(response.results, measurementParamenters);
+                }
+                if (operation === 'measurements') {
+                  response.results = filterMeasurementParameters(response.results, measurementParamenters);
+                }
               }
 
               resolve(response);
