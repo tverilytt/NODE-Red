@@ -200,7 +200,7 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
               }
 
               resolve(response);
-              debugLog('openaqAPI', 'fetch responseBody', data);
+              debugLog('openaqAPI', 'fetch responseBody', response);
             } catch (error) {
               debugLog('openaqAPI', 'json parse error', error);
               debugLog('openaqAPI', 'text body', text);

@@ -53,6 +53,7 @@ module.exports = function(RED) {
       debugLog(queryParameters);
 
       node.status({fill : 'green', shape : 'ring', text : 'Requesting cities...'});
+
       openaq.openaqAPI('cities', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
