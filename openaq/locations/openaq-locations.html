@@ -12,7 +12,11 @@
 
 -->
 
-<script type="text/x-red" data-template-name="openaq-locations">
+<script type="text/html" data-template-name="openaq-locations">
+  <div class="form-row">
+    <span for="node-input-config"> API</span>
+    <input type="text" id="node-input-config">
+  </div>
     <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
       <div class="form-row">
         <span for="node-input-location"> Location</span>
@@ -99,9 +103,13 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="openaq-locations">
+<script type="text/html" data-help-name="openaq-locations">
     <h4>Locations</h4>
     <p>Provides a list of measurement locations and their meta data.</p>
+
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Open AQ API URL</dd>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -125,7 +133,9 @@
         <dt class="optional">parameter <span class="property-type">string</span></dt>
         <dd>If not configured in the node, this optional property sets the parameter of the request.
             Must be one of <code>pm25</code>, <code>pm10</code>, <code>so2</code>, <code>no2</code>,
-            <code>o3</code>, <code>co</code> or <code>bc</code>.</dd>
+            <code>o3</code>, <code>co</code> or <code>bc</code>, or a comma separated lists of these,
+            e.g. <code>pm10,pm25</code>
+        </dd>
 
         <dt class="optional">has_geo <span class="property-type">boolean</span></dt>
         <dd>If not configured in the node, this optional property sets the has_geo of the request.</dd>
@@ -134,6 +144,10 @@
         <dd>If not configured in the node, this optional property sets the orderby of the request.
             Each array element object contains two properties. <code>orderby</code> - name of field to order by.
             <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
+
+            <p>New: If a coordinate (latitude and longitude) is specified, and <code>orderby</code> = <code>distance</code>,
+              the response will contain a <code>distance</code> property, with the distance (in meters) from the given coordinate.</p>
+          </dd>
 
         <dt class="optional">limit <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
@@ -155,39 +169,40 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('openaq-locations', {
-        category : 'openaq',
-        color : 'DeepSkyBlue',
-        defaults: {
-            location : {value : null },
-            city : {value : null },
-            country : {value : null },
-            latitude : {value : null, validate:function(lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true;} },
-            longitude : {value : null, validate:function(lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true;} },
-            radius : {value : 2500 },
-            orderby_location : {value : true },
-            sort_location : {value : 'asc' },
-            orderby_city : {value : false },
-            sort_city : {value : 'asc' },
-            orderby_country : {value : false },
-            sort_country : {value : 'asc' },
-            orderby_distance : {value : false },
-            sort_distance : {value : 'asc' },
-            parameter : {value : null },
-            hasGeo : {value : true },
-            limit : {value : 100 },
-            page : {value : 1 },
-            debug : {value : false },
-            name : {value : ''}
-        },
-        inputs : 1,
-        outputs : 1,
-        icon : 'openaq.png',
-        label : function() {
-            return this.name|| 'locations';
-        },
-        paletteLabel : function() {
-            return this.name|| 'locations';
-        }
-    });
+  RED.nodes.registerType('openaq-locations', {
+    category: 'openaq',
+    color: 'DeepSkyBlue',
+    defaults: {
+      config: { value: '', type: "openaq-config", required: false },
+      location: { value: null },
+      city: { value: null },
+      country: { value: null },
+      latitude: { value: null, validate: function (lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true; } },
+      longitude: { value: null, validate: function (lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true; } },
+      radius: { value: 2500 },
+      orderby_location: { value: true },
+      sort_location: { value: 'asc' },
+      orderby_city: { value: false },
+      sort_city: { value: 'asc' },
+      orderby_country: { value: false },
+      sort_country: { value: 'asc' },
+      orderby_distance: { value: false },
+      sort_distance: { value: 'asc' },
+      parameter: { value: null },
+      hasGeo: { value: true },
+      limit: { value: 100 },
+      page: { value: 1 },
+      debug: { value: false },
+      name: { value: '' }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'openaq.png',
+    label: function () {
+      return this.name || 'locations';
+    },
+    paletteLabel: function () {
+      return this.name || 'locations';
+    }
+  });
 </script>

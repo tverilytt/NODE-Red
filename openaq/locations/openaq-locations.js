@@ -27,6 +27,9 @@ module.exports = function(RED) {
   function Locations(config) {
     RED.nodes.createNode(this, config);
 
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
+
     openaq.setDebugLogging(config.debug);
 
     var node = this;
@@ -41,7 +44,7 @@ module.exports = function(RED) {
         latitude : msg.latitude || msg.payload.latitude || config.latitude,
         longitude : msg.longitude || msg.payload.longitude || config.longitude,
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           location : msg.location || msg.payload.location || config.location,
           city : msg.city || msg.payload.city || config.city,
@@ -56,10 +59,9 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
        node.status({fill : 'green', shape : 'ring', text : 'Requesting locations...'});
-       openaq.openaqAPI('locations', parameters)
+
+       openaq.openaqAPI('locations', queryParameters, node.config && node.config.api)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
          console.info('locations.js', 'openAPI response', response);

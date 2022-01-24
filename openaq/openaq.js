@@ -225,7 +225,6 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
 module.exports = {
   setDebugLogging,
   getOrderByConfigAsJSON,
-  getOrderByQueryString,
   openaqAPI
 }
 

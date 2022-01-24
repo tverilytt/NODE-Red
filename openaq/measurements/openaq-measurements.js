@@ -44,7 +44,7 @@ module.exports = function(RED) {
         latitude : msg.latitude || msg.payload.latitude || config.latitude,
         longitude : msg.longitude || msg.payload.longitude || config.longitude,
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           location : msg.location || msg.payload.location || config.location,
           city : msg.city || msg.payload.city || config.city,
@@ -81,21 +81,6 @@ module.exports = function(RED) {
 //           node.error(JSON.stringify(error), msg);
        });
     });
-
-    function getOrderByConfigSample() {
-      return {
-        "orderby" : [
-          {
-            "orderby" : "location", "sort" : "desc"
-          },
-          {
-            "orderby" : "city", "sort" : "desc"
-          },
-          {
-            "orderby" : "country", "sort" : "desc"
-          }
-        ]};
-    }
 
     function debugLog(...args) {
       console.debug(DEBUG_PREFIX, ...args);
