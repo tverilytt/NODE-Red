@@ -27,6 +27,9 @@ module.exports = function(RED) {
   function Cities(config) {
     RED.nodes.createNode(this, config);
 
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
+
     openaq.setDebugLogging(config.debug);
 
     var node = this;
@@ -39,7 +42,7 @@ module.exports = function(RED) {
 
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           country : msg.country || msg.payload.country || config.country,
           limit : msg.limit || msg.payload.limit || config.limit,
@@ -49,10 +52,8 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
       node.status({fill : 'green', shape : 'ring', text : 'Requesting cities...'});
-      openaq.openaqAPI('cities', parameters)
+      openaq.openaqAPI('cities', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
         console.info('cities.js', 'openAPI response', response);
