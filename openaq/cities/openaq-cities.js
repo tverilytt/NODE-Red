@@ -63,7 +63,7 @@ module.exports = function(RED) {
       })
       .catch(function (error) {
         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
-        debugLog('Got error: ' + error);
+        openaq.logError(error);
         msg.payload = error;
         node.send(msg);
 //           node.error(JSON.stringify(error), msg);

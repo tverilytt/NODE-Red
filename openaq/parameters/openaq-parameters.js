@@ -27,6 +27,9 @@ module.exports = function(RED) {
   function Parameters(config) {
     RED.nodes.createNode(this, config);
 
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
+
     openaq.setDebugLogging(config.debug);
 
     var node = this;
@@ -39,15 +42,14 @@ module.exports = function(RED) {
 
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
       };
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
       node.status({fill : 'green', shape : 'ring', text : 'Requesting parameters...'});
-      openaq.openaqAPI('parameters', parameters)
+
+      openaq.openaqAPI('parameters', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
         console.info('parameters.js', 'openAPI response', response);
@@ -56,8 +58,7 @@ module.exports = function(RED) {
       })
       .catch(function (error) {
         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
-        debugLog('Got error: ' + error);
-        msg.payload = error;
+        msg.payload = openaq.logError(error);
         node.send(msg);
 //           node.error(JSON.stringify(error), msg);
       });

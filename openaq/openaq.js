@@ -164,7 +164,7 @@ function filterLocationsMeasurementParameters(locations, measurementParamenters)
 
 function openaqAPI(operation, queryParameters, apiURL, options) {
   return new Promise(function (resolve, reject) {
-    const measurementParamenters = queryParameters.simpleParameters.parameter ? queryParameters.simpleParameters.parameter.split(',') : undefined;
+    const measurementParamenters = (true || queryParameters.simpleParameters && queryParameters.simpleParameters.parameter) ? queryParameters.simpleParameters.parameter.split(',') : undefined;
     if (measurementParamenters) {
       queryParameters.simpleParameters.parameter = measurementParamenters.length === 1 ? measurementParamenters[0] : '';
     }
@@ -222,9 +222,15 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
   });
 }
 
+function logError(error) {
+  console.error(error);
+  return { error: error, trace: error.stack };
+}
+
 module.exports = {
   setDebugLogging,
   getOrderByConfigAsJSON,
-  openaqAPI
+  openaqAPI,
+  logError
 }
 

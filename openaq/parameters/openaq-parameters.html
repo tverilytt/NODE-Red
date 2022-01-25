@@ -12,7 +12,11 @@
 
 -->
 
-<script type="text/x-red" data-template-name="openaq-parameters">
+<script type="text/html" data-template-name="openaq-parameters">
+  <div class="form-row">
+    <span for="node-input-config"> API</span>
+    <input type="text" id="node-input-config">
+  </div>
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
       <div>
@@ -46,9 +50,13 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="openaq-parameters">
+<script type="text/html" data-help-name="openaq-parameters">
     <h4>Parameters</h4>
     <p>Provides a simple listing of parameters within the platform.</p>
+
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Open AQ API URL</dd>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -79,16 +87,17 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            orderby_name : {value : true },
-            sort_name : {value : 'asc' },
-            orderby_preferredUnit : {value : false },
-            sort_preferredUnit : {value : null },
-            orderby_id : {value : false },
-            sort_id : {value : null },
-            limit : {value : 100 },
-            page : {value : 1 },
-            debug : {value : false },
-            name : {value : ''}
+          config: { value: '', type: "openaq-config", required: false },
+          orderby_name : {value : true },
+          sort_name : {value : 'asc' },
+          orderby_preferredUnit : {value : false },
+          sort_preferredUnit : {value : null },
+          orderby_id : {value : false },
+          sort_id : {value : null },
+          limit : {value : 100 },
+          page : {value : 1 },
+          debug : {value : false },
+          name : {value : ''}
         },
         inputs : 1,
         outputs : 1,
