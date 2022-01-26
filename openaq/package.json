@@ -37,6 +37,6 @@
     },
     "dependencies": {
         "node-fetch": "~2.6.x",
-        "log4js": "~6.3.x"
+        "log4js": "~6.4.x"
     }
 }
