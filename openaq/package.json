@@ -37,6 +37,7 @@
     },
     "dependencies": {
         "node-fetch": "~2.6.x",
-        "log4js": "~6.4.x"
+        "log4js": "~6.4.x",
+        "haversine-distance": "~1.2.1"
     }
 }
