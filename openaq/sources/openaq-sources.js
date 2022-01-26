@@ -27,6 +27,9 @@ module.exports = function(RED) {
   function Sources(config) {
     RED.nodes.createNode(this, config);
 
+    this.config = RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
+
     openaq.setDebugLogging(config.debug);
 
     var node = this;
@@ -39,7 +42,7 @@ module.exports = function(RED) {
 
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           limit : msg.limit || msg.payload.limit || config.limit,
           page : msg.page || msg.payload.page || config.page
@@ -48,10 +51,9 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
       node.status({fill : 'green', shape : 'ring', text : 'Requesting sources...'});
-      openaq.openaqAPI('sources', parameters)
+
+      openaq.openaqAPI('sources', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
         console.info('sources.js', 'openAPI response', response);
@@ -60,8 +62,7 @@ module.exports = function(RED) {
       })
       .catch(function (error) {
         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
-        debugLog('Got error: ' + error);
-        msg.payload = error;
+        msg.payload = openaq.logError(error);
         node.send(msg);
 //           node.error(JSON.stringify(error), msg);
       });
