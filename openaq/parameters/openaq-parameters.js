@@ -25,14 +25,18 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: parameters]';
 
   function Parameters(config) {
+    var node = this;
+
+    function debugLog(...args) {
+      node.config && node.config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+    }
+
     RED.nodes.createNode(this, config);
 
-    this.config = RED.nodes.getNode(config.config);
+    this.config = config.config && RED.nodes.getNode(config.config);
     debugLog('Config',  this.config);
 
     openaq.setDebugLogging(config.debug);
-
-    var node = this;
 
     this.on('input', function(msg) {
       debugLog('node',  node);
@@ -52,7 +56,7 @@ module.exports = function(RED) {
       openaq.openaqAPI('parameters', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('parameters.js', 'openAPI response', response);
+        debugLog('parameters.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -64,10 +68,6 @@ module.exports = function(RED) {
       });
 
     });
-
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
 
   }
 

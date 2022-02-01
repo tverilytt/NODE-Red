@@ -19,34 +19,26 @@
 
 'use strict';
 
-const log4js = require('log4js');
-log4js.configure({
-  appenders: { console: { type: 'file', filename: 'openaq.log' } },
-  categories: { default: { appenders: ['console'], level: 'debug' } }
-});
+// https://stackoverflow.com/a/45291964/4878494
+const fs = require('fs');
+const { Console } = require('console');
 
-const haversine = require('haversine-distance')
-
-const logger = log4js.getLogger('console');
-logger.level = 'debug';
-console.trace = logger.debug.bind(logger);
-console.debug = logger.debug.bind(logger);
-console.info = logger.info.bind(logger);
-console.log = logger.info.bind(logger);
-console.warning = logger.info.bind(logger);
-console.error = logger.info.bind(logger);
-console.fatal = logger.info.bind(logger);
+const output = fs.createWriteStream('./openaq.log', {flags: 'a'});
+//const errorOutput = fs.createWriteStream('./openaq.err', {flags: 'a'});
+const fileLogger = new Console(output, output);
 
 const fetch = require('node-fetch');
+
+const haversine = require('haversine-distance')
 
 //  const openaqAPI = 'https://api.openaq.org/v1/';
 const openaqAPIURL = 'https://api.openaq.org/v2/';
 const DEBUG_PREFIX = '[openaq: openaq]';
 
 function checkFetchStatus(response) {
-  debugLog('Headers', response.headers.raw());
+  _debugLog('Headers', response.headers.raw());
 
-  debugLog('checkFetchStatus', response.ok, response.status, response.statusText);
+  _debugLog('checkFetchStatus', response.ok, response.status, response.statusText);
   if (response.ok) { // res.status >= 200 && res.status < 300
     return response;
   } else {
@@ -55,11 +47,23 @@ function checkFetchStatus(response) {
 }
 
 function debugLog(...args) {
-  console.debug(DEBUG_PREFIX, ...args);
+  const timestamp = `[${new Date().toISOString()}]`;
+  console.debug(timestamp, ...args);
+  fileLogger.debug(timestamp, ...args);
+}
+
+function _debugLog(...args) {
+  debugLog(DEBUG_PREFIX, ...args);
+}
+
+function logError(error, ...args) {
+  const timestamp = `[${new Date().toISOString()}]`;
+  console.error(timestamp, error, ...args);
+  fileLogger.error(timestamp, error, ...args);
+  return { error: error, trace: error.stack };
 }
 
 function setDebugLogging(debug) {
-  logger.level = debug ? 'debug' : 'error';
 }
 
 function validLatitude(latitude) {
@@ -90,7 +94,6 @@ function getOrderByConfigAsJSON(config) {
     .filter(key => config[key]);
   return orderbys.map(orderby => {
     var fieldName = orderby.split('_')[1];
-    debugLog('--->', orderby, fieldName);
     return {
       orderby: fieldName, sort: config['sort_' + fieldName]
     };
@@ -124,7 +127,6 @@ function getQueryParameters(parameters) {
   var simpleParametersQuery = getSimpleQueryParameters(parameters.simpleParameters);
   if (queryURI.length === 0 && simpleParametersQuery.length > 0)
     simpleParametersQuery = '?' + simpleParametersQuery.substring(1);
-  debugLog('simple query parameters', simpleParametersQuery);
   queryURI += simpleParametersQuery;
 
   var orderbyQuery = parameters.orderby;
@@ -134,14 +136,12 @@ function getQueryParameters(parameters) {
     orderbyQuery = getOrderByQueryString(parameters.orderby);
   if (queryURI.length === 0 && orderbyQuery.length > 0)
     orderbyQuery = '?' + orderbyQuery.substring(1);
-  debugLog('orderby query', orderbyQuery);
   queryURI += orderbyQuery;
 
   return queryURI;
 }
 
 function sortByDistance(locations, origin, sort = 'asc') {
-  debugLog('sortByDistance', locations, origin);
   const sortedLocations = locations
     .map(location => Object.assign(location, { distance: haversine(origin, location.coordinates) }))
     .sort((a, b) => a.distance - b.distance);
@@ -171,10 +171,8 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
 
     var parameters = getQueryParameters(queryParameters);
 
-    debugLog('latest.js', 'openAPI query parameters', queryParameters, 'Config node API URL:', apiURL);
-
     var url = (apiURL || openaqAPIURL) + operation + parameters;
-    debugLog('URL', 'openaqAPI', url);
+    _debugLog('URL', 'openaqAPI', url);
 
     fetch(url, options)
       .then(checkFetchStatus)
@@ -187,7 +185,6 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
               let orderByDistance = null;
               if (orderByDistance = getSortByDistance(queryParameters)) {
                 response.results = sortByDistance(response.results, { latitude: queryParameters.latitude, longitude: queryParameters.longitude }, orderByDistance.sort)
-                debugLog('latest.js', 'openAPI response', response);
               }
 
               if (measurementParamenters && measurementParamenters.length > 0) {
@@ -200,37 +197,33 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
               }
 
               resolve(response);
-              debugLog('openaqAPI', 'fetch responseBody', response);
+              _debugLog('openaqAPI', 'fetch responseBody', response);
             } catch (error) {
-              debugLog('openaqAPI', 'json parse error', error);
-              debugLog('openaqAPI', 'text body', text);
+              _debugLog('openaqAPI', 'json parse error', error);
+              _debugLog('openaqAPI', 'text body', text);
               reject({ error: error, body: text });
             }
           })
           .catch(error => {
-            debugLog('openaqAPI', 'text body error', error);
+            _debugLog('openaqAPI', 'text body error', error);
             reject(error);
           });
       }, error => {
-        console.error('openaq.js', 'openaqAPI', 'Error in checkFetchStatus', error);
+        logError('openaq.js', 'openaqAPI', 'Error in checkFetchStatus', error);
         reject(error);
       })
       .catch(error => {
-        console.error('openaq.js', 'openaqAPI', 'catch error', error);
+        logError('openaq.js', 'openaqAPI', 'catch error', error);
         reject(error);
       });
   });
-}
-
-function logError(error) {
-  console.error(error);
-  return { error: error, trace: error.stack };
 }
 
 module.exports = {
   setDebugLogging,
   getOrderByConfigAsJSON,
   openaqAPI,
-  logError
+  logError,
+  debugLog
 }
 

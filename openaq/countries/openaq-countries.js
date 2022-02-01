@@ -25,14 +25,18 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: countries]';
 
   function Countries(config) {
-    RED.nodes.createNode(this, config);
+    var node = this;
 
-    this.config = RED.nodes.getNode(config.config);
-    debugLog('Config',  this.config);
+    function debugLog(...args) {
+      node.config && node.config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+    }
+
+    RED.nodes.createNode(this, config);
 
     openaq.setDebugLogging(config.debug);
 
-    var node = this;
+    this.config = config.config && RED.nodes.getNode(config.config);
+    debugLog('Config',  this.config);
 
     this.on('input', function(msg) {
       debugLog('node',  node);
@@ -56,7 +60,7 @@ module.exports = function(RED) {
       openaq.openaqAPI('countries', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('countries.js', 'openAPI response', response);
+        debugLog('countries.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -68,10 +72,6 @@ module.exports = function(RED) {
       });
 
     });
-
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
 
   }
 

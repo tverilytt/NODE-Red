@@ -25,14 +25,19 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: sources]';
 
   function Sources(config) {
+    var node = this;
+
+    openaq.logError('sources config', config);
+    function debugLog(...args) {
+      node.config && node.config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+    }
+
     RED.nodes.createNode(this, config);
 
-    this.config = RED.nodes.getNode(config.config);
+    this.config = config.config && RED.nodes.getNode(config.config);
     debugLog('Config',  this.config);
 
     openaq.setDebugLogging(config.debug);
-
-    var node = this;
 
     this.on('input', function(msg) {
       debugLog('node',  node);
@@ -56,7 +61,7 @@ module.exports = function(RED) {
       openaq.openaqAPI('sources', queryParameters, node.config && node.config.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('sources.js', 'openAPI response', response);
+        debugLog('sources.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
@@ -68,10 +73,6 @@ module.exports = function(RED) {
       });
 
     });
-
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
 
   }
 
