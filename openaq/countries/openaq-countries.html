@@ -14,8 +14,8 @@
 
 <script type="text/html" data-template-name="openaq-countries">
   <div class="form-row">
-    <span for="node-input-config"> API</span>
-    <input type="text" id="node-input-config">
+    <span for="node-input-aqconfig"> API</span>
+    <input type="text" id="node-input-aqconfig">
   </div>
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
@@ -45,10 +45,6 @@
       <input type="text" id="node-input-limit" placeholder="Limit" style="width:100px;">
       <span for="node-input-page"> Page</span>
       <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
-    </div>
-    <div class="form-row">
-        <label for="node-input-debug"> Console log</label>
-        <input type="checkbox" id="node-input-debug" style="width:20px;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
@@ -99,7 +95,7 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-          config: { value: '', type: "openaq-config", required: false },
+          aqconfig: { value: '', type: "openaq-config", required: false },
           orderby_country : {value : true },
           sort_country : {value : 'asc' },
           orderby_count : {value : false },
@@ -108,7 +104,6 @@
           sort_locations : {value : 'asc' },
           limit : {value : 100 },
           page : {value : 1 },
-          debug : {value : false },
           name : {value : ''}
         },
         inputs : 1,

@@ -14,8 +14,8 @@
 
 <script type="text/html" data-template-name="openaq-latest">
   <div class="form-row">
-    <span for="node-input-config"> API</span>
-    <input type="text" id="node-input-config">
+    <span for="node-input-aqconfig"> API</span>
+    <input type="text" id="node-input-aqconfig">
   </div>
   <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
     <div class="form-row">
@@ -96,10 +96,6 @@
       <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
     </div>
     <div class="form-row">
-        <label for="node-input-debug"> Console log</label>
-        <input type="checkbox" id="node-input-debug" style="width:20px;">
-    </div>
-    <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
@@ -175,7 +171,7 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-          config: { value: '', type: "openaq-config", required: false },
+          aqconfig: { value: '', type: "openaq-config", required: false },
           location : {value : null },
           city : {value : null },
           country : {value : null },
@@ -194,7 +190,6 @@
           hasGeo : {value : false },
           limit : {value : 100 },
           page : {value : 1 },
-          debug : {value : false },
           name : {value : null }
         },
         inputs : 1,

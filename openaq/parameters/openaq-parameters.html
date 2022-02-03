@@ -14,8 +14,8 @@
 
 <script type="text/html" data-template-name="openaq-parameters">
   <div class="form-row">
-    <span for="node-input-config"> API</span>
-    <input type="text" id="node-input-config">
+    <span for="node-input-aqconfig"> API</span>
+    <input type="text" id="node-input-aqconfig">
   </div>
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
@@ -39,10 +39,6 @@
         <option value="asc" selected>Ascending</option>
       </select>
       </div>
-    </div>
-    <div class="form-row">
-        <label for="node-input-debug"> Console log</label>
-        <input type="checkbox" id="node-input-debug" style="width:20px;">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
@@ -87,7 +83,7 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-          config: { value: '', type: "openaq-config", required: false },
+          aqconfig: { value: '', type: "openaq-config", required: false },
           orderby_name : {value : true },
           sort_name : {value : 'asc' },
           orderby_preferredUnit : {value : false },
@@ -96,7 +92,6 @@
           sort_id : {value : null },
           limit : {value : 100 },
           page : {value : 1 },
-          debug : {value : false },
           name : {value : ''}
         },
         inputs : 1,

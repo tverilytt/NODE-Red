@@ -28,19 +28,17 @@ module.exports = function(RED) {
     var node = this;
 
     function debugLog(...args) {
-      node.config && node.config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+      node.aqconfig && node.aqconfig.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
     }
 
     RED.nodes.createNode(this, config);
 
-    this.config = config.config && RED.nodes.getNode(config.config);
-    debugLog('Config',  this.config);
-
-    openaq.setDebugLogging(config.debug);
+    this.aqconfig = config.aqconfig && RED.nodes.getNode(config.aqconfig);
+    debugLog('Config',  this.aqconfig);
 
     this.on('input', function(msg) {
       debugLog('node',  node);
-      debugLog('config', config);
+      debugLog('config', node.aqconfig);
 
       msg.payload = msg.payload || {};
 
@@ -53,7 +51,7 @@ module.exports = function(RED) {
 
       node.status({fill : 'green', shape : 'ring', text : 'Requesting parameters...'});
 
-      openaq.openaqAPI('parameters', queryParameters, node.config && node.config.api)
+      openaq.openaqAPI('parameters', queryParameters, node.aqconfig)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
         debugLog('parameters.js', 'openAPI response', response);

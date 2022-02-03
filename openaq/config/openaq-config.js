@@ -25,8 +25,10 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: config]';
 
   function Config(node) {
+    var config = this;
+
     function debugLog(...args) {
-      node.config && node.config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+      config.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
     }
 
     RED.nodes.createNode(this, node);
@@ -35,9 +37,6 @@ module.exports = function(RED) {
     this.debug = node.debug;
 
     debugLog('Config API',  this.api, this.debug);
-
-    openaq.setDebugLogging(this.debug);
-
   }
 
   RED.nodes.registerType('openaq-config', Config);

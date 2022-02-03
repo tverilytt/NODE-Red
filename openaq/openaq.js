@@ -35,10 +35,10 @@ const haversine = require('haversine-distance')
 const openaqAPIURL = 'https://api.openaq.org/v2/';
 const DEBUG_PREFIX = '[openaq: openaq]';
 
-function checkFetchStatus(response) {
-  _debugLog('Headers', response.headers.raw());
+function checkFetchStatus(response, aqConfig) {
+  aqConfig && aqConfig.debug && _debugLog('Headers', response.headers.raw());
 
-  _debugLog('checkFetchStatus', response.ok, response.status, response.statusText);
+  aqConfig && aqConfig.debug && _debugLog('checkFetchStatus', response.ok, response.status, response.statusText);
   if (response.ok) { // res.status >= 200 && res.status < 300
     return response;
   } else {
@@ -63,9 +63,6 @@ function logError(error, ...args) {
   return { error: error, trace: error.stack };
 }
 
-function setDebugLogging(debug) {
-}
-
 function validLatitude(latitude) {
   var n = parseFloat(latitude);
   return n <= 90 && n >= -90;
@@ -77,8 +74,8 @@ function validLongitude(longitude) {
 }
 
 function getOrderByQueryString(orderbys) {
-  var orders = orderbys
-    .filter(field => field.orderby);
+  var orders = orderbys.filter(field => field.orderby);
+
   return orders
     .filter(field => field.orderby !== 'distance') // Open AQ API no longer supports order_by "distance"...
     .map(field => {
@@ -162,7 +159,9 @@ function filterLocationsMeasurementParameters(locations, measurementParamenters)
   });
 }
 
-function openaqAPI(operation, queryParameters, apiURL, options) {
+function openaqAPI(operation, queryParameters, aqConfig, options) {
+  aqConfig = aqConfig || {};
+  
   return new Promise(function (resolve, reject) {
     const measurementParamenters = (queryParameters.simpleParameters && queryParameters.simpleParameters.parameter) ? queryParameters.simpleParameters.parameter.split(',') : undefined;
     if (measurementParamenters) {
@@ -171,11 +170,11 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
 
     var parameters = getQueryParameters(queryParameters);
 
-    var url = (apiURL || openaqAPIURL) + operation + parameters;
-    _debugLog('URL', 'openaqAPI', url);
+    var url = (aqConfig.apiURL || openaqAPIURL) + operation + parameters;
+    aqConfig.debug && _debugLog('URL', 'openaqAPI', url);
 
     fetch(url, options)
-      .then(checkFetchStatus)
+      .then((response) => checkFetchStatus(response, aqConfig))
       .then(responseBody => {
         responseBody.text()
           .then(text => {
@@ -197,15 +196,15 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
               }
 
               resolve(response);
-              _debugLog('openaqAPI', 'fetch responseBody', response);
+              aqConfig.debug && _debugLog('openaqAPI', 'fetch responseBody', response);
             } catch (error) {
-              _debugLog('openaqAPI', 'json parse error', error);
-              _debugLog('openaqAPI', 'text body', text);
+              aqConfig.debug && _debugLog('openaqAPI', 'json parse error', error);
+              aqConfig.debug && _debugLog('openaqAPI', 'text body', text);
               reject({ error: error, body: text });
             }
           })
           .catch(error => {
-            _debugLog('openaqAPI', 'text body error', error);
+            aqConfig.debug && _debugLog('openaqAPI', 'text body error', error);
             reject(error);
           });
       }, error => {
@@ -220,7 +219,6 @@ function openaqAPI(operation, queryParameters, apiURL, options) {
 }
 
 module.exports = {
-  setDebugLogging,
   getOrderByConfigAsJSON,
   openaqAPI,
   logError,
