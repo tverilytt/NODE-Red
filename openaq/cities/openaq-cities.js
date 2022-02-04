@@ -25,21 +25,26 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: cities]';
 
   function Cities(config) {
+    var node = this;
+
+    function debugLog(...args) {
+      node.aqconfig && node.aqconfig.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+    }
+
     RED.nodes.createNode(this, config);
 
-    openaq.setDebugLogging(config.debug);
-
-    var node = this;
+    this.aqconfig = config.aqconfig && RED.nodes.getNode(config.aqconfig);
+    debugLog('Config',  this.aqconfig);
 
     this.on('input', function(msg) {
       debugLog('node',  node);
-      debugLog('config', config);
+      debugLog('config', node.aqconfig);
 
       msg.payload = msg.payload || {};
 
       var queryParameters = {
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+          openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           country : msg.country || msg.payload.country || config.country,
           limit : msg.limit || msg.payload.limit || config.limit,
@@ -49,29 +54,23 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
-
       node.status({fill : 'green', shape : 'ring', text : 'Requesting cities...'});
-      openaq.openaqAPI('cities', parameters)
+
+      openaq.openaqAPI('cities', queryParameters, node.aqconfig && node.aqconfig.api)
       .then(function(response) {
         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-        console.info('cities.js', 'openAPI response', response);
+        debugLog('cities.js', 'openAPI response', response);
         msg.payload = response;
         node.send(msg);
       })
       .catch(function (error) {
         node.status({fill : 'red', shape : 'dot', text : 'Error ' + error});
-        debugLog('Got error: ' + error);
-        msg.payload = error;
+        msg.payload = openaq.logError(error);
         node.send(msg);
 //           node.error(JSON.stringify(error), msg);
       });
 
     });
-
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
 
   }
 

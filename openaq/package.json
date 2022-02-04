@@ -1,6 +1,6 @@
 {
     "name": "node-red-contrib-openaq",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Node-RED nodes for Open AQ",
     "repository": {
         "type": "git",
@@ -17,10 +17,11 @@
         "global grassroot community"
     ],
     "node-red": {
+        "version": ">=1.2.0",
         "nodes": {
+            "openaq-config": "config/openaq-config.js",
             "openaq-cities": "cities/openaq-cities.js",
             "openaq-countries": "countries/openaq-countries.js",
-            "openaq-fetches": "fetches/openaq-fetches.js",
             "openaq-latest": "latest/openaq-latest.js",
             "openaq-locations": "locations/openaq-locations.js",
             "openaq-measurements": "measurements/openaq-measurements.js",
@@ -31,10 +32,10 @@
     "author": {
         "name": "Jo Torsmyr",
         "email": "jo@torsmyr.com",
-        "url": "http://plus.google.com/+JoTorsmyr"
+        "url": "https://github.com/tverilytt"
     },
     "dependencies": {
-        "node-fetch": "^2.2.x",
-        "log4js": "^3.0"
+        "node-fetch": "~2.6.x",
+        "haversine-distance": "~1.2.1"
     }
 }

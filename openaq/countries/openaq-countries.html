@@ -12,19 +12,17 @@
 
 -->
 
-<script type="text/x-red" data-template-name="openaq-countries">
+<script type="text/html" data-template-name="openaq-countries">
+  <div class="form-row">
+    <span for="node-input-aqconfig"> API</span>
+    <input type="text" id="node-input-aqconfig">
+  </div>
     <div class="form-row"><i class="fa fa-sort"></i> <span>Order by</span>:</div>
     <div class="form-row">
       <div>
-      <span for="node-input-orderby_name"> Name</span>
-      <input type="checkbox" id="node-input-orderby_name" style="width:20px;">
-      <select id="node-input-sort_name" style="width:100px;">
-        <option value="desc">Descending</option>
-        <option value="asc" selected>Ascending</option>
-      </select>
-      <span for="node-input-orderby_cities"> Cities</span>
-      <input type="checkbox" id="node-input-orderby_cities" style="width:20px;">
-      <select id="node-input-sort_cities" style="width:100px;">
+      <span for="node-input-orderby_country"> Country</span>
+      <input type="checkbox" id="node-input-orderby_country" style="width:20px;">
+      <select id="node-input-sort_country" style="width:100px;">
         <option value="desc">Descending</option>
         <option value="asc" selected>Ascending</option>
       </select>
@@ -49,18 +47,18 @@
       <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
     </div>
     <div class="form-row">
-        <label for="node-input-debug"> Console log</label>
-        <input type="checkbox" id="node-input-debug" style="width:20px;">
-    </div>
-    <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="openaq-countries">
+<script type="text/html" data-help-name="openaq-countries">
     <h4>Countries</h4>
     <p>Provides a simple listing of countries within the platform.</p>
+
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Open AQ API URL</dd>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -71,6 +69,7 @@
         <dd>If not configured in the node, this optional property sets the orderby of the request.
             Each array element object contains two properties. <code>orderby</code> - name of field to order by.
             <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
+        </dd>
 
         <dt class="optional">limit <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
@@ -96,18 +95,16 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
-            orderby_name : {value : true },
-            sort_name : {value : 'asc' },
-            orderby_count : {value : false },
-            sort_count : {value : 'asc' },
-            orderby_cities : {value : false },
-            sort_cities : {value : 'asc' },
-            orderby_locations : {value : false },
-            sort_locations : {value : 'asc' },
-            limit : {value : 100 },
-            page : {value : 1 },
-            debug : {value : false },
-            name : {value : ''}
+          aqconfig: { value: '', type: "openaq-config", required: false },
+          orderby_country : {value : true },
+          sort_country : {value : 'asc' },
+          orderby_count : {value : false },
+          sort_count : {value : 'asc' },
+          orderby_locations : {value : false },
+          sort_locations : {value : 'asc' },
+          limit : {value : 100 },
+          page : {value : 1 },
+          name : {value : ''}
         },
         inputs : 1,
         outputs : 1,

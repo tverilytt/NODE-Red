@@ -25,15 +25,20 @@ module.exports = function(RED) {
   var DEBUG_PREFIX = '[openaq: latest]';
 
   function Latest(config) {
+    var node = this;
+
+    function debugLog(...args) {
+      node.aqconfig && node.aqconfig.debug && openaq.debugLog(DEBUG_PREFIX, ...args);
+    }
+
     RED.nodes.createNode(this, config);
 
-    openaq.setDebugLogging(config.debug);
-
-    var node = this;
+    this.aqconfig = config.aqconfig && RED.nodes.getNode(config.aqconfig);
+    debugLog('Config',  this.aqconfig);
 
     this.on('input', function(msg) {
       debugLog('node',  node);
-      debugLog('config', config);
+      debugLog('config', node.aqconfig);
 
       msg.payload = msg.payload || {};
 
@@ -41,7 +46,7 @@ module.exports = function(RED) {
         latitude : msg.latitude || msg.payload.latitude || config.latitude,
         longitude : msg.longitude || msg.payload.longitude || config.longitude,
         orderby : msg.orderby || msg.payload.orderby || 
-          openaq.getOrderByQueryString(openaq.getOrderByConfigAsJSON(config)),
+        openaq.getOrderByConfigAsJSON(config),
         simpleParameters : {
           location : msg.location || msg.payload.location || config.location,
           city : msg.city || msg.payload.city || config.city,
@@ -56,47 +61,23 @@ module.exports = function(RED) {
 
       debugLog(queryParameters);
 
-      var parameters = openaq.getQueryParameters(queryParameters);
+      node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
 
-       node.status({fill : 'green', shape : 'ring', text : 'Requesting latest...'});
-       openaq.openaqAPI('latest', parameters)
-       .then(function(response) {
-         node.status({fill : 'green', shape : 'dot', text : 'Success'});
-         console.info('latest.js', 'openAPI response', response);
-         msg.payload = response;
-         node.send(msg);
-       })
-       .catch(function (error) {
-         node.status({fill : 'red', shape : 'dot', text : 'Error ' + 
-           (error.error ? error.error : error) });
-         debugLog('Got error: ' + error);
-         msg.payload = error;
-         node.send(msg);
+      openaq.openaqAPI('latest', queryParameters, node.aqconfig)
+      .then(function(response) {
+        node.status({fill : 'green', shape : 'dot', text : 'Success'});
+        debugLog('latest.js', 'openAPI response', response);
+        msg.payload = response;
+        node.send(msg);
+      })
+      .catch(function (error) {
+        node.status({fill : 'red', shape : 'dot', text : 'Error ' + 
+          (error.error ? error.error : error) });
+          msg.payload = openaq.logError(error);
+          node.send(msg);
 //           node.error(JSON.stringify(error), msg);
-       });
+      });
     });
-
-    function getOrderByConfigSample() {
-      return {
-        "orderby" : [
-          {
-            "orderby" : "location", "sort" : "desc"
-          },
-          {
-            "orderby" : "city", "sort" : "desc"
-          },
-          {
-            "orderby" : "country", "sort" : "desc"
-          },
-          {
-            "orderby" : "distance", "sort" : null
-          }
-        ]};
-    }
-
-    function debugLog(...args) {
-      console.debug(DEBUG_PREFIX, ...args);
-    }
 
   }
 

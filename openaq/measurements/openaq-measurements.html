@@ -12,7 +12,11 @@
 
 -->
 
-<script type="text/x-red" data-template-name="openaq-measurements">
+<script type="text/html" data-template-name="openaq-measurements">
+    <div class="form-row">
+      <span for="node-input-aqconfig"> API</span>
+      <input type="text" id="node-input-aqconfig">
+      </div>
     <div class="form-row"><i class="fa fa-globe"></i> <span>Location</span>:</div>
       <div class="form-row">
         <span for="node-input-location"> Location</span>
@@ -91,21 +95,9 @@
     </div>
     <div class="form-row">
       <div>
-      <span for="node-input-orderby_date"> Date</span>
-      <input type="checkbox" id="node-input-orderby_date" style="width:20px;">
+      <span for="node-input-orderby_datetime"> Date time</span>
+      <input type="checkbox" id="node-input-orderby_datetime" style="width:20px;">
       <select id="node-input-sort_date" style="width:100px;">
-        <option value="asc" selected>Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-      <span for="node-input-orderby_value"> Value</span>
-      <input type="checkbox" id="node-input-orderby_value" style="width:20px;">
-      <select id="node-input-sort_value" style="width:100px;">
-        <option value="asc" selected>Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-      <span for="node-input-orderby_parameter"> Parameter</span>
-      <input type="checkbox" id="node-input-orderby_parameter" style="width:20px;">
-      <select id="node-input-sort_parameter" style="width:100px;">
         <option value="asc" selected>Ascending</option>
         <option value="desc">Descending</option>
       </select>
@@ -118,18 +110,18 @@
       <input type="text" id="node-input-page" placeholder="Page" style="width:100px;">
     </div>
     <div class="form-row">
-        <label for="node-input-debug"> Console log</label>
-        <input type="checkbox" id="node-input-debug" style="width:20px;">
-    </div>
-    <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="openaq-measurements">
+<script type="text/html" data-help-name="openaq-measurements">
     <h4>Measurements</h4>
     <p>Provides data about individual measurements</p>
+
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Open AQ API URL</dd>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
@@ -165,8 +157,10 @@
 
         <dt class="optional">parameter <span class="property-type">string</span></dt>
         <dd>If not configured in the node, this optional property sets the parameter of the request.
-            Must be one of <code>pm25</code>, <code>pm10</code>, <code>so2</code>, <code>no2</code>,
-            <code>o3</code>, <code>co</code> or <code>bc</code>.</dd>
+          Must be one of <code>pm25</code>, <code>pm10</code>, <code>so2</code>, <code>no2</code>,
+          <code>o3</code>, <code>co</code> or <code>bc</code>, or a comma separated lists of these,
+          e.g. <code>pm10,pm25</code>
+        </dd>
 
         <dt class="optional">has_geo <span class="property-type">boolean</span></dt>
         <dd>If not configured in the node, this optional property sets the has_geo of the request.</dd>
@@ -176,7 +170,12 @@
             Each array element object contains two properties. <code>orderby</code> - name of field to order by.
             <code>sort</code> - ascending (<code>asc</code>) or descending (<code>desc</code>) sort.
 
-        <dt class="optional">limit <span class="property-type">number</span></dt>
+            Available values : <code>city, country, location, datetime</dd>
+
+            <p>New: If a coordinate (latitude and longitude) is specified, and <code>orderby</code> = <code>distance</code>,
+              the response will contain a <code>distance</code> property, with the distance (in meters) from the given coordinate.
+        </p>
+          <dt class="optional">limit <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the limit of the request.</dd>
         <dt class="optional">page <span class="property-type">number</span></dt>
         <dd>If not configured in the node, this optional property sets the page of the request.</dd>
@@ -200,6 +199,7 @@
         category : 'openaq',
         color : 'DeepSkyBlue',
         defaults: {
+          aqconfig: { value: '', type: "openaq-config", required: false },
           location : {value : null },
           city : {value : null },
           country : {value : null },
@@ -216,17 +216,12 @@
           sort_city : {value : null },
           orderby_country : {value : false },
           sort_country : {value : null },
-          orderby_date : {value : true },
+          orderby_datetimetime : {value : true },
           sort_date : {value : 'asc' },
-          orderby_value : {value : false },
-          sort_value : {value : null },
-          orderby_parameter : {value : false },
-          sort_parameter : {value : null },
           parameter : {value : null },
           hasGeo : {value : false },
           limit : {value : 100 },
           page : {value : 1 },
-          debug : {value : false },
           name : {value : null }
         },
         inputs : 1,

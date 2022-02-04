@@ -1,3 +1,7 @@
+#### 0.0.6: OpenAQ API v2
+
+ - Updates nodes to (by default) use the Open AQ v2 API. OpenAQ API URL configurable through new config node.
+
 #### 0.0.5: URI
 
  - Encode URI components, e.g. country, city, location names.
