@@ -22,11 +22,11 @@ The samples directory contains example payloads and Node-RED flow using the node
 <h4>Cities</h4>
 Provides a simple listing of cities within the platform.
 
+<h4>Config</h4>
+Configuration node, which optionally can be used to specify Open AQ API URL and console & file debug logging.
+
 <h4>Countries</h4>
 Provides a simple listing of countries within the platform.
-
-<h4>Fetches</h4>
-Providing data about individual fetch operations that are used to populate data in the platform.
 
 <h4>Latest</h4>
 Provides the latest value of each available parameter for every location in the system.
