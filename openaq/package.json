@@ -22,7 +22,6 @@
             "openaq-config": "config/openaq-config.js",
             "openaq-cities": "cities/openaq-cities.js",
             "openaq-countries": "countries/openaq-countries.js",
-            "openaq-fetches": "fetches/openaq-fetches.js",
             "openaq-latest": "latest/openaq-latest.js",
             "openaq-locations": "locations/openaq-locations.js",
             "openaq-measurements": "measurements/openaq-measurements.js",
