@@ -24,6 +24,12 @@ module.exports = function(RED) {
 
   var DEBUG_PREFIX = '[openaq: locations]';
 
+  function addLocationProperty(results) {
+    return results.map(location => {
+      return { ...location, ...{ location: location.name }}
+    });
+  }
+
   function Locations(config) {
     var node = this;
 
@@ -66,6 +72,7 @@ module.exports = function(RED) {
        openaq.openaqAPI('locations', queryParameters, node.aqconfig)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
+         response.results = addLocationProperty(response.results);
          debugLog('locations.js', 'openAPI response', response);
          msg.payload = response;
          node.send(msg);
