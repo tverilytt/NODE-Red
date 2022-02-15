@@ -72,7 +72,14 @@ module.exports = function(RED) {
        openaq.openaqAPI('locations', queryParameters, node.aqconfig)
        .then(function(response) {
          node.status({fill : 'green', shape : 'dot', text : 'Success'});
+         // V1 compatibility: "location" = "name"
          response.results = addLocationProperty(response.results);
+         // Sort by "name" / "location" broken in V2, do the sort...
+         const orderbyLocation = openaq.getSortByLocation(queryParameters);
+         debugLog('orderbyLocation', orderbyLocation);
+         if (orderbyLocation) {
+            response.results = openaq.sortByLocation(response.results, orderbyLocation.sort);
+        }
          debugLog('locations.js', 'openAPI response', response);
          msg.payload = response;
          node.send(msg);

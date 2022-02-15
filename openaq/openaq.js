@@ -145,8 +145,21 @@ function sortByDistance(locations, origin, sort = 'asc') {
   return sort === 'desc' ? sortedLocations.reverse() : sortedLocations;
 }
 
+function sortByLocation(locations, sort = 'asc') {
+  const sortedLocations = locations.sort((a, b) => a.location.localeCompare(b.location));
+  return sort === 'desc' ? sortedLocations.reverse() : sortedLocations;
+}
+
+function getSortBy(queryParameters, sortby) {
+  return queryParameters && queryParameters.orderby && queryParameters.orderby.find(order => order.orderby === sortby);
+}
+
 function getSortByDistance(queryParameters) {
-  return queryParameters && queryParameters.orderby && queryParameters.orderby.find(order => order.orderby === 'distance');
+  return getSortBy(queryParameters, 'distance');
+}
+
+function getSortByLocation(queryParameters) {
+  return getSortBy(queryParameters, 'location');
 }
 
 function filterMeasurementParameters(measurements, measurementParamenters) {
@@ -222,6 +235,8 @@ module.exports = {
   getOrderByConfigAsJSON,
   openaqAPI,
   logError,
-  debugLog
+  debugLog,
+  getSortByLocation,
+  sortByLocation
 }
 

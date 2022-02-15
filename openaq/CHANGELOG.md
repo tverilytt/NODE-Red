@@ -1,3 +1,11 @@
+#### 0.0.8: locations & measurements nodes
+
+Sort by "location" property.
+
+#### 0.0.7: locations
+
+locations node - add location property (= name property) for API V1 backward compatibility
+
 #### 0.0.6: OpenAQ API v2
 
  - Updates nodes to (by default) use the Open AQ v2 API. OpenAQ API URL configurable through new config node.
