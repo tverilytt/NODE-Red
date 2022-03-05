@@ -11,38 +11,64 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="weather data">
+<script type="text/html" data-template-name="weather data">
     <div class="form-row">
-        <label for="node-input-debug"><i class="icon-tag"></i> Console log</label>
-        <input type="checkbox" id="node-input-debug" placeholder="Debug">
+        <span for="node-input-yrconfig"> API</span>
+        <input type="text" id="node-input-yrconfig">
+      </div>
+    <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
+      <span for="node-input-latitude"> Latitude</span>
+      <input type="text" id="node-input-latitude" placeholder="Latitude" style="width:100px;">
+      <span for="node-input-longitude"> Longitude</span>
+      <input type="text" id="node-input-longitude" placeholder="Longitude" style="width:100px;">
     </div>
     <div class="form-row">
+        <div>
+            <span for="node-input-forecastType"> Type</span>
+            <select id="node-input-forecastType" style="width:100px;">
+                <option value="compact" selected>Compact</option>
+                <option value="complete">Complete</option>
+            </select>
+        </div>
+    </div>
+<div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="weather data">
+<script type="text/html" data-help-name="weather data">
     <h4>Yr weather data</h4>
     <p>Lookup Yr weather weather data (in XML format) for a specific place</>
     <p>Input: msg.payload - Object structure as returned from Node geonames lookup-place</p>
     <p>Output: msg.payload - XML containing Yr weather data, for a certain place.</p>
     </>
+
+    <h3>Config</h3>
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Configuration node for (optionally) overriding the default Yr API URL</dd>
+
 </script>
 
 <script type="text/javascript">
     RED.nodes.registerType('weather data', {
-        category : 'yr',
-        color : 'LightBlue',
+        category: 'yr',
+        color: 'LightBlue',
         defaults: {
-            debug : {value : false },
-            name : {value : ''}
+            yrconfig: { value: '', type: "yr-config", required: false },
+            latitude: { value: null, validate: function (lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true; } },
+            longitude: { value: null, validate: function (lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true; } },
+            forecastType : { value : 'compact' },
+            name: { value: '' }
         },
-        inputs : 1,
-        outputs : 1,
-        icon : 'yr.png',
-        label : function() {
-            return this.name|| 'weather data';
+        inputs: 1,
+        outputs: 1,
+        icon: 'yr.png',
+        label: function () {
+            return this.name || 'weather data';
         },
+        paletteLabel: function () {
+            return this.name || 'weather data';
+        }
     });
 </script>

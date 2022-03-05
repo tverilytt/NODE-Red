@@ -1,0 +1,49 @@
+<!--
+  Jo Torsmyr
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+-->
+
+<script type="text/html" data-template-name="yr-config">
+    <div class="form-row">
+      <label for="node-config-input-api"><i class="fa fa-database"></i> API</label>
+      <input type="text" id="node-config-input-api" placeholder="Yr API URL">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-debug"> Debug log</label>
+      <input type="checkbox" id="node-config-input-debug" style="width:20px;">
+  </div>
+</script>
+
+<script type="text/html" data-help-name="yr-config">
+    <h4>Config</h4>
+    <p>Common configuration for all Yr nodes</p>
+
+    <dt class="optional">API <span class="property-type">string</span></dt>
+    <dd>Yr API URL. Default is https://api.met.no/weatherapi/locationforecast/2.0</dd>
+    <dt class="optional">Console log<span class="property-type">checkbox</span></dt>
+    <dd>Debug log to console (and file yr.log)</dd>
+
+  </script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('yr-config', {
+        category : 'config',
+        color : 'LightBlue',
+        defaults: {
+          api: { value: 'https://api.met.no/weatherapi/locationforecast/2.0', required: true },
+          debug : { value : false }
+        },
+        label : function() {
+            return this.api || 'Yr API';
+        }
+    });
+</script>
