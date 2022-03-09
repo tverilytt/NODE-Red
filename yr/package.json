@@ -10,6 +10,7 @@
     "keywords" : [ "node-red", "weather-data", "weather-info" ],
     "node-red" : {
         "nodes" : {
+            "yr-config": "config/yr-config.js",
             "weather-data" : "weather-data/weather-data.js",
             "weather-info" : "weather-info/weather-info.js"
         }
