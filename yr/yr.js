@@ -85,44 +85,9 @@ async function callYrAPI(url, options) {
   }
 }
 
-function getYrMeteogramURL(geonames) {
-  let uri = 'https://www.yr.no/nb/værvarsel/graf/1-72837/';
-
-  if (geonames && geonames[0]) {
-    var geoname = geonames[0];
-    var svalbard = false;
-
-    // Map Svalbard and Jan Mayen to Norway
-    if (geoname.countryName == 'Svalbard and Jan Mayen') {
-      geoname.countryName = 'Norway';
-      svalbard = true;
-    }
-
-    uri += geoname.countryName + '/';
-
-    if (geoname.adminName1 === '') uri += 'Other' + '/';
-    else uri += geoname.adminName1 + '/';
-
-    if (geoname.countryName == 'Norway' && !svalbard)
-      if (geoname.adminName2)
-        uri += geoname.adminName2 + '/';
-      else
-        uri += geoname.adminName1 + '/';
-    uri += geoname.toponymName + '/';
-
-    uri = uri.replace(/\s+/g, '_');
-
-    uri = encodeURI(uri);
-
-    return uri;
-  } else
-    return null;
-}
-
 module.exports = {
   yrAPIURL,
   logError,
   debugLog,
-  callYrAPI,
-  getYrMeteogramURL
+  callYrAPI
 }

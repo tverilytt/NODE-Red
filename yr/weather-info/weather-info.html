@@ -11,11 +11,7 @@
   limitations under the License.
 -->
 
-<script type="text/html" data-template-name="weather data">
-    <div class="form-row">
-        <span for="node-input-yrconfig"> API</span>
-        <input type="text" id="node-input-yrconfig">
-      </div>
+<script type="text/html" data-template-name="weather info">
     <div class="form-row"><i class="fa fa-map-marker"></i> <span>Coordinates</span>:</div>
       <span for="node-input-latitude"> Latitude</span>
       <input type="text" id="node-input-latitude" placeholder="Latitude" style="width:100px;">
@@ -24,10 +20,10 @@
     </div>
     <div class="form-row">
         <div>
-            <span for="node-input-forecastType"> Type</span>
-            <select id="node-input-forecastType" style="width:100px;">
-                <option value="compact" selected>Compact</option>
-                <option value="complete">Complete</option>
+            <span for="node-input-forecastView"> Type</span>
+            <select id="node-input-forecastView" style="width:100px;">
+                <option value="graf" selected>Graph</option>
+                <option value="daglig-tabell">Table</option>
             </select>
         </div>
     </div>
@@ -37,37 +33,44 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="weather data">
-    <h4>Yr weather data</h4>
-    <p>Lookup Yr weather weather data (in XML format) for a specific place</p>
-    <p>Input: msg.payload - Latitude & longitude properties</p>
-    <p>Output: msg.payload - JSON containing Yr weather data.</p>
-
-    <h3>Config</h3>
-    <dt class="optional">API <span class="property-type">string</span></dt>
-    <dd>Configuration node for (optionally) overriding the default Yr API URL</dd>
-
+<script type="text/html" data-help-name="weather info">
+    <h4>Yr weather info</h4>
+    <p>Find Yr wather forecast URL for selected location.</p>
+        <p>Input: msg.payload - Latitude & longitude properties</p>
+        <p>
+            Example:
+            {
+                latitude: 59.543,
+                longitude: 10.345
+              }
+        </p>
+        <p>Output: msg.payload - JSON containing Yr Web URL.</p>
+        <p>
+            Example:
+            {
+                forecast: "https://www.yr.no/nb/v%C3%A6rvarsel/daglig-tabell?lat=60&lng=10"
+            }
+        </p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('weather data', {
+    RED.nodes.registerType('weather info', {
         category: 'yr',
         color: 'LightBlue',
         defaults: {
-            yrconfig: { value: '', type: "yr-config", required: false },
             latitude: { value: null, validate: function (lat) { if (lat) { var n = parseFloat(lat); return n <= 90 && n >= -90 } else return true; } },
             longitude: { value: null, validate: function (lng) { if (lng) { var n = parseFloat(lng); return n <= 180 && n >= -180 } else return true; } },
-            forecastType: { value: 'compact' },
+            forecastView: { value: 'graph' },
             name: { value: '' }
         },
         inputs: 1,
         outputs: 1,
         icon: 'yr.png',
         label: function () {
-            return this.name || 'weather data';
+            return this.name || 'weather info';
         },
         paletteLabel: function () {
-            return this.name || 'weather data';
+            return this.name || 'weather info';
         }
     });
 </script>
