@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "node-fetch": "~2.6.x",
-        "haversine-distance": "^1.2.1"
+        "haversine-distance": "^1.2.1",
+        "webidl-conversions": "^7.0.0"
     }
 }
