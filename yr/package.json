@@ -21,7 +21,7 @@
         "url" : "http://plus.google.com/+JoTorsmyr"
     },
     "dependencies": {
-        "node-fetch": "~2.6.x",
+        "node-fetch": "~2.7.0",
         "haversine-distance": "^1.2.1",
         "webidl-conversions": "^7.0.0"
     }
